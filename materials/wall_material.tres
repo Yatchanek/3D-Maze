@@ -1,0 +1,13 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://du6un3j10ysxp"]
+
+[ext_resource type="Texture2D" uid="uid://yumugv1ftnk5" path="res://brick.png" id="1_mwmdr"]
+[ext_resource type="Texture2D" uid="uid://bgr81kdg27irv" path="res://brick_normal.png" id="2_wk3i5"]
+
+[resource]
+albedo_texture = ExtResource("1_mwmdr")
+normal_enabled = true
+normal_scale = 0.5
+normal_texture = ExtResource("2_wk3i5")
+uv1_scale = Vector3(2, 2, 2)
+uv1_triplanar = true
+uv1_world_triplanar = true

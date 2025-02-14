@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://b1y1eap5q1dws"]
+[gd_scene load_steps=7 format=3 uid="uid://b1y1eap5q1dws"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ovkwn"]
+[ext_resource type="Material" uid="uid://crbopxk1glyq0" path="res://materials/indicator_material.tres" id="2_nrt8s"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_sv5h7"]
 radius = 0.125
@@ -14,6 +15,10 @@ height = 0.5
 radius = 0.05
 height = 0.25
 
+[sub_resource type="PrismMesh" id="PrismMesh_nn47u"]
+material = ExtResource("2_nrt8s")
+size = Vector3(1, 1, 0.1)
+
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_ovkwn")
 
@@ -25,14 +30,25 @@ shape = SubResource("CapsuleShape3D_sv5h7")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 mesh = SubResource("CapsuleMesh_h81ep")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, -0.038)
-fov = 45.0
-
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.341417, -0.0711063)
 mesh = SubResource("CapsuleMesh_g5bst")
 
-[node name="SpotLight3D" type="SpotLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0)
-spot_angle = 33.0
+[node name="CameraGimbal" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.314526, -0.038)
+
+[node name="Camera" type="Camera3D" parent="CameraGimbal"]
+cull_mask = 1048571
+fov = 45.0
+
+[node name="SpotLight3D" type="SpotLight3D" parent="CameraGimbal/Camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0980023, 0.038)
+spot_range = 7.0
+spot_attenuation = 1.75
+spot_angle = 40.0
+
+[node name="Marker" type="MeshInstance3D" parent="CameraGimbal"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.935474, -0.062)
+layers = 4
+mesh = SubResource("PrismMesh_nn47u")
+skeleton = NodePath("../..")

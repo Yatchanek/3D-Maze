@@ -1,0 +1,94 @@
+[gd_scene load_steps=6 format=3 uid="uid://b2kx3pbytijw1"]
+
+[ext_resource type="Script" path="res://scripts/hex_maze.gd" id="1_k0ibe"]
+[ext_resource type="PackedScene" uid="uid://cyrp51sdsmug" path="res://scenes/hex_room.tscn" id="2_a6gxg"]
+[ext_resource type="PackedScene" uid="uid://b1y1eap5q1dws" path="res://scenes/player.tscn" id="3_3ttit"]
+
+[sub_resource type="Environment" id="Environment_prdqm"]
+background_mode = 1
+background_color = Color(0, 0, 0.0745098, 1)
+ambient_light_energy = 0.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8lijc"]
+draw_center = false
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(7.78515e-06, 0.255032, 0.0431681, 1)
+
+[node name="HexMaze" type="Node3D"]
+script = ExtResource("1_k0ibe")
+hex_room_scene = ExtResource("2_a6gxg")
+
+[node name="Player" parent="." instance=ExtResource("3_3ttit")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_prdqm")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(208, 208)
+render_target_update_mode = 4
+
+[node name="CanvasLayer" type="CanvasLayer" parent="SubViewportContainer/SubViewport"]
+layer = -1
+
+[node name="Control" type="Control" parent="SubViewportContainer/SubViewport/CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="SubViewportContainer/SubViewport/CanvasLayer/Control"]
+visible = false
+custom_minimum_size = Vector2(208, 208)
+layout_mode = 0
+offset_right = 208.0
+offset_bottom = 208.0
+
+[node name="MiniMap" type="ColorRect" parent="SubViewportContainer/SubViewport/CanvasLayer/Control/ColorRect"]
+visible = false
+custom_minimum_size = Vector2(192, 192)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -96.0
+offset_top = -96.0
+offset_right = 96.0
+offset_bottom = 96.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.07, 0.07, 0.07, 1)
+
+[node name="Panel" type="Panel" parent="SubViewportContainer/SubViewport/CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8lijc")
+
+[node name="Node3D" type="Node3D" parent="SubViewportContainer/SubViewport"]
+
+[node name="OrthCamera" type="Camera3D" parent="SubViewportContainer/SubViewport/Node3D"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 2, 0)
+cull_mask = 1048573
+projection = 1
+size = 15.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.131426, 0.991326, 0, -0.991326, 0.131426, 0, 0, 0)
+layers = 4
+light_cull_mask = 4294967292

@@ -1,0 +1,41 @@
+[gd_scene load_steps=9 format=3 uid="uid://40c68js2kmmj"]
+
+[ext_resource type="Script" path="res://scripts/wall.gd" id="1_e1eiq"]
+[ext_resource type="Texture2D" uid="uid://yumugv1ftnk5" path="res://brick.png" id="1_gkgu1"]
+[ext_resource type="Texture2D" uid="uid://bgr81kdg27irv" path="res://brick_normal.png" id="2_3273o"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4bmst"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e1crl"]
+albedo_texture = ExtResource("1_gkgu1")
+normal_enabled = true
+normal_scale = 0.5
+normal_texture = ExtResource("2_3273o")
+uv1_scale = Vector3(2, 2, 2)
+uv1_triplanar = true
+uv1_world_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_124m8"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_e1crl")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u85yb"]
+albedo_color = Color(1, 1, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_o4ed8"]
+material = SubResource("StandardMaterial3D_u85yb")
+
+[node name="Wall" type="StaticBody3D"]
+script = ExtResource("1_e1eiq")
+
+[node name="CollisionShape" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_4bmst")
+
+[node name="WallBody" type="MeshInstance3D" parent="."]
+layers = 2
+mesh = SubResource("BoxMesh_124m8")
+
+[node name="Outline" type="MeshInstance3D" parent="."]
+layers = 4
+mesh = SubResource("BoxMesh_o4ed8")
+skeleton = NodePath("../WallBody")

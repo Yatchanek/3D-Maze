@@ -197,10 +197,3 @@ func create_collision_shape(mesh_start : Vector2i, mesh_end : Vector2i):
 	collision_shape.shape = shape
 	collision_shape.position = Vector3(mesh_start.x + shape.size.x * 0.5 - 0.5, 0, mesh_start.y + shape.size.z * 0.5 - 0.5)
 	wall_body.call_deferred("add_child", collision_shape)
-			
-	# var mesh : MeshInstance3D = MeshInstance3D.new()
-	# mesh.mesh = BoxMesh.new()
-	# mesh.mesh.size = shape.size
-	# mesh.position = collision_shape.position
-	# add_child(mesh)
-				

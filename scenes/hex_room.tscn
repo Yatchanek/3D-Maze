@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3 uid="uid://cyrp51sdsmug"]
+
+[ext_resource type="Script" path="res://scripts/hex_room.gd" id="1_4hbrt"]
+[ext_resource type="PackedScene" uid="uid://40c68js2kmmj" path="res://scenes/wall.tscn" id="2_bl8a7"]
+[ext_resource type="ArrayMesh" uid="uid://b2dvjrkj3rud0" path="res://hex_no_walls.res" id="3_v2upc"]
+[ext_resource type="ArrayMesh" uid="uid://dykc1bu0xirbf" path="res://floor.res" id="4_oyuyt"]
+[ext_resource type="ArrayMesh" uid="uid://ce3cgmhkilqjh" path="res://hex_outline.res" id="5_mwrvo"]
+
+[node name="HexRoom" type="StaticBody3D"]
+script = ExtResource("1_4hbrt")
+wall_scene = ExtResource("2_bl8a7")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.433013, 0, 0.25, 0, 1, 0, -0.25, 0, 0.433013, 0, 0, 0)
+mesh = ExtResource("3_v2upc")
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.433013, 0, 0.25, 0, 0.5, 0, -0.25, 0, 0.433013, 0, -0.025, 0)
+layers = 2
+mesh = ExtResource("4_oyuyt")
+
+[node name="Ceiling" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.433013, 0, 0.25, 0, 0.5, 0, -0.25, 0, 0.433013, 0, 2.025, 0)
+layers = 2
+mesh = ExtResource("4_oyuyt")
+
+[node name="MapOutline" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.433013, 0, 0.25, 0, 1, 0, -0.25, 0, 0.433013, 0, 2.1, 0)
+layers = 4
+mesh = ExtResource("5_mwrvo")
