@@ -15,19 +15,29 @@ var walls: Dictionary = {
 
 var maze: Dictionary = {}
 
+var a_star : AStar3D = AStar3D.new()
+
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	for q in range(-2, 3):
 		for r in range(-2, 3):
 			for s in range(-2, 3):
 				if q + r + s == 0:
-					maze[Vector3i(q, r, s)] = 0
+					var cell_data = CellData.new()
+					cell_data.coords = Vector3i(q, r, s)
+					cell_data.id = a_star.get_available_point_id()
+					cell_data.position = Vector3(q * 1.5 * Globals.HEX_SIZE, 0, sqrt(3) * Globals.HEX_SIZE * 0.5 * q + r * sqrt(3) * Globals.HEX_SIZE)
+					maze[Vector3i(q, r, s)] = cell_data
+					a_star.add_point(cell_data.id, cell_data.position)
 
 	create_maze()
 	break_walls()
-	#mini_map.player = player
-	#mini_map.maze = maze
 	build_maze()
+	$Enemy.position = maze[Vector3i(-1, 0, 1)].position
+	$Enemy.a_star = a_star
+	$Enemy.get_new_destination()
+	player.start()
+
 
 
 func create_maze():
@@ -36,6 +46,7 @@ func create_maze():
 
 	for cell in maze.keys():
 		unvisited.append(cell)
+		
 
 	var current: Vector3i = unvisited[randi() % unvisited.size()]
 	unvisited.erase(current)
@@ -46,9 +57,9 @@ func create_maze():
 			var next: Vector3i = neighbours[randi() % neighbours.size()]
 			stack.append(current)
 			var dir: Vector3i = next - current
-			maze[current] |= walls[dir]
-			maze[next] |= walls[-dir]
-
+			maze[current].layout |= walls[dir]
+			maze[next].layout |= walls[-dir]
+			a_star.connect_points(maze[current].id, maze[next].id)
 
 			current = next
 			unvisited.erase(current)
@@ -69,15 +80,15 @@ func get_neighbours(cell: Vector3i, unvisited: Array[Vector3i]) -> Array[Vector3
 func build_maze():
 	for cell in maze.keys():
 		var hex_room: HexRoom = hex_room_scene.instantiate()
-		hex_room.position = Vector3(cell.x * 1.5 * Globals.HEX_SIZE, 0, sqrt(3) * Globals.HEX_SIZE * 0.5 * cell.x + cell.y * sqrt(3) * Globals.HEX_SIZE)
-		hex_room.layout = maze[cell]
+		hex_room.position = maze[cell].position
+		#print(hex_room.position)
+		hex_room.layout = maze[cell].layout
 		add_child(hex_room)
 
 
 func break_walls():
 	
-	var walls_to_break : int = floori(maze.size() * 0.15)
-	prints("Breaking walls", walls_to_break)
+	var walls_to_break : int = floori(maze.size() * 0.25)
 	var unvisited : Array[Vector3i] = []
 	for cell in maze.keys():
 		unvisited.append(cell)
@@ -89,7 +100,7 @@ func break_walls():
 		var neighbour : Vector3i = neighbours.pop_back()
 		var dir: Vector3i = neighbour - cell
 		var found : bool = true
-		while maze[cell] & walls[dir] != 0:
+		while maze[cell].layout & walls[dir] != 0:
 			if neighbours.size() == 0:
 				found = false
 				break
@@ -97,8 +108,10 @@ func break_walls():
 			dir = neighbour - cell
 			
 		if found:
-			maze[cell] |= walls[dir]
-			maze[neighbour] |= walls[-dir]
+			maze[cell].layout |= walls[dir]
+			maze[neighbour].layout |= walls[-dir]
+			a_star.connect_points(maze[cell].id, maze[neighbour].id)
+
 		
 		unvisited.erase(cell)
 

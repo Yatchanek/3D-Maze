@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://cd6euvc8pcasg"]
+
+[ext_resource type="Script" path="res://scripts/full_wall.gd" id="1_bcphk"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_in6tj"]
+
+[node name="FullWall" type="StaticBody3D"]
+collision_mask = 16
+script = ExtResource("1_bcphk")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_in6tj")

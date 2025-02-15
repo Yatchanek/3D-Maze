@@ -4,7 +4,7 @@
 [ext_resource type="Material" uid="uid://crbopxk1glyq0" path="res://materials/indicator_material.tres" id="2_nrt8s"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_sv5h7"]
-radius = 0.125
+radius = 0.25
 height = 0.5
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_h81ep"]
@@ -20,11 +20,13 @@ material = ExtResource("2_nrt8s")
 size = Vector3(1, 1, 0.1)
 
 [node name="Player" type="CharacterBody3D"]
+collision_layer = 16
 script = ExtResource("1_ovkwn")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 shape = SubResource("CapsuleShape3D_sv5h7")
+disabled = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
@@ -38,11 +40,13 @@ mesh = SubResource("CapsuleMesh_g5bst")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.314526, -0.038)
 
 [node name="Camera" type="Camera3D" parent="CameraGimbal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0342797, 0.0292361)
 cull_mask = 1048571
 fov = 45.0
+near = 0.02
 
 [node name="Light" type="SpotLight3D" parent="CameraGimbal/Camera"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0980023, 0.038)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.215036, 0.496643)
 light_color = Color(1, 1, 0.862745, 1)
 light_energy = 1.5
 spot_range = 10.0
