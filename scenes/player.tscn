@@ -41,11 +41,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.314526, -0.038)
 cull_mask = 1048571
 fov = 45.0
 
-[node name="SpotLight3D" type="SpotLight3D" parent="CameraGimbal/Camera"]
+[node name="Light" type="SpotLight3D" parent="CameraGimbal/Camera"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0980023, 0.038)
-spot_range = 7.0
+light_color = Color(1, 1, 0.862745, 1)
+light_energy = 1.5
+spot_range = 10.0
 spot_attenuation = 1.75
-spot_angle = 40.0
+spot_angle = 25.0
 
 [node name="Marker" type="MeshInstance3D" parent="CameraGimbal"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.935474, -0.062)

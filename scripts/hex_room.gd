@@ -5,11 +5,6 @@ class_name HexRoom
 
 var layout : int = 0
 
-func _input(event):
-	if event is InputEventKey:
-		if event.is_action_pressed("ui_accept"):
-			get_tree().reload_current_scene()
-
 func _ready() -> void:
 	var exits : Array [int] = [Globals.N, Globals.NE, Globals.SE, Globals.S, Globals.SW, Globals.NW]
 	for i in exits.size():

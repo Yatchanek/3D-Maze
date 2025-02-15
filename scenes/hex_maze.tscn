@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://b2kx3pbytijw1"]
+[gd_scene load_steps=7 format=3 uid="uid://b2kx3pbytijw1"]
 
 [ext_resource type="Script" path="res://scripts/hex_maze.gd" id="1_k0ibe"]
 [ext_resource type="PackedScene" uid="uid://cyrp51sdsmug" path="res://scenes/hex_room.tscn" id="2_a6gxg"]
@@ -16,6 +16,8 @@ border_width_top = 8
 border_width_right = 8
 border_width_bottom = 8
 border_color = Color(7.78515e-06, 0.255032, 0.0431681, 1)
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_i5o6u"]
 
 [node name="HexMaze" type="Node3D"]
 script = ExtResource("1_k0ibe")
@@ -83,12 +85,17 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_8lijc")
 
 [node name="OrthCamera" type="Camera3D" parent="SubViewportContainer/SubViewport/Node3D"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 2, 0)
-cull_mask = 1048573
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 11.4109, 0)
+cull_mask = 1048572
 projection = 1
-size = 15.0
+size = 20.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.131426, 0.991326, 0, -0.991326, 0.131426, 0, 0, 0)
 layers = 4
 light_cull_mask = 4294967292
+
+[node name="Floor" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("WorldBoundaryShape3D_i5o6u")

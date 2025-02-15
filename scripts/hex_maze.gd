@@ -2,7 +2,6 @@ extends Node3D
 
 @export var hex_room_scene: PackedScene
 @onready var orth_camera : Camera3D = %OrthCamera
-#@onready var mini_map : MiniMapHex = %MiniMap
 @onready var player = $Player
 
 var walls: Dictionary = {
@@ -77,7 +76,7 @@ func build_maze():
 
 func break_walls():
 	
-	var walls_to_break : int = floori(maze.size() * 0.25)
+	var walls_to_break : int = floori(maze.size() * 0.15)
 	prints("Breaking walls", walls_to_break)
 	var unvisited : Array[Vector3i] = []
 	for cell in maze.keys():

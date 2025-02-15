@@ -12,4 +12,4 @@ static var exits : Array[int] = [N, NE, SE, S, SW, NW]
 
 static var HEX_SIZE : int = 4
 static var HEX_HEIGHT : int = 2
-static var WALL_WIDTH : float = 0.25
+static var WALL_WIDTH : float = 0.5

@@ -1,29 +1,19 @@
-[gd_scene load_steps=9 format=3 uid="uid://40c68js2kmmj"]
+[gd_scene load_steps=7 format=3 uid="uid://40c68js2kmmj"]
 
 [ext_resource type="Script" path="res://scripts/wall.gd" id="1_e1eiq"]
-[ext_resource type="Texture2D" uid="uid://yumugv1ftnk5" path="res://brick.png" id="1_gkgu1"]
-[ext_resource type="Texture2D" uid="uid://bgr81kdg27irv" path="res://brick_normal.png" id="2_3273o"]
+[ext_resource type="Material" uid="uid://cdixrnimbfu2e" path="res://materials/wall_material_2.tres" id="2_2dptb"]
+[ext_resource type="Material" uid="uid://7hen55jioufw" path="res://materials/outline_material.tres" id="3_x45e4"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_4bmst"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e1crl"]
-albedo_texture = ExtResource("1_gkgu1")
-normal_enabled = true
-normal_scale = 0.5
-normal_texture = ExtResource("2_3273o")
-uv1_scale = Vector3(2, 2, 2)
-uv1_triplanar = true
-uv1_world_triplanar = true
-
 [sub_resource type="BoxMesh" id="BoxMesh_124m8"]
 resource_local_to_scene = true
-material = SubResource("StandardMaterial3D_e1crl")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u85yb"]
-albedo_color = Color(1, 1, 0, 1)
+material = ExtResource("2_2dptb")
+size = Vector3(1, 1, 0.5)
 
 [sub_resource type="BoxMesh" id="BoxMesh_o4ed8"]
-material = SubResource("StandardMaterial3D_u85yb")
+material = ExtResource("3_x45e4")
+size = Vector3(1, 0.1, 0)
 
 [node name="Wall" type="StaticBody3D"]
 script = ExtResource("1_e1eiq")
