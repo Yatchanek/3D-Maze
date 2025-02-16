@@ -13,15 +13,30 @@ var walls: Dictionary = {
 	Vector3i(-1, 0, 1): Globals.NW
 }
 
+const CULL_DISTANCE : int = 2
+
 var maze: Dictionary = {}
+
+var room_dict : Dictionary = {}
+
 
 var a_star : AStar3D = AStar3D.new()
 
+var thread : Thread
+
+var rooms_to_add : Array[HexRoom] = []
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventKey:
+		if event.pressed and event.keycode == KEY_ESCAPE:
+			get_tree().quit()
+
 func _ready() -> void:
+	thread = Thread.new()
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	for q in range(-2, 3):
-		for r in range(-2, 3):
-			for s in range(-2, 3):
+	for q in range(-3, 4):
+		for r in range(-3, 4):
+			for s in range(-3, 4):
 				if q + r + s == 0:
 					var cell_data = CellData.new()
 					cell_data.coords = Vector3i(q, r, s)
@@ -32,12 +47,29 @@ func _ready() -> void:
 
 	create_maze()
 	break_walls()
-	build_maze()
-	$Enemy.position = maze[Vector3i(-1, 0, 1)].position
-	$Enemy.a_star = a_star
-	$Enemy.get_new_destination()
-	player.start()
+	thread.start(build_maze)
 
+	var close_neighbours : Array[Vector3i]= get_cells_in_range(Vector3i.ZERO, 1)
+
+	var enemy_positions : Array[Vector3i] = []
+	var start_tick : int = 0
+	for enemy : BasicEnemy in get_tree().get_nodes_in_group("Enemies"):
+		var pos : Vector3i = maze.keys().pick_random()
+		while close_neighbours.has(pos) or enemy_positions.has(pos):
+			pos = maze.keys().pick_random()
+		
+		enemy_positions.append(pos)
+		enemy.position = maze[pos].position
+		enemy.a_star = a_star
+		enemy.get_new_destination()
+		enemy.tick = start_tick
+
+		start_tick += 3
+
+
+	player.start()
+	await get_tree().process_frame
+	room_dict[Vector3i.ZERO].call_deferred("disable_detector")
 
 
 func create_maze():
@@ -68,7 +100,7 @@ func create_maze():
 		else:
 			break
 
-func get_neighbours(cell: Vector3i, unvisited: Array[Vector3i]) -> Array[Vector3i]:
+func get_neighbours(cell: Vector3i, unvisited: Array) -> Array[Vector3i]:
 	var neighbours: Array[Vector3i] = []
 	for dir in walls.keys():
 		var neighbour: Vector3i = cell + dir
@@ -77,19 +109,56 @@ func get_neighbours(cell: Vector3i, unvisited: Array[Vector3i]) -> Array[Vector3
 
 	return neighbours
 
-func build_maze():
-	for cell in maze.keys():
-		var hex_room: HexRoom = hex_room_scene.instantiate()
-		hex_room.position = maze[cell].position
-		#print(hex_room.position)
-		hex_room.layout = maze[cell].layout
-		add_child(hex_room)
 
+func get_cells_in_range(coords: Vector3i, dist : int) -> Array[Vector3i]:
+	var cells : Array[Vector3i] = []
+	for q : int in range(-dist, dist + 1):
+		for r : int in range(max(-dist, -q - dist), min(dist, -q + dist) + 1):
+			var s : int = -q - r
+			var result : Vector3i = coords + Vector3i(q, r, s)
+
+			if maze.has(result):
+				cells.append(coords + Vector3i(q, r, s))
+
+	return cells
+
+func build_maze():
+	var neighbours : Array[Vector3i] = get_cells_in_range(Vector3i.ZERO, CULL_DISTANCE)
+	for cell in neighbours:
+		create_room(cell)
+
+	call_deferred("_on_rooms_created")
+
+func create_room(coords : Vector3i):
+	var hex_room: HexRoom = hex_room_scene.instantiate()
+	hex_room.room_data = maze[coords]
+	hex_room.entered.connect(_on_room_entered)
+	rooms_to_add.append(hex_room)
+	room_dict[coords] = hex_room	
+
+func adjust_visibility(coords : Vector3i):
+	var neighbours : Array[Vector3i] = get_cells_in_range(coords, CULL_DISTANCE)
+	for neighbour in neighbours:
+		if !room_dict.has(neighbour):
+			create_room(neighbour)
+		else:
+			room_dict[neighbour].call_deferred("enable_detector")
+
+	for room in room_dict.keys():
+		if !neighbours.has(room):
+			room_dict[room].queue_free()
+			room_dict.erase(room)
+
+
+	call_deferred("_on_rooms_created")
+	
+	room_dict[coords].call_deferred("disable_detector")
+	
 
 func break_walls():
-	
 	var walls_to_break : int = floori(maze.size() * 0.25)
 	var unvisited : Array[Vector3i] = []
+	
 	for cell in maze.keys():
 		unvisited.append(cell)
 
@@ -115,6 +184,16 @@ func break_walls():
 		
 		unvisited.erase(cell)
 
+
+func _on_rooms_created():
+	thread.wait_to_finish()
+	for room in rooms_to_add:
+		call_deferred("add_child", room)
+
+	rooms_to_add = []
+
+func _on_room_entered(coords : Vector3i):
+	thread.start(adjust_visibility.bind(coords))
 
 func _process(_delta: float) -> void:
 	orth_camera.position = Vector3(player.position.x, 5, player.position.z)

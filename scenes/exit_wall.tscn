@@ -5,7 +5,7 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_2l63e"]
 
 [node name="ExitWall" type="StaticBody3D"]
-collision_mask = 16
+collision_mask = 18
 script = ExtResource("1_88fxt")
 
 [node name="CollisionLeft" type="CollisionShape3D" parent="."]

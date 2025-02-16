@@ -1,7 +1,7 @@
-extends CharacterBody3D
+extends StateEntity
+class_name BasicEnemy
 
-
-const SPEED = 1.25
+var SPEED = 1.25
 const JUMP_VELOCITY = 4.5
 
 var a_star : AStar3D
@@ -10,29 +10,21 @@ var path : PackedVector3Array = []
 
 var waypoint : Vector3
 
-enum State {
-	PATROL,
-	CHASE,
-	CHECK_LAST,
-	LOOK_AROUND,
-	RESUME
-}
-
-var current_state : State
-
 var target : CharacterBody3D
+var potential_target : CharacterBody3D
 var target_in_range : bool = false
 var last_target_position : Vector3
 
 var elapsed_time : float = 0.0
 var rotation_time : float = 0.0
 
-var num_rays : int = 8
+var num_rays : int = 12
 
 var interest : Array[float] = []
 var ray_directions : Array[Vector3] = []
 
 var sight_check_query : PhysicsShapeQueryParameters3D
+var tick : int = 0
 
 func _ready() -> void:
 	configure_rays()
@@ -41,8 +33,6 @@ func _ready() -> void:
 	shape.size = Vector3(0.3, 0.3, Globals.HEX_SIZE * 2)
 	sight_check_query.shape = shape
 	sight_check_query.collision_mask = 1
-	current_state = State.PATROL
-
 
 func configure_rays():
 	interest.resize(num_rays)
@@ -50,77 +40,16 @@ func configure_rays():
 		ray_directions.append(-basis.z.rotated(Vector3.UP, (TAU / num_rays) * i))
 
 
-func _physics_process(delta: float) -> void:
-	if !a_star:
-		return
-	
-	var direction : Vector3
-	if current_state == State.PATROL:
-		if position.distance_squared_to(waypoint) < 0.05 * 0.05:
-			if path.size() > 1:
-				path.remove_at(0)
-				waypoint = path[0]
-			else:
-				get_new_destination()
-			
-			if target_in_range:
-				elapsed_time += delta
-				if elapsed_time >= 0.5:
-					elapsed_time -= 0.5
-					if check_line_sight():
-						$Body.mesh.albedo_color = Color.RED
-						current_state = State.CHASE
+func handle_movement(dir : Vector3):
+	var desired_velocity : Vector3 = dir * SPEED
 
+	velocity = lerp(velocity, desired_velocity, 0.15)
 
-		direction = position.direction_to(waypoint)
-	
-	elif current_state == State.CHASE:
-		elapsed_time += delta
-		if elapsed_time > 0.1:
-			elapsed_time -= 0.1
-			if !check_line_sight():
-				last_target_position = target.position
-				$Body.mesh.material.albedo_color = Color.YELLOW
-				current_state = State.CHECK_LAST
+	if velocity != Vector3.ZERO:
+		look_at(position + velocity.normalized())
+		basis = basis.orthonormalized()
 
-		direction = position.direction_to(target.position)		
-
-	elif current_state == State.CHECK_LAST:
-		direction = get_context_steering(position.direction_to(last_target_position))
-		if position.distance_squared_to(last_target_position) < 0.05 * 0.05:
-			current_state = State.LOOK_AROUND
-
-	elif current_state == State.LOOK_AROUND:
-		print("Looking around")
-		elapsed_time += delta
-		rotation_time += delta
-		rotation.y += PI / 2 * delta
-		if elapsed_time > 0.1:
-			elapsed_time -= 0.1
-			if target and check_line_sight():
-				$Body.mesh.material.albedo_color = Color.RED
-				current_state = State.CHASE
-		if rotation_time > 2.0:
-			rotation_time -= 2.0
-			waypoint = a_star.get_point_position(a_star.get_closest_point(position))
-			$Body.mesh.material.albedo_color = Color.GREEN
-			current_state = State.RESUME
-	
-	elif current_state == State.RESUME:
-		direction = position.direction_to(waypoint)
-		if position.distance_squared_to(waypoint) < 0.05 * 0.05:
-			get_new_destination()
-			current_state = State.PATROL
-
-	if current_state != State.LOOK_AROUND:
-		var desired_velocity : Vector3 = direction * SPEED
-
-		velocity = lerp(velocity, desired_velocity, 0.15)
-		if velocity != Vector3.ZERO:
-			transform = transform.looking_at(position + velocity.normalized())
-			basis = basis.orthonormalized()
-
-		move_and_slide()
+	move_and_slide()
 
 
 func get_context_steering(dir : Vector3):
@@ -130,7 +59,7 @@ func get_context_steering(dir : Vector3):
 	var state : PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
 
 	for i in num_rays:
-		var query : PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(position + Vector3.UP * 0.5, position + Vector3.UP * 0.5 + ray_directions[i].rotated(Vector3.UP, rotation.y) * 2, 1)
+		var query : PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(position + Vector3.UP * 0.5, position + Vector3.UP * 0.5 + ray_directions[i].rotated(Vector3.UP, rotation.y) * 2, 3)
 		var result = state.intersect_ray(query)
 
 		if result:
@@ -156,37 +85,22 @@ func get_new_destination():
 	waypoint = path[0]
 
 
-func check_line_sight() -> bool:
+func check_line_sight(body : PhysicsBody3D = null) -> PhysicsBody3D:
 	var to : Vector3
-	if target:
-		to = target.position + Vector3.UP * 0.5
+	if is_instance_valid(body):
+		if -basis.z.dot(global_position.direction_to(body.global_position)) < 0.3:
+			return null
+		to = body.global_position + Vector3.UP * 0.25
 	else:
-		to = position + Vector3.UP * 0.5 -basis.z * Globals.HEX_SIZE
-	sight_check_query.transform.origin = to
+		to = global_position + Vector3.UP * 0.25 -basis.z * Globals.HEX_SIZE * 2
 	var state = get_world_3d().direct_space_state
-	var query = PhysicsRayQueryParameters3D.create(position + Vector3.UP * 0.5, to, 1)
-	#var result : Array[Dictionary] = state.intersect_shape(sight_check_query)
+	var query = PhysicsRayQueryParameters3D.create(global_position + Vector3.UP * 0.25, to, 17)
 	var result : Dictionary = state.intersect_ray(query)
-	if result:#.size() > 0:
-		return false
 
-	return true
-
-func _on_detector_body_entered(body: Node3D) -> void:
-	target = body
-	if check_line_sight():
-		$Body.mesh.material.albedo_color = Color.RED
-		current_state = State.CHASE
+	if result and result.collider is CharacterBody3D:
+		return result.collider
 	else:
-		target_in_range = true
+		return null
 
-
-func _on_detector_body_exited(_body: Node3D) -> void:
-	if current_state == State.CHASE:
-		last_target_position = target.position
-		target = null
-		target_in_range = false
-		$Body.mesh.material.albedo_color = Color.YELLOW
-		current_state = State.CHECK_LAST
-	else:
-		target_in_range = false
+func change_color(color : Color):
+	$Body.mesh.material.albedo_color = color
