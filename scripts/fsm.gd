@@ -1,7 +1,7 @@
 extends Node
 class_name FiniteStateMachine
 
-@export var actor : StateEntity
+@export var actor : CharacterBody3D
 @export var default_state : String
 
 var current_state : State = null

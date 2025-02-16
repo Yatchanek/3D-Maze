@@ -53,7 +53,7 @@ func _ready() -> void:
 
 	var enemy_positions : Array[Vector3i] = []
 	var start_tick : int = 0
-	for enemy : BasicEnemy in get_tree().get_nodes_in_group("Enemies"):
+	for enemy : Enemy in get_tree().get_nodes_in_group("Enemies"):
 		var pos : Vector3i = maze.keys().pick_random()
 		while close_neighbours.has(pos) or enemy_positions.has(pos):
 			pos = maze.keys().pick_random()
@@ -61,7 +61,6 @@ func _ready() -> void:
 		enemy_positions.append(pos)
 		enemy.position = maze[pos].position
 		enemy.a_star = a_star
-		enemy.get_new_destination()
 		enemy.tick = start_tick
 
 		start_tick += 3

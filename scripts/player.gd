@@ -15,6 +15,9 @@ func _input(event: InputEvent) -> void:
 		gimbal.rotation.y -= event.relative.x * 0.0025
 		camera.rotation.x = clampf(camera.rotation.x - event.relative.y * 0.0025, - PI / 2, PI / 2)
 
+func _ready() -> void:
+	Globals.player = self
+
 func start():
 	$CollisionShape3D.set_deferred("disabled", false)
 

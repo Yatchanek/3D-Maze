@@ -1,7 +1,7 @@
 extends Node
 class_name State
 
-var actor : StateEntity
+var actor : CharacterBody3D
 var elapsed_time : float = 0.0
 
 @onready var state_machine : FiniteStateMachine = get_parent()

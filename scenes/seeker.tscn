@@ -1,0 +1,58 @@
+[gd_scene load_steps=10 format=3 uid="uid://bcir1xrpmpjdm"]
+
+[ext_resource type="Script" path="res://scripts/seeker_enemy/seeker.gd" id="1_6pkhf"]
+[ext_resource type="Script" path="res://scripts/fsm.gd" id="2_sws0l"]
+[ext_resource type="Script" path="res://scripts/seeker_enemy/idle_state.gd" id="3_kvm0l"]
+[ext_resource type="Script" path="res://scripts/seeker_enemy/seek.gd" id="4_6kbps"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_7yofo"]
+radius = 0.25
+height = 1.0
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_t070t"]
+radius = 0.25
+height = 1.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_6oyku"]
+top_radius = 0.1
+bottom_radius = 0.1
+height = 0.4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_igcsn"]
+albedo_color = Color(0, 1, 0, 1)
+
+[sub_resource type="PrismMesh" id="PrismMesh_ftc33"]
+material = SubResource("StandardMaterial3D_igcsn")
+size = Vector3(1, 1, 0.1)
+
+[node name="Seeker" type="CharacterBody3D"]
+collision_layer = 2
+script = ExtResource("1_6pkhf")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.5, 0)
+shape = SubResource("CapsuleShape3D_7yofo")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.5, 0)
+mesh = SubResource("CapsuleMesh_t070t")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.454172, 2.98023e-08)
+mesh = SubResource("CylinderMesh_6oyku")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1.93537, -0.149356)
+layers = 4
+mesh = SubResource("PrismMesh_ftc33")
+
+[node name="FiniteStateMachine" type="Node" parent="." node_paths=PackedStringArray("actor")]
+script = ExtResource("2_sws0l")
+actor = NodePath("..")
+default_state = "Idle"
+
+[node name="Idle" type="Node" parent="FiniteStateMachine"]
+script = ExtResource("3_kvm0l")
+
+[node name="Seek" type="Node" parent="FiniteStateMachine"]
+script = ExtResource("4_6kbps")

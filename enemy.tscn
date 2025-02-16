@@ -1,12 +1,14 @@
-[gd_scene load_steps=15 format=3 uid="uid://dupc2snhor4cq"]
+[gd_scene load_steps=17 format=3 uid="uid://dupc2snhor4cq"]
 
-[ext_resource type="Script" path="res://scripts/enemy.gd" id="1_nvf4u"]
+[ext_resource type="Script" path="res://scripts/basic_enemy/basic_enemy.gd" id="1_1ya0f"]
 [ext_resource type="Script" path="res://scripts/basic_enemy/basic_enemy_fsm.gd" id="2_u5gao"]
+[ext_resource type="Script" path="res://scripts/basic_enemy/idle_state.gd" id="3_7rhli"]
 [ext_resource type="Script" path="res://scripts/basic_enemy/patrol_state.gd" id="3_48d10"]
 [ext_resource type="Script" path="res://scripts/basic_enemy/chase_state.gd" id="4_d1181"]
 [ext_resource type="Script" path="res://scripts/basic_enemy/check_last.gd" id="5_1ts22"]
 [ext_resource type="Script" path="res://scripts/basic_enemy/look_around.gd" id="6_08vff"]
 [ext_resource type="Script" path="res://scripts/basic_enemy/resume_state.gd" id="7_kld31"]
+[ext_resource type="Script" path="res://scripts/context_steering_component.gd" id="9_yb1bp"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_fpmjc"]
 radius = 0.2
@@ -24,11 +26,11 @@ height = 0.75
 [sub_resource type="BoxMesh" id="BoxMesh_jhu7m"]
 size = Vector3(0.15, 0.15, 0.35)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dvy13"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q2dia"]
 albedo_color = Color(1, 1, 0, 1)
 
 [sub_resource type="PrismMesh" id="PrismMesh_bjq0r"]
-material = SubResource("StandardMaterial3D_dvy13")
+material = SubResource("StandardMaterial3D_q2dia")
 size = Vector3(1, 1, 0.1)
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_6dmrq"]
@@ -37,7 +39,7 @@ radius = 3.0
 
 [node name="Enemy" type="CharacterBody3D"]
 collision_layer = 2
-script = ExtResource("1_nvf4u")
+script = ExtResource("1_1ya0f")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.375, 0)
@@ -69,7 +71,10 @@ shape = SubResource("CylinderShape3D_6dmrq")
 [node name="FSM" type="Node" parent="." node_paths=PackedStringArray("actor")]
 script = ExtResource("2_u5gao")
 actor = NodePath("..")
-default_state = "Patrol"
+default_state = "Idle"
+
+[node name="Idle" type="Node" parent="FSM"]
+script = ExtResource("3_7rhli")
 
 [node name="Patrol" type="Node" parent="FSM"]
 script = ExtResource("3_48d10")
@@ -85,6 +90,10 @@ script = ExtResource("6_08vff")
 
 [node name="Resume" type="Node" parent="FSM"]
 script = ExtResource("7_kld31")
+
+[node name="ContextSteeringComponent" type="Node" parent="."]
+script = ExtResource("9_yb1bp")
+collision_mask = 3
 
 [connection signal="body_entered" from="Detector" to="FSM" method="_on_detector_body_entered"]
 [connection signal="body_exited" from="Detector" to="FSM" method="_on_detector_body_exited"]

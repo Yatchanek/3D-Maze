@@ -4,6 +4,7 @@ func _enter_state(_previous_state : State) -> void:
 	actor.SPEED = 1.25
 	actor.change_color(Color.GREEN)
 	elapsed_time = 0.0
+	get_new_destination()
 
 func physics_update(delta : float) -> void:
 	if !actor.a_star:
@@ -14,7 +15,7 @@ func physics_update(delta : float) -> void:
 			actor.path.remove_at(0)
 			actor.waypoint = actor.path[0]
 		else:
-			actor.get_new_destination()
+			get_new_destination()
 
 	if actor.target_in_range:
 		elapsed_time += delta
@@ -29,3 +30,14 @@ func physics_update(delta : float) -> void:
 		direction = actor.get_context_steering(direction)
 
 	actor.handle_movement(direction)
+
+
+func get_new_destination():
+	var from : int = actor.a_star.get_closest_point(actor.position)
+	var ids : PackedInt64Array = actor.a_star.get_point_ids()
+	var to : int = ids[randi() % ids.size()]
+	while from == to:
+		to = ids[randi() % ids.size()]
+	actor.path = actor.a_star.get_point_path(from, to)
+	actor.path.remove_at(0)
+	actor.waypoint = actor.path[0]

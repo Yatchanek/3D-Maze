@@ -3,11 +3,10 @@ extends State
 func _enter_state(_precious_state : State) -> void:
 	actor.SPEED = 2.0
 	actor.change_color(Color.RED)
+	elapsed_time = 0.0
 
 func physics_update(delta : float) -> void:
-	if !actor.a_star:
-		return
-		
+
 	elapsed_time += delta
 	if elapsed_time > 0.1:
 		elapsed_time -= 0.1

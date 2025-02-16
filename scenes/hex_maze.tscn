@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://b2kx3pbytijw1"]
+[gd_scene load_steps=9 format=3 uid="uid://b2kx3pbytijw1"]
 
 [ext_resource type="Script" path="res://scripts/hex_maze.gd" id="1_k0ibe"]
 [ext_resource type="PackedScene" uid="uid://cyrp51sdsmug" path="res://scenes/hex_room.tscn" id="2_a6gxg"]
 [ext_resource type="PackedScene" uid="uid://b1y1eap5q1dws" path="res://scenes/player.tscn" id="3_3ttit"]
 [ext_resource type="PackedScene" uid="uid://dupc2snhor4cq" path="res://enemy.tscn" id="4_t2nx0"]
+[ext_resource type="PackedScene" uid="uid://bcir1xrpmpjdm" path="res://scenes/seeker.tscn" id="5_2tns3"]
 
 [sub_resource type="Environment" id="Environment_prdqm"]
 background_mode = 1
@@ -84,3 +85,5 @@ shape = SubResource("WorldBoundaryShape3D_i5o6u")
 [node name="Enemy3" parent="." groups=["Enemies"] instance=ExtResource("4_t2nx0")]
 
 [node name="Enemy4" parent="." groups=["Enemies"] instance=ExtResource("4_t2nx0")]
+
+[node name="Seeker" parent="." groups=["Enemies"] instance=ExtResource("5_2tns3")]
