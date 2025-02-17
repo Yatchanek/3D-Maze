@@ -1,42 +1,117 @@
-[gd_scene load_steps=9 format=3 uid="uid://cyrp51sdsmug"]
+[gd_scene load_steps=15 format=4 uid="uid://cyrp51sdsmug"]
 
 [ext_resource type="Script" path="res://scripts/hex_room.gd" id="1_4hbrt"]
 [ext_resource type="PackedScene" uid="uid://d23pegtrbefue" path="res://scenes/wall.tscn" id="2_bl8a7"]
 [ext_resource type="PackedScene" uid="uid://cd6euvc8pcasg" path="res://scenes/full_wall.tscn" id="3_cb8lo"]
-[ext_resource type="ArrayMesh" uid="uid://bod35s3asabcc" path="res://meshes/hexes/hex_empty.res" id="3_qw1yu"]
-[ext_resource type="ArrayMesh" uid="uid://cfdutd1sru0lu" path="res://meshes/outlines/floor.res" id="4_0s3j4"]
 [ext_resource type="PackedScene" uid="uid://dedse6bl0jd5a" path="res://scenes/exit_wall.tscn" id="4_knxge"]
-[ext_resource type="ArrayMesh" uid="uid://52n5xkxj2s77" path="res://meshes/outlines/ceiling.res" id="5_w1pxa"]
-[ext_resource type="ArrayMesh" uid="uid://cvhd8tkcn0efs" path="res://meshes/outlines/outline_empty_Cylinder_001.res" id="6_5c5ba"]
+[ext_resource type="PackedScene" uid="uid://bt4medw7i0qd2" path="res://scenes/corridor.tscn" id="5_rspij"]
+[ext_resource type="ArrayMesh" uid="uid://csfd0gxary8o6" path="res://meshes/hexes/hex_template_2_Cylinder.res" id="6_0ltwm"]
+[ext_resource type="Material" uid="uid://bdvg1qqkxldue" path="res://materials/wall_material_4.tres" id="7_m0ua0"]
+[ext_resource type="Material" uid="uid://bga7r7xhs1o36" path="res://materials/floor_material.tres" id="9_fusjx"]
+[ext_resource type="ArrayMesh" uid="uid://y77m3wxeksuu" path="res://meshes/outlines/outline_empty_thin.res" id="10_lkl5v"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ja1ki"]
+_surfaces = [{
+"aabb": AABB(-8, 0, -6.9282, 16, 1e-05, 13.8564),
+"format": 34896613377,
+"index_count": 12,
+"index_data": PackedByteArray("BAAAAAMAAAACAAEAAgAEAAUAAAAEAAIA"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("/78AAP//AAD//wAA/38AAP+/AAAAAAAA/z8AAP//AAAAAAAA/38AAP8/AAAAAAAA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_crpa3"]
+resource_name = "floor_Plane"
+_surfaces = [{
+"aabb": AABB(-8, 0, -6.9282, 16, 1e-05, 13.8564),
+"attribute_data": PackedByteArray("/3///9ju/7/Y7v8/JhH/vyYR/z//fwAA"),
+"format": 34896613399,
+"index_count": 12,
+"index_data": PackedByteArray("BAAAAAMAAAACAAEAAgAEAAUAAAAEAAIA"),
+"material": ExtResource("7_m0ua0"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("/78AAP//usL//wAA/3+6wv+/AAAAALrC/z8AAP//usIAAAAA/3+6wv8/AAAAALrCqulWU6rpVlOq6VZTqulWU6rpVlOq6VZT")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_ja1ki")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_3d82s"]
+_surfaces = [{
+"aabb": AABB(-8, 0, -6.9282, 16, 1e-05, 13.8564),
+"format": 34896613377,
+"index_count": 12,
+"index_data": PackedByteArray("BAAAAAMAAAACAAEAAgAEAAUAAAAEAAIA"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("/78AAP//AAD//wAA/38AAP+/AAAAAAAA/z8AAP//AAAAAAAA/38AAP8/AAAAAAAA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_cg7y4"]
+resource_name = "floor_Plane"
+_surfaces = [{
+"aabb": AABB(-8, 0, -6.9282, 16, 1e-05, 13.8564),
+"attribute_data": PackedByteArray("/3///9ju/7/Y7v8/JhH/vyYR/z//fwAA"),
+"format": 34896613399,
+"index_count": 12,
+"index_data": PackedByteArray("BAAAAAMAAAACAAEAAgAEAAUAAAAEAAIA"),
+"material": ExtResource("9_fusjx"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("/78AAP//usL//wAA/3+6wv+/AAAAALrC/z8AAP//usIAAAAA/3+6wv8/AAAAALrCqulWU6rpVlOq6VZTqulWU6rpVlOq6VZT")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_3d82s")
+
+[sub_resource type="BoxMesh" id="BoxMesh_w4d0i"]
+size = Vector3(1.5, 1.5, 1.5)
 
 [node name="HexRoom" type="Node3D"]
 script = ExtResource("1_4hbrt")
 wall_scene = ExtResource("2_bl8a7")
 full_collision_scene = ExtResource("3_cb8lo")
 exit_collision_scene = ExtResource("4_knxge")
+corridor_scene = ExtResource("5_rspij")
 
 [node name="Body" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0)
-mesh = ExtResource("3_qw1yu")
+mesh = ExtResource("6_0ltwm")
 
 [node name="Floor" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.25, 0, 0.433013, 0, 0.5, 0, -0.433013, 0, 0.25, 0, 0, 0)
-layers = 2
-mesh = ExtResource("4_0s3j4")
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+visible = false
+mesh = SubResource("ArrayMesh_crpa3")
+
+[node name="Floor2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.25, 0, 0.433013, 0, 0.5, 0, -0.433013, 0, 0.25, 0, 2.02886, 0)
+visible = false
+layers = 4
+mesh = SubResource("ArrayMesh_crpa3")
 
 [node name="Ceiling" type="MeshInstance3D" parent="."]
 transform = Transform3D(-0.5, -4.37114e-08, 0, 4.37114e-08, -0.5, 0, 0, 0, 0.5, 0, 2.01, 0)
-layers = 2
-mesh = ExtResource("5_w1pxa")
+visible = false
+mesh = SubResource("ArrayMesh_cg7y4")
 
 [node name="MapOutline" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 2.05, 0)
 layers = 4
-mesh = ExtResource("6_5c5ba")
+mesh = ExtResource("10_lkl5v")
 
 [node name="EntranceDetector" type="Area3D" parent="."]
 collision_layer = 0
 collision_mask = 16
 monitorable = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, 2.57882, 0, -1.48888)
+mesh = SubResource("BoxMesh_w4d0i")
 
 [connection signal="body_entered" from="EntranceDetector" to="." method="_on_entrance_detector_body_entered"]

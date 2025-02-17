@@ -2,3 +2,5 @@
 
 [resource]
 albedo_color = Color(1, 0, 0, 1)
+emission_enabled = true
+emission = Color(1, 0, 0, 1)

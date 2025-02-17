@@ -14,12 +14,12 @@
 radius = 0.2
 height = 0.75
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rn8ik"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rletg"]
 resource_local_to_scene = true
 albedo_color = Color(0, 1, 0, 1)
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_6rcxu"]
-material = SubResource("StandardMaterial3D_rn8ik")
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_f7o2n"]
+material = SubResource("StandardMaterial3D_rletg")
 radius = 0.2
 height = 0.75
 
@@ -28,6 +28,8 @@ size = Vector3(0.15, 0.15, 0.35)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q2dia"]
 albedo_color = Color(1, 1, 0, 1)
+emission_enabled = true
+emission = Color(1, 1, 0, 1)
 
 [sub_resource type="PrismMesh" id="PrismMesh_bjq0r"]
 material = SubResource("StandardMaterial3D_q2dia")
@@ -47,7 +49,7 @@ shape = SubResource("CapsuleShape3D_fpmjc")
 
 [node name="Body" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.375, 0)
-mesh = SubResource("CapsuleMesh_6rcxu")
+mesh = SubResource("CapsuleMesh_f7o2n")
 skeleton = NodePath("../CollisionShape3D")
 
 [node name="Nose" type="MeshInstance3D" parent="Body"]
@@ -55,7 +57,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.145766, -0.25462)
 mesh = SubResource("BoxMesh_jhu7m")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1.49366, -0.149356)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 3, -0.149)
 layers = 4
 mesh = SubResource("PrismMesh_bjq0r")
 
@@ -93,6 +95,8 @@ script = ExtResource("7_kld31")
 
 [node name="ContextSteeringComponent" type="Node" parent="."]
 script = ExtResource("9_yb1bp")
+num_rays = 10
+ray_length = 1.5
 collision_mask = 3
 
 [connection signal="body_entered" from="Detector" to="FSM" method="_on_detector_body_entered"]

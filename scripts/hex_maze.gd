@@ -1,6 +1,9 @@
 extends Node3D
 
+@export var CULL_DISTANCE : int = 1
+@export_range(0., 1.0) var connectivity_ratio : float = 0.25
 @export var hex_room_scene: PackedScene
+
 @onready var orth_camera : Camera3D = %OrthCamera
 @onready var player = $Player
 
@@ -13,7 +16,8 @@ var walls: Dictionary = {
 	Vector3i(-1, 0, 1): Globals.NW
 }
 
-const CULL_DISTANCE : int = 2
+
+
 
 var maze: Dictionary = {}
 
@@ -41,7 +45,9 @@ func _ready() -> void:
 					var cell_data = CellData.new()
 					cell_data.coords = Vector3i(q, r, s)
 					cell_data.id = a_star.get_available_point_id()
-					cell_data.position = Vector3(q * 1.5 * Globals.HEX_SIZE, 0, sqrt(3) * Globals.HEX_SIZE * 0.5 * q + r * sqrt(3) * Globals.HEX_SIZE)
+					cell_data.position = Vector3(q * (1.5 * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH * cos (PI / 6)), 0, q * (sqrt(3) * 0.5 * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH * 0.5)+ r * (sqrt(3) * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH))
+					if q == 0:
+						print(cell_data.position)
 					maze[Vector3i(q, r, s)] = cell_data
 					a_star.add_point(cell_data.id, cell_data.position)
 
@@ -155,15 +161,20 @@ func adjust_visibility(coords : Vector3i):
 	
 
 func break_walls():
-	var walls_to_break : int = floori(maze.size() * 0.25)
+	var walls_to_break : int = floori(maze.size() * connectivity_ratio)
 	var unvisited : Array[Vector3i] = []
 	
 	for cell in maze.keys():
 		unvisited.append(cell)
-
+	var fails : int = 0
 	for i in range(walls_to_break):
+		if fails == 10:
+			break
 		var cell: Vector3i = unvisited.pick_random()
 		var neighbours : Array[Vector3i] = get_neighbours(cell, unvisited)
+		if neighbours.size() == 0:
+			fails += 1
+			continue
 		neighbours.shuffle()
 		var neighbour : Vector3i = neighbours.pop_back()
 		var dir: Vector3i = neighbour - cell

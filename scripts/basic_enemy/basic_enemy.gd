@@ -17,6 +17,9 @@ func get_context_steering(dir : Vector3) -> Vector3:
 	return context_steering_component.get_context_steering(dir, rotation.y)
 
 func handle_movement(dir : Vector3):
+	if dir.is_equal_approx(Vector3.ZERO):
+		return
+		
 	var desired_velocity : Vector3 = dir * SPEED
 
 	velocity = lerp(velocity, desired_velocity, 0.15)

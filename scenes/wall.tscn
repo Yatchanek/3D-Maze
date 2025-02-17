@@ -1,19 +1,22 @@
 [gd_scene load_steps=6 format=3 uid="uid://d23pegtrbefue"]
 
+[ext_resource type="Material" uid="uid://bdvg1qqkxldue" path="res://materials/wall_material_4.tres" id="1_6avlq"]
 [ext_resource type="Script" path="res://scripts/wall.gd" id="1_e1eiq"]
-[ext_resource type="Material" uid="uid://cdixrnimbfu2e" path="res://materials/wall_material_2.tres" id="2_2dptb"]
 [ext_resource type="Material" uid="uid://7hen55jioufw" path="res://materials/outline_material.tres" id="3_x45e4"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_k6bhu"]
-material = ExtResource("2_2dptb")
+material = ExtResource("1_6avlq")
+size = Vector3(1, 1, 0.25)
 
 [sub_resource type="BoxMesh" id="BoxMesh_4lk8o"]
 material = ExtResource("3_x45e4")
+size = Vector3(1, 0.1, 0.5)
 
 [node name="Wall" type="MeshInstance3D"]
 mesh = SubResource("BoxMesh_k6bhu")
 script = ExtResource("1_e1eiq")
 
 [node name="Outline" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0.125)
 layers = 4
 mesh = SubResource("BoxMesh_4lk8o")

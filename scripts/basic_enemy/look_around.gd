@@ -13,6 +13,5 @@ func physics_update(delta : float) -> void:
 	if actor.target:
 		transition.emit("Chase")
 	if rotation_time > 2.0:
-		rotation_time -= 2.0
-		actor.waypoint = actor.a_star.get_point_position(actor.a_star.get_closest_point(actor.position))
+		rotation_time = 0.0
 		transition.emit("Resume")

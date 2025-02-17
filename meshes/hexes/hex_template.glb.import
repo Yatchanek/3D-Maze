@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bykm8sywt64h3"
-path="res://.godot/imported/hex_1.glb-406524ad3cbc4cb288c648945e7e26c1.scn"
+uid="uid://bepo2x0ux2hxg"
+path="res://.godot/imported/hex_template.glb-7a4e14e06fea0956eca1bbee6b92086e.scn"
 
 [deps]
 
-source_file="res://meshes/hexes/hex_1.glb"
-dest_files=["res://.godot/imported/hex_1.glb-406524ad3cbc4cb288c648945e7e26c1.scn"]
+source_file="res://meshes/hexes/hex_template.glb"
+dest_files=["res://.godot/imported/hex_template.glb-7a4e14e06fea0956eca1bbee6b92086e.scn"]
 
 [params]
 
@@ -31,6 +31,18 @@ animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
-_subresources={}
+_subresources={
+"meshes": {
+"hex_template_Cylinder": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/path": "res://meshes/hexes/hex_template_Cylinder.res"
+}
+}
+}
 gltf/naming_version=1
 gltf/embedded_image_handling=1
