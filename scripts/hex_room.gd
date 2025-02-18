@@ -9,11 +9,14 @@ class_name HexRoom
 @onready var entrance_detector : Area3D = $EntranceDetector
 
 var room_data : CellData
+var material_index : int
 
 signal entered(coords : Vector3i)
 
 func _ready() -> void:
 	position = room_data.position
+	material_index = randi_range(0, 1)
+	$Body.mesh.surface_set_material(0, load("res://materials/wall_material_" + str(material_index) + ".tres"))
 	var exits : Array [int] = [Globals.N, Globals.NE, Globals.SE, Globals.S, Globals.SW, Globals.NW]
 	for i in exits.size():
 		var mask : int = room_data.layout & exits[i]
@@ -22,6 +25,7 @@ func _ready() -> void:
 		add_detector_collision(i, mask)
 		add_corridor(i, mask)
 
+		
 func create_wall(idx: int, exit : int) -> void:
 	if exit != 0:
 		return
@@ -29,17 +33,18 @@ func create_wall(idx: int, exit : int) -> void:
 	wall.rotation_degrees = Vector3(0, idx * -60, 0)
 	var direction = Vector3.FORWARD.rotated(Vector3.UP, deg_to_rad(wall.rotation_degrees.y))
 	wall.position = direction * (sqrt(3) * Globals.HEX_SIZE * 0.5 - Globals.WALL_WIDTH * 0.5)
-
+	wall.material_idx = material_index
 	call_deferred("add_child", wall)
 
 
 func add_corridor(idx : int, exit : int) -> void:
-	if exit == 0:
+	if exit == 0 or Globals.CORRIDOR_LENGTH <= 0.0 or Globals.maze[room_data.coords + Globals.directions[idx]].corridors[wrapi(idx + 3, 0, 6)]:
 		return
 	var corridor : StaticBody3D = corridor_scene.instantiate()
 	corridor.rotation_degrees = Vector3(0, idx * -60, 0)
 	var direction = Vector3.FORWARD.rotated(Vector3.UP, deg_to_rad(corridor.rotation_degrees.y))
-	corridor.position = direction * (sqrt(3) * Globals.HEX_SIZE * 0.5 + Globals.CORRIDOR_LENGTH * 0.25)
+	corridor.position = direction * (sqrt(3) * Globals.HEX_SIZE * 0.5 + Globals.CORRIDOR_LENGTH * 0.5)
+	room_data.corridors[idx] = true
 	call_deferred("add_child", corridor)
 
 func add_detector_collision(idx: int, exit : int) -> void:
@@ -79,3 +84,5 @@ func enable_detector():
 func _on_entrance_detector_body_entered(_body:Node3D) -> void:
 	entered.emit(room_data.coords)
 
+func _exit_tree() -> void:
+	room_data.corridors = [false, false, false, false, false, false]

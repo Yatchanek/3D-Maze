@@ -1,0 +1,12 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://dakuvjq0jwhg8"]
+
+[ext_resource type="Texture2D" uid="uid://dph24mwse0sle" path="res://textures/Wood_Planks_03_Brown_1.png" id="1_osgjq"]
+[ext_resource type="Texture2D" uid="uid://2oivi8u1i0jf" path="res://textures/Wood_Planks_03_Brown_n.png" id="2_8pvf1"]
+
+[resource]
+albedo_texture = ExtResource("1_osgjq")
+normal_enabled = true
+normal_texture = ExtResource("2_8pvf1")
+uv1_scale = Vector3(0.5, 0.5, 0.5)
+uv1_triplanar = true
+texture_filter = 0

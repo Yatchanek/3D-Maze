@@ -9,10 +9,20 @@ static var SW : int = 16
 static var NW : int = 32
 
 static var exits : Array[int] = [N, NE, SE, S, SW, NW]
+static var directions : Array[Vector3i] = [
+    Vector3i(0, -1, 1),
+	Vector3i(1, -1, 0),
+	Vector3i(1, 0, -1),
+	Vector3i(0, 1, -1),
+	Vector3i(-1, 1, 0),
+	Vector3i(-1, 0, 1)
+]
 
 static var HEX_SIZE : int = 4
 static var HEX_HEIGHT : int = 2
 static var WALL_WIDTH : float = 0.25
 static var OUTLINE_WIDTH : float = 0.5
-static var CORRIDOR_LENGTH : float = 4.0
+static var CORRIDOR_LENGTH : float = 3.0
 static var player : CharacterBody3D
+
+static var maze : Dictionary = {}

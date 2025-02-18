@@ -1,11 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://d23pegtrbefue"]
+[gd_scene load_steps=5 format=3 uid="uid://d23pegtrbefue"]
 
-[ext_resource type="Material" uid="uid://bdvg1qqkxldue" path="res://materials/wall_material_4.tres" id="1_6avlq"]
 [ext_resource type="Script" path="res://scripts/wall.gd" id="1_e1eiq"]
 [ext_resource type="Material" uid="uid://7hen55jioufw" path="res://materials/outline_material.tres" id="3_x45e4"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_k6bhu"]
-material = ExtResource("1_6avlq")
+resource_local_to_scene = true
 size = Vector3(1, 1, 0.25)
 
 [sub_resource type="BoxMesh" id="BoxMesh_4lk8o"]

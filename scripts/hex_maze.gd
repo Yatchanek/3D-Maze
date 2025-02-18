@@ -17,8 +17,6 @@ var walls: Dictionary = {
 }
 
 
-
-
 var maze: Dictionary = {}
 
 var room_dict : Dictionary = {}
@@ -46,10 +44,10 @@ func _ready() -> void:
 					cell_data.coords = Vector3i(q, r, s)
 					cell_data.id = a_star.get_available_point_id()
 					cell_data.position = Vector3(q * (1.5 * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH * cos (PI / 6)), 0, q * (sqrt(3) * 0.5 * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH * 0.5)+ r * (sqrt(3) * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH))
-					if q == 0:
-						print(cell_data.position)
 					maze[Vector3i(q, r, s)] = cell_data
 					a_star.add_point(cell_data.id, cell_data.position)
+
+	Globals.maze = maze
 
 	create_maze()
 	break_walls()
@@ -73,8 +71,7 @@ func _ready() -> void:
 
 
 	player.start()
-	await get_tree().process_frame
-	room_dict[Vector3i.ZERO].call_deferred("disable_detector")
+
 
 
 func create_maze():
@@ -132,7 +129,7 @@ func build_maze():
 	for cell in neighbours:
 		create_room(cell)
 
-	call_deferred("_on_rooms_created")
+	call_deferred("_on_rooms_created", true)
 
 func create_room(coords : Vector3i):
 	var hex_room: HexRoom = hex_room_scene.instantiate()
@@ -195,12 +192,15 @@ func break_walls():
 		unvisited.erase(cell)
 
 
-func _on_rooms_created():
+func _on_rooms_created(first_time : bool = false):
 	thread.wait_to_finish()
 	for room in rooms_to_add:
 		call_deferred("add_child", room)
 
 	rooms_to_add = []
+	if first_time:
+		await get_tree().process_frame
+		room_dict[Vector3i.ZERO].call_deferred("disable_detector")
 
 func _on_room_entered(coords : Vector3i):
 	thread.start(adjust_visibility.bind(coords))

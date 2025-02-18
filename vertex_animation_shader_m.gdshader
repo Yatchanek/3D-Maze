@@ -38,7 +38,7 @@ mat4 saturation_matrix(float s) {
 	float sr = (1.0 - s) * luminance.r;
 	float sg = (1.0 - s) * luminance.g;
 	float sb = (1.0 - s) * luminance.b;
-	
+
 	return mat4(
 		vec4(sr + s, sr, sr, 0),
 		vec4(sg, sg + s, sg, 0),
