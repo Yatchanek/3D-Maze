@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://b2kx3pbytijw1"]
+[gd_scene load_steps=12 format=3 uid="uid://b2kx3pbytijw1"]
 
 [ext_resource type="Script" path="res://scripts/hex_maze.gd" id="1_k0ibe"]
 [ext_resource type="PackedScene" uid="uid://cyrp51sdsmug" path="res://scenes/hex_room.tscn" id="2_a6gxg"]
 [ext_resource type="PackedScene" uid="uid://b1y1eap5q1dws" path="res://scenes/player.tscn" id="3_3ttit"]
-[ext_resource type="PackedScene" uid="uid://dupc2snhor4cq" path="res://enemy.tscn" id="4_t2nx0"]
+[ext_resource type="PackedScene" uid="uid://cv7vir4skba8n" path="res://scenes/hex_room_small.tscn" id="3_tymju"]
+[ext_resource type="PackedScene" uid="uid://dupc2snhor4cq" path="res://scenes/enemy.tscn" id="4_t2nx0"]
 [ext_resource type="PackedScene" uid="uid://bcir1xrpmpjdm" path="res://scenes/seeker.tscn" id="5_2tns3"]
 
 [sub_resource type="Environment" id="Environment_prdqm"]
@@ -20,11 +21,21 @@ border_color = Color(7.78515e-06, 0.255032, 0.0431681, 1)
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_i5o6u"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rletg"]
+albedo_color = Color(0, 1, 0, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_juknq"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_rletg")
+radius = 0.2
+height = 0.75
+
 [node name="HexMaze" type="Node3D"]
 script = ExtResource("1_k0ibe")
 CULL_DISTANCE = 2
 connectivity_ratio = 0.5
 hex_room_scene = ExtResource("2_a6gxg")
+small_hex_room_scene = ExtResource("3_tymju")
 
 [node name="Player" parent="." instance=ExtResource("3_3ttit")]
 
@@ -65,16 +76,11 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_8lijc")
 [node name="OrthCamera" type="Camera3D" parent="SubViewportContainer/SubViewport/Node3D"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 11.4109, 0)
+visible = false
 cull_mask = 1048572
 projection = 1
 current = true
-size = 50.0
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.131426, 0.991326, 0, -0.991326, 0.131426, 0, 0, 0)
-layers = 4
-light_energy = 0.1
-light_cull_mask = 4294967292
+size = 25.0
 
 [node name="Floor" type="StaticBody3D" parent="."]
 
@@ -83,6 +89,9 @@ shape = SubResource("WorldBoundaryShape3D_i5o6u")
 
 [node name="Enemy" parent="." groups=["Enemies"] instance=ExtResource("4_t2nx0")]
 
+[node name="Body" parent="Enemy" index="1"]
+mesh = SubResource("CapsuleMesh_juknq")
+
 [node name="Enemy2" parent="." groups=["Enemies"] instance=ExtResource("4_t2nx0")]
 
 [node name="Enemy3" parent="." groups=["Enemies"] instance=ExtResource("4_t2nx0")]
@@ -90,3 +99,5 @@ shape = SubResource("WorldBoundaryShape3D_i5o6u")
 [node name="Enemy4" parent="." groups=["Enemies"] instance=ExtResource("4_t2nx0")]
 
 [node name="Seeker" parent="." groups=["Enemies"] instance=ExtResource("5_2tns3")]
+
+[editable path="Enemy"]

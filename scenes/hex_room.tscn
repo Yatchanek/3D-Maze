@@ -1,14 +1,21 @@
-[gd_scene load_steps=15 format=4 uid="uid://cyrp51sdsmug"]
+[gd_scene load_steps=22 format=4 uid="uid://cyrp51sdsmug"]
 
 [ext_resource type="Script" path="res://scripts/hex_room.gd" id="1_4hbrt"]
 [ext_resource type="PackedScene" uid="uid://d23pegtrbefue" path="res://scenes/wall.tscn" id="2_bl8a7"]
 [ext_resource type="PackedScene" uid="uid://cd6euvc8pcasg" path="res://scenes/full_wall.tscn" id="3_cb8lo"]
 [ext_resource type="PackedScene" uid="uid://dedse6bl0jd5a" path="res://scenes/exit_wall.tscn" id="4_knxge"]
-[ext_resource type="ArrayMesh" uid="uid://bnr8ecux6edhl" path="res://meshes/hexes/hex_empty.res" id="5_k1bcu"]
-[ext_resource type="PackedScene" uid="uid://bt4medw7i0qd2" path="res://scenes/corridor.tscn" id="5_rspij"]
+[ext_resource type="PackedScene" uid="uid://bt4medw7i0qd2" path="res://scenes/corridor.tscn" id="5_lvgyp"]
+[ext_resource type="PackedScene" uid="uid://cm23almacxsok" path="res://scenes/corridor_semi_long.tscn" id="6_geiuu"]
+[ext_resource type="Material" uid="uid://ncplgtiws8qq" path="res://materials/wall_material_1.tres" id="7_7ou1p"]
 [ext_resource type="Material" uid="uid://dvo1r1d1ypcta" path="res://materials/floor_material_0.tres" id="7_c8mt0"]
+[ext_resource type="PackedScene" uid="uid://bdivpaurpge64" path="res://scenes/corridor_long.tscn" id="7_vx62r"]
 [ext_resource type="Material" uid="uid://bf560ha2364y8" path="res://materials/wall_material_0.tres" id="8_sjrt4"]
-[ext_resource type="ArrayMesh" uid="uid://y77m3wxeksuu" path="res://meshes/outlines/outline_empty_thin.res" id="10_lkl5v"]
+[ext_resource type="Material" uid="uid://c6n25dcaddypg" path="res://materials/wall_material_2.tres" id="10_hyakg"]
+[ext_resource type="ArrayMesh" uid="uid://bnr8ecux6edhl" path="res://meshes/hexes/hex_empty.res" id="10_mhljg"]
+[ext_resource type="Material" uid="uid://3be68um7y4vv" path="res://materials/floor_material_0_top.tres" id="10_sb6ot"]
+[ext_resource type="ArrayMesh" uid="uid://cufy7sle0g3sq" path="res://meshes/outlines/outline_empty_plane.res" id="11_6wa2b"]
+[ext_resource type="Material" uid="uid://bdh3gpk7eqkiw" path="res://materials/wall_material_3.tres" id="11_fvq5f"]
+[ext_resource type="Material" uid="uid://cat4ifx6ilgi2" path="res://materials/wall_material_4.tres" id="12_4cxwg"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_ja1ki"]
 _surfaces = [{
@@ -48,7 +55,7 @@ _surfaces = [{
 "format": 34896613399,
 "index_count": 12,
 "index_data": PackedByteArray("BAAAAAMAAAACAAEAAgAEAAUAAAAEAAIA"),
-"material": ExtResource("7_c8mt0"),
+"material": ExtResource("10_sb6ot"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 6,
@@ -92,11 +99,12 @@ script = ExtResource("1_4hbrt")
 wall_scene = ExtResource("2_bl8a7")
 full_collision_scene = ExtResource("3_cb8lo")
 exit_collision_scene = ExtResource("4_knxge")
-corridor_scene = ExtResource("5_rspij")
+corridor_scenes = Array[PackedScene]([ExtResource("5_lvgyp"), ExtResource("6_geiuu"), ExtResource("7_vx62r")])
+materials = Array[Material]([ExtResource("8_sjrt4"), ExtResource("7_7ou1p"), ExtResource("10_hyakg"), ExtResource("11_fvq5f"), ExtResource("12_4cxwg")])
 
 [node name="Body" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0)
-mesh = ExtResource("5_k1bcu")
+mesh = ExtResource("10_mhljg")
 
 [node name="Floor" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
@@ -114,7 +122,7 @@ mesh = SubResource("ArrayMesh_cg7y4")
 [node name="MapOutline" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 2.05, 0)
 layers = 4
-mesh = ExtResource("10_lkl5v")
+mesh = ExtResource("11_6wa2b")
 
 [node name="EntranceDetector" type="Area3D" parent="."]
 collision_layer = 0

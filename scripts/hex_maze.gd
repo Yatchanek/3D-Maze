@@ -3,6 +3,7 @@ extends Node3D
 @export var CULL_DISTANCE : int = 1
 @export_range(0., 1.0) var connectivity_ratio : float = 0.25
 @export var hex_room_scene: PackedScene
+@export var small_hex_room_scene: PackedScene
 
 @onready var orth_camera : Camera3D = %OrthCamera
 @onready var player = $Player
@@ -28,6 +29,8 @@ var thread : Thread
 
 var rooms_to_add : Array[HexRoom] = []
 
+var current_room : Vector3i
+
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey:
 		if event.pressed and event.keycode == KEY_ESCAPE:
@@ -44,11 +47,13 @@ func _ready() -> void:
 					cell_data.coords = Vector3i(q, r, s)
 					cell_data.id = a_star.get_available_point_id()
 					cell_data.position = Vector3(q * (1.5 * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH * cos (PI / 6)), 0, q * (sqrt(3) * 0.5 * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH * 0.5)+ r * (sqrt(3) * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH))
+					if randf() < 0.25:
+						cell_data.type = cell_data.Type.SMALL
 					maze[Vector3i(q, r, s)] = cell_data
 					a_star.add_point(cell_data.id, cell_data.position)
 
 	Globals.maze = maze
-
+	current_room = Vector3i.ZERO
 	create_maze()
 	break_walls()
 	thread.start(build_maze)
@@ -68,7 +73,6 @@ func _ready() -> void:
 		enemy.tick = start_tick
 
 		start_tick += 3
-
 
 	player.start()
 
@@ -132,14 +136,19 @@ func build_maze():
 	call_deferred("_on_rooms_created", true)
 
 func create_room(coords : Vector3i):
-	var hex_room: HexRoom = hex_room_scene.instantiate()
+	var hex_room: HexRoom
+	if maze[coords].type == CellData.Type.NORMAL:
+		hex_room = hex_room_scene.instantiate()
+	else:
+		hex_room = small_hex_room_scene.instantiate()
 	hex_room.room_data = maze[coords]
 	hex_room.entered.connect(_on_room_entered)
 	rooms_to_add.append(hex_room)
 	room_dict[coords] = hex_room	
 
-func adjust_visibility(coords : Vector3i):
-	var neighbours : Array[Vector3i] = get_cells_in_range(coords, CULL_DISTANCE)
+func adjust_visibility():
+	var neighbours : Array[Vector3i] = get_cells_in_range(current_room, CULL_DISTANCE)
+
 	for neighbour in neighbours:
 		if !room_dict.has(neighbour):
 			create_room(neighbour)
@@ -151,11 +160,16 @@ func adjust_visibility(coords : Vector3i):
 			room_dict[room].queue_free()
 			room_dict.erase(room)
 
-
 	call_deferred("_on_rooms_created")
 	
-	room_dict[coords].call_deferred("disable_detector")
-	
+
+func hide_distant_rooms():
+	var neighbours : Array[Vector3i] = get_cells_in_range(current_room, 1)
+	for room in room_dict.keys():
+		if neighbours.has(room):
+			room_dict[room].make_visible()
+		else:
+			room_dict[room].make_invisible()
 
 func break_walls():
 	var walls_to_break : int = floori(maze.size() * connectivity_ratio)
@@ -202,8 +216,12 @@ func _on_rooms_created(first_time : bool = false):
 		await get_tree().process_frame
 		room_dict[Vector3i.ZERO].call_deferred("disable_detector")
 
+	#hide_distant_rooms()
+
 func _on_room_entered(coords : Vector3i):
-	thread.start(adjust_visibility.bind(coords))
+	current_room = coords
+	room_dict[current_room].call_deferred("disable_detector")
+	thread.start(adjust_visibility)
 
 func _process(_delta: float) -> void:
 	orth_camera.position = Vector3(player.position.x, 5, player.position.z)

@@ -1,0 +1,8 @@
+[gd_resource type="BoxMesh" load_steps=2 format=3 uid="uid://onstsblc4s7b"]
+
+[ext_resource type="Material" uid="uid://dakuvjq0jwhg8" path="res://materials/wood_corridor_material.tres" id="1_fon5u"]
+
+[resource]
+resource_local_to_scene = true
+material = ExtResource("1_fon5u")
+size = Vector3(0.25, 2, 4)

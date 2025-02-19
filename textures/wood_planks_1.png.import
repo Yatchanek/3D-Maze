@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dsorrnm6xev6p"
-path.s3tc="res://.godot/imported/Bricks_01_Grey_n.png-a99238f42ab34ed931aaec842436c564.s3tc.ctex"
+uid="uid://8nplrw0jvcu6"
+path.s3tc="res://.godot/imported/wood_planks_1.png-4e19c0bb0f38b3735d9137622f025b24.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://textures/Bricks_01_Grey_n.png"
-dest_files=["res://.godot/imported/Bricks_01_Grey_n.png-a99238f42ab34ed931aaec842436c564.s3tc.ctex"]
+source_file="res://textures/wood_planks_1.png"
+dest_files=["res://.godot/imported/wood_planks_1.png-4e19c0bb0f38b3735d9137622f025b24.s3tc.ctex"]
 
 [params]
 
@@ -20,12 +20,12 @@ compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
-compress/normal_map=1
+compress/normal_map=0
 compress/channel_pack=0
 mipmaps/generate=true
 mipmaps/limit=-1
-roughness/mode=1
-roughness/src_normal="res://textures/Bricks_01_Grey_n.png"
+roughness/mode=0
+roughness/src_normal=""
 process/fix_alpha_border=true
 process/premult_alpha=false
 process/normal_map_invert_y=false

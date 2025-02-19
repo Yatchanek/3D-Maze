@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dph24mwse0sle"
-path.s3tc="res://.godot/imported/Wood_Planks_03_Brown_1.png-93c0e6fccf475c988da73b81d6ee27b0.s3tc.ctex"
+uid="uid://dblavuc1pchat"
+path.s3tc="res://.godot/imported/bricks_3.png-be21e466584862589e2347767bf2697e.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://textures/Wood_Planks_03_Brown_1.png"
-dest_files=["res://.godot/imported/Wood_Planks_03_Brown_1.png-93c0e6fccf475c988da73b81d6ee27b0.s3tc.ctex"]
+source_file="res://textures/bricks_3.png"
+dest_files=["res://.godot/imported/bricks_3.png-be21e466584862589e2347767bf2697e.s3tc.ctex"]
 
 [params]
 

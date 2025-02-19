@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2yvg84wfwfnn"
-path.s3tc="res://.godot/imported/Wood_Planks_03_Brown_2.png-1435e10cd8f8c1395d155f044f82eab6.s3tc.ctex"
+uid="uid://crrudev3d1vpa"
+path.s3tc="res://.godot/imported/cobblestones_0_n.png-f43458c49fcef4d64c8d101858191479.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://textures/Wood_Planks_03_Brown_2.png"
-dest_files=["res://.godot/imported/Wood_Planks_03_Brown_2.png-1435e10cd8f8c1395d155f044f82eab6.s3tc.ctex"]
+source_file="res://textures/cobblestones_0_n.png"
+dest_files=["res://.godot/imported/cobblestones_0_n.png-f43458c49fcef4d64c8d101858191479.s3tc.ctex"]
 
 [params]
 
@@ -20,12 +20,12 @@ compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
-compress/normal_map=0
+compress/normal_map=1
 compress/channel_pack=0
 mipmaps/generate=true
 mipmaps/limit=-1
-roughness/mode=0
-roughness/src_normal=""
+roughness/mode=1
+roughness/src_normal="res://textures/Cobblestones_01_Grey_n.png"
 process/fix_alpha_border=true
 process/premult_alpha=false
 process/normal_map_invert_y=false

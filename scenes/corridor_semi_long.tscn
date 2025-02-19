@@ -1,0 +1,74 @@
+[gd_scene load_steps=12 format=3 uid="uid://cm23almacxsok"]
+
+[ext_resource type="Script" path="res://scripts/corridor.gd" id="1_hcnc1"]
+[ext_resource type="Material" uid="uid://dakuvjq0jwhg8" path="res://materials/wood_corridor_material.tres" id="2_lx5r4"]
+[ext_resource type="Material" uid="uid://7hen55jioufw" path="res://materials/outline_material.tres" id="3_pa5xr"]
+[ext_resource type="Material" uid="uid://dvo1r1d1ypcta" path="res://materials/floor_material_0.tres" id="4_cj6gj"]
+[ext_resource type="Material" uid="uid://3be68um7y4vv" path="res://materials/floor_material_0_top.tres" id="5_heeqe"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2put2"]
+size = Vector3(0.5, 2, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ky75a"]
+material = ExtResource("2_lx5r4")
+size = Vector3(0.5, 2, 3)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_82sia"]
+material = ExtResource("3_pa5xr")
+size = Vector2(0.5, 3)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_lrtq1"]
+resource_local_to_scene = true
+material = ExtResource("4_cj6gj")
+size = Vector2(2, 3)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_u3vo4"]
+resource_local_to_scene = true
+material = ExtResource("5_heeqe")
+size = Vector2(2, 3)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_uyg5w"]
+resource_local_to_scene = true
+material = ExtResource("2_lx5r4")
+size = Vector2(2, 3)
+
+[node name="Corridor" type="StaticBody3D"]
+script = ExtResource("1_hcnc1")
+
+[node name="LeftCollision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1, 0)
+shape = SubResource("BoxShape3D_2put2")
+
+[node name="RightCollision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0)
+shape = SubResource("BoxShape3D_2put2")
+
+[node name="LeftWall" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1, 0)
+mesh = SubResource("BoxMesh_ky75a")
+
+[node name="RightWall" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0)
+mesh = SubResource("BoxMesh_ky75a")
+
+[node name="LeftOutline" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 2.05, 0)
+layers = 4
+mesh = SubResource("PlaneMesh_82sia")
+
+[node name="RightOutline" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 2.05, 0)
+layers = 4
+mesh = SubResource("PlaneMesh_82sia")
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_lrtq1")
+
+[node name="FloorTop" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.02, 0)
+layers = 4
+mesh = SubResource("PlaneMesh_u3vo4")
+
+[node name="Ceiling" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 2.01, 0)
+mesh = SubResource("PlaneMesh_uyg5w")

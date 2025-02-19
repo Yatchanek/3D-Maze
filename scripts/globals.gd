@@ -19,10 +19,13 @@ static var directions : Array[Vector3i] = [
 ]
 
 static var HEX_SIZE : int = 4
+static var SMALL_HEX_SIZE : float = 2.5
 static var HEX_HEIGHT : int = 2
 static var WALL_WIDTH : float = 0.25
 static var OUTLINE_WIDTH : float = 0.5
 static var CORRIDOR_LENGTH : float = 3.0
+static var CORRIDOR_SEMI_LONG_LENGTH : float = CORRIDOR_LENGTH + sqrt(3) * (HEX_SIZE - SMALL_HEX_SIZE) * 0.5
+static var CORRIDOR_LONG_LENGTH : float = CORRIDOR_LENGTH + sqrt(3) * (HEX_SIZE - SMALL_HEX_SIZE)
 static var player : CharacterBody3D
 
 static var maze : Dictionary = {}

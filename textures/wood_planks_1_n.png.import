@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2oivi8u1i0jf"
-path.s3tc="res://.godot/imported/Wood_Planks_03_Brown_n.png-b9cd4dbba8289a9ddb03972a94f5bc80.s3tc.ctex"
+uid="uid://cqgrhw3pvqdmb"
+path.s3tc="res://.godot/imported/wood_planks_1_n.png-ea2a98a520057024eede13fa02bb38b1.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://textures/Wood_Planks_03_Brown_n.png"
-dest_files=["res://.godot/imported/Wood_Planks_03_Brown_n.png-b9cd4dbba8289a9ddb03972a94f5bc80.s3tc.ctex"]
+source_file="res://textures/wood_planks_1_n.png"
+dest_files=["res://.godot/imported/wood_planks_1_n.png-ea2a98a520057024eede13fa02bb38b1.s3tc.ctex"]
 
 [params]
 
@@ -25,7 +25,7 @@ compress/channel_pack=0
 mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=1
-roughness/src_normal="res://textures/Wood_Planks_03_Brown_n.png"
+roughness/src_normal="res://textures/wood_planks_1_n.png"
 process/fix_alpha_border=true
 process/premult_alpha=false
 process/normal_map_invert_y=false

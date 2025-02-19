@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://b1y1eap5q1dws"]
+[gd_scene load_steps=9 format=3 uid="uid://b1y1eap5q1dws"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ovkwn"]
 [ext_resource type="Material" uid="uid://crbopxk1glyq0" path="res://materials/indicator_material.tres" id="2_nrt8s"]
@@ -17,7 +17,15 @@ height = 0.25
 
 [sub_resource type="PrismMesh" id="PrismMesh_nn47u"]
 material = ExtResource("2_nrt8s")
-size = Vector3(1, 1, 0.1)
+size = Vector3(1, 1.25, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_un68u"]
+albedo_color = Color(0, 0, 0, 1)
+emission_enabled = true
+
+[sub_resource type="PrismMesh" id="PrismMesh_dda7n"]
+material = SubResource("StandardMaterial3D_un68u")
+size = Vector3(1, 1.25, 0.1)
 
 [node name="Player" type="CharacterBody3D"]
 collision_layer = 16
@@ -49,17 +57,23 @@ near = 0.02
 far = 20.0
 
 [node name="Light" type="SpotLight3D" parent="CameraGimbal/Camera"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.215036, 0.496643)
-light_color = Color(1, 1, 0.862745, 1)
-light_energy = 1.5
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.215, 0.5)
+light_color = Color(1, 1, 0.756863, 1)
+light_energy = 1.75
 shadow_enabled = true
 shadow_opacity = 0.7
 spot_range = 10.0
-spot_attenuation = 1.75
-spot_angle = 35.0
+spot_attenuation = 2.0
+spot_angle_attenuation = 2.0
 
 [node name="Marker" type="MeshInstance3D" parent="CameraGimbal"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 3, -0.062)
+transform = Transform3D(1.25, 0, 0, 0, -4.37114e-08, 1.25, 0, -1, -5.46392e-08, 0, 3, -0.062)
 layers = 4
 mesh = SubResource("PrismMesh_nn47u")
 skeleton = NodePath("../..")
+
+[node name="Marker2" type="MeshInstance3D" parent="CameraGimbal/Marker"]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, -2.73286e-14, 0, 4.09929e-14, 1, 0, 0.0294262, -0.0274539)
+layers = 4
+mesh = SubResource("PrismMesh_dda7n")
+skeleton = NodePath("../../..")
