@@ -4,6 +4,8 @@ extends Node3D
 @export_range(0., 1.0) var connectivity_ratio : float = 0.25
 @export var hex_room_scene: PackedScene
 @export var small_hex_room_scene: PackedScene
+@export var basic_enemy_scene : PackedScene
+@export var seeker_enemy_scene : PackedScene
 
 @onready var orth_camera : Camera3D = %OrthCamera
 @onready var player = $Player
@@ -22,7 +24,6 @@ var maze: Dictionary = {}
 
 var room_dict : Dictionary = {}
 
-
 var a_star : AStar3D = AStar3D.new()
 
 var thread : Thread
@@ -30,6 +31,10 @@ var thread : Thread
 var rooms_to_add : Array[HexRoom] = []
 
 var current_room : Vector3i
+
+var enemy_array : Array[Enemy] = []
+
+var max_enemies : int = 10
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey:
@@ -58,21 +63,6 @@ func _ready() -> void:
 	break_walls()
 	thread.start(build_maze)
 
-	var close_neighbours : Array[Vector3i]= get_cells_in_range(Vector3i.ZERO, 1)
-
-	var enemy_positions : Array[Vector3i] = []
-	var start_tick : int = 0
-	for enemy : Enemy in get_tree().get_nodes_in_group("Enemies"):
-		var pos : Vector3i = maze.keys().pick_random()
-		while close_neighbours.has(pos) or enemy_positions.has(pos):
-			pos = maze.keys().pick_random()
-		
-		enemy_positions.append(pos)
-		enemy.position = maze[pos].position
-		enemy.a_star = a_star
-		enemy.tick = start_tick
-
-		start_tick += 3
 
 	player.start()
 
@@ -97,7 +87,14 @@ func create_maze():
 			var dir: Vector3i = next - current
 			maze[current].layout |= walls[dir]
 			maze[next].layout |= walls[-dir]
-			a_star.connect_points(maze[current].id, maze[next].id)
+
+			var middle_point : Vector3 = (maze[current].position + maze[next].position) * 0.5
+			var new_id : int = a_star.get_available_point_id()
+			a_star.add_point(new_id, middle_point)
+			a_star.connect_points(maze[current].id, new_id)
+			a_star.connect_points(new_id, maze[next].id)
+			
+			
 
 			current = next
 			unvisited.erase(current)
@@ -200,10 +197,38 @@ func break_walls():
 		if found:
 			maze[cell].layout |= walls[dir]
 			maze[neighbour].layout |= walls[-dir]
-			a_star.connect_points(maze[cell].id, maze[neighbour].id)
+			var middle_point : Vector3 = (maze[cell].position + maze[neighbour].position) * 0.5
+			var new_id = a_star.get_available_point_id()
+			a_star.add_point(new_id, middle_point)
+			a_star.connect_points(maze[cell].id, new_id)
+			a_star.connect_points(new_id, maze[neighbour].id)
 
 		
 		unvisited.erase(cell)
+
+func spawn_enemy():
+	if enemy_array.size() >= max_enemies:
+		return
+
+	var neighbours : Array[Vector3i]= get_cells_in_range(Vector3i.ZERO, 1)
+
+	var start_tick : int = randi_range(0, 5)
+	var pos : Vector3i = maze.keys().pick_random()
+	while neighbours.has(pos):
+		pos = maze.keys().pick_random()
+
+	var enemy : Enemy
+	if randf() < 0.88:
+		enemy = basic_enemy_scene.instantiate()
+	else:
+		enemy = seeker_enemy_scene.instantiate()
+	enemy.position = maze[pos].position
+	enemy.a_star = a_star
+	enemy.tick = start_tick
+	enemy.died.connect(_on_enemy_destroyed)
+	enemy_array.append(enemy)
+
+	call_deferred("add_child", enemy)
 
 
 func _on_rooms_created(first_time : bool = false):
@@ -225,3 +250,14 @@ func _on_room_entered(coords : Vector3i):
 
 func _process(_delta: float) -> void:
 	orth_camera.position = Vector3(player.position.x, 5, player.position.z)
+
+
+func _on_player_grenade_thrown(grenade: RigidBody3D, impulse: Vector3) -> void:
+	grenade.apply_central_impulse(impulse)
+	call_deferred("add_child", grenade)
+
+func _on_enemy_destroyed(enemy : Enemy):
+	enemy_array.erase(enemy)
+
+func _on_timer_timeout() -> void:
+	spawn_enemy()

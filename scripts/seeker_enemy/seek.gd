@@ -9,13 +9,8 @@ func _enter_state(_previous_state : State) -> void:
 
 func physics_update(delta : float) -> void:
 	actor.tick += 1
-	if actor.position.distance_squared_to(waypoint) < 0.15 * 0.15:
-		path.remove_at(0)
-		if path.size() > 0:
-			waypoint = path[0]
-
-		else:
-			get_new_destination()
+	if actor.position.distance_squared_to(waypoint) < 0.1 * 0.1:
+		get_new_destination()
 
 	var direction : Vector3 = actor.position.direction_to(waypoint)
 	if actor.tick % 3:
@@ -30,10 +25,10 @@ func physics_update(delta : float) -> void:
 
 	actor.move_and_slide()
 
-	elapsed_time += delta
-	if elapsed_time > 5.0:
-		get_new_destination()
-		elapsed_time -= 5.0
+	#elapsed_time += delta
+	#if elapsed_time > 5.0:
+		#get_new_destination()
+		#elapsed_time -= 5.0
 
 func get_new_destination() -> void:
 	var destination : int = actor.a_star.get_closest_point(Globals.player.position)

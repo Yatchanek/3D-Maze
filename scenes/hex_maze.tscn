@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://b2kx3pbytijw1"]
+[gd_scene load_steps=11 format=3 uid="uid://b2kx3pbytijw1"]
 
 [ext_resource type="Script" path="res://scripts/hex_maze.gd" id="1_k0ibe"]
 [ext_resource type="PackedScene" uid="uid://cyrp51sdsmug" path="res://scenes/hex_room.tscn" id="2_a6gxg"]
@@ -10,6 +10,15 @@
 [sub_resource type="Environment" id="Environment_prdqm"]
 background_mode = 1
 ambient_light_energy = 0.0
+fog_mode = 1
+fog_light_color = Color(0.787759, 0.787759, 0.787759, 1)
+fog_light_energy = 2.0
+fog_density = 1.0
+fog_sky_affect = 0.0
+volumetric_fog_density = 0.7342
+volumetric_fog_albedo = Color(0, 0, 0, 1)
+volumetric_fog_emission = Color(0.533037, 0.533037, 0.533037, 1)
+volumetric_fog_length = 15.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8lijc"]
 draw_center = false
@@ -19,16 +28,11 @@ border_width_right = 8
 border_width_bottom = 8
 border_color = Color(7.78515e-06, 0.255032, 0.0431681, 1)
 
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3oeqy"]
+rough = true
+absorbent = true
+
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_i5o6u"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rletg"]
-albedo_color = Color(0, 1, 0, 1)
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_juknq"]
-resource_local_to_scene = true
-material = SubResource("StandardMaterial3D_rletg")
-radius = 0.2
-height = 0.75
 
 [node name="HexMaze" type="Node3D"]
 script = ExtResource("1_k0ibe")
@@ -36,25 +40,27 @@ CULL_DISTANCE = 2
 connectivity_ratio = 0.5
 hex_room_scene = ExtResource("2_a6gxg")
 small_hex_room_scene = ExtResource("3_tymju")
+basic_enemy_scene = ExtResource("4_t2nx0")
+seeker_enemy_scene = ExtResource("5_2tns3")
 
 [node name="Player" parent="." instance=ExtResource("3_3ttit")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_prdqm")
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+[node name="MiniMap" type="SubViewportContainer" parent="."]
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+[node name="SubViewport" type="SubViewport" parent="MiniMap"]
 handle_input_locally = false
 size = Vector2i(384, 384)
 render_target_update_mode = 4
 
-[node name="CanvasLayer" type="CanvasLayer" parent="SubViewportContainer/SubViewport"]
+[node name="CanvasLayer" type="CanvasLayer" parent="MiniMap/SubViewport"]
 layer = -1
 
-[node name="Control" type="Control" parent="SubViewportContainer/SubViewport/CanvasLayer"]
+[node name="Control" type="Control" parent="MiniMap/SubViewport/CanvasLayer"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -62,7 +68,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="Panel" parent="SubViewportContainer/SubViewport/CanvasLayer/Control"]
+[node name="Panel" type="Panel" parent="MiniMap/SubViewport/CanvasLayer/Control"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -71,33 +77,23 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8lijc")
 
-[node name="Node3D" type="Node3D" parent="SubViewportContainer/SubViewport"]
-
-[node name="OrthCamera" type="Camera3D" parent="SubViewportContainer/SubViewport/Node3D"]
+[node name="OrthCamera" type="Camera3D" parent="MiniMap/SubViewport/CanvasLayer"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 11.4109, 0)
-visible = false
 cull_mask = 1048572
 projection = 1
 current = true
 size = 25.0
 
 [node name="Floor" type="StaticBody3D" parent="."]
+physics_material_override = SubResource("PhysicsMaterial_3oeqy")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
 shape = SubResource("WorldBoundaryShape3D_i5o6u")
 
-[node name="Enemy" parent="." groups=["Enemies"] instance=ExtResource("4_t2nx0")]
+[node name="Timer" type="Timer" parent="."]
+wait_time = 5.0
+autostart = true
 
-[node name="Body" parent="Enemy" index="1"]
-mesh = SubResource("CapsuleMesh_juknq")
-
-[node name="Enemy2" parent="." groups=["Enemies"] instance=ExtResource("4_t2nx0")]
-
-[node name="Enemy3" parent="." groups=["Enemies"] instance=ExtResource("4_t2nx0")]
-
-[node name="Enemy4" parent="." groups=["Enemies"] instance=ExtResource("4_t2nx0")]
-
-[node name="Seeker" parent="." groups=["Enemies"] instance=ExtResource("5_2tns3")]
-
-[editable path="Enemy"]
+[connection signal="grenade_thrown" from="Player" to="." method="_on_player_grenade_thrown"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

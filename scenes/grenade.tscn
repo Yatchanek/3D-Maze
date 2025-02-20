@@ -1,0 +1,81 @@
+[gd_scene load_steps=14 format=3 uid="uid://bkb4wd464le6g"]
+
+[ext_resource type="Script" path="res://scripts/grenade.gd" id="1_bchq8"]
+[ext_resource type="PackedScene" uid="uid://cabmscpkdhse4" path="res://scenes/hurtbox.tscn" id="3_3iu5a"]
+[ext_resource type="ArrayMesh" uid="uid://b4mcsnfqtimku" path="res://meshes/grenade.res" id="3_y07fr"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_uci0x"]
+rough = true
+bounce = 0.25
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_e2l2h"]
+radius = 0.15
+
+[sub_resource type="Gradient" id="Gradient_hb6wa"]
+offsets = PackedFloat32Array(0, 0.336364, 0.618182, 1)
+colors = PackedColorArray(1, 0, 0, 1, 1, 1, 0, 1, 1, 0.482353, 0, 1, 1, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_w1kl6"]
+gradient = SubResource("Gradient_hb6wa")
+
+[sub_resource type="Curve" id="Curve_jou3d"]
+_data = [Vector2(0, 0.296703), 0.0, 0.0, 0, 0, Vector2(0.318841, 0.659341), 1.86644, 1.86644, 0, 0, Vector2(0.507246, 1), 0.0, 0.0, 0, 0, Vector2(0.521739, 0.978022), 0.0, 0.0, 0, 0, Vector2(0.710145, 0.835165), -1.5887, -1.5887, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 6
+
+[sub_resource type="CurveTexture" id="CurveTexture_17o4j"]
+curve = SubResource("Curve_jou3d")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_wqo8v"]
+emission_shape = 1
+emission_sphere_radius = 0.25
+direction = Vector3(0, 1, 0)
+spread = 70.0
+initial_velocity_min = 3.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.5
+scale_max = 1.5
+scale_curve = SubResource("CurveTexture_17o4j")
+color_initial_ramp = SubResource("GradientTexture1D_w1kl6")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eweun"]
+vertex_color_use_as_albedo = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_bg0u1"]
+material = SubResource("StandardMaterial3D_eweun")
+radius = 0.2
+height = 0.4
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_dykns"]
+resource_local_to_scene = true
+radius = 0.001
+
+[node name="Grenade" type="RigidBody3D"]
+collision_layer = 8
+physics_material_override = SubResource("PhysicsMaterial_uci0x")
+angular_damp = 5.0
+script = ExtResource("1_bchq8")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_e2l2h")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, 0, 0, 0)
+mesh = ExtResource("3_y07fr")
+
+[node name="Explosion" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 16
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.9
+process_material = SubResource("ParticleProcessMaterial_wqo8v")
+draw_pass_1 = SubResource("SphereMesh_bg0u1")
+
+[node name="Hurtbox" parent="." instance=ExtResource("3_3iu5a")]
+collision_layer = 64
+
+[node name="CollisionShape3D" parent="Hurtbox" index="0"]
+shape = SubResource("SphereShape3D_dykns")
+
+[editable path="Hurtbox"]

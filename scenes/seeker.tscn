@@ -1,10 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://bcir1xrpmpjdm"]
+[gd_scene load_steps=13 format=3 uid="uid://bcir1xrpmpjdm"]
 
 [ext_resource type="Script" path="res://scripts/seeker_enemy/seeker.gd" id="1_6pkhf"]
 [ext_resource type="Script" path="res://scripts/fsm.gd" id="2_sws0l"]
 [ext_resource type="Script" path="res://scripts/seeker_enemy/idle_state.gd" id="3_kvm0l"]
 [ext_resource type="Script" path="res://scripts/seeker_enemy/seek.gd" id="4_6kbps"]
 [ext_resource type="Script" path="res://scripts/context_steering_component.gd" id="5_2058m"]
+[ext_resource type="PackedScene" uid="uid://bi7vniosvwa8c" path="res://scenes/hit_box.tscn" id="6_837p5"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_7yofo"]
 radius = 0.25
@@ -27,6 +28,10 @@ emission = Color(0, 1, 0, 1)
 [sub_resource type="PrismMesh" id="PrismMesh_ftc33"]
 material = SubResource("StandardMaterial3D_igcsn")
 size = Vector3(1, 1, 0.1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mr83j"]
+radius = 0.25
+height = 1.0
 
 [node name="Seeker" type="CharacterBody3D"]
 collision_layer = 2
@@ -65,3 +70,12 @@ script = ExtResource("5_2058m")
 num_rays = 12
 ray_length = 1.5
 collision_mask = 3
+
+[node name="HitBox" parent="." node_paths=PackedStringArray("target") instance=ExtResource("6_837p5")]
+target = NodePath("..")
+
+[node name="CollisionShape3D" parent="HitBox" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("CapsuleShape3D_mr83j")
+
+[editable path="HitBox"]

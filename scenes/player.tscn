@@ -1,6 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://b1y1eap5q1dws"]
+[gd_scene load_steps=10 format=3 uid="uid://b1y1eap5q1dws"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ovkwn"]
+[ext_resource type="PackedScene" uid="uid://bkb4wd464le6g" path="res://scenes/grenade.tscn" id="2_jw5ya"]
 [ext_resource type="Material" uid="uid://crbopxk1glyq0" path="res://materials/indicator_material.tres" id="2_nrt8s"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_sv5h7"]
@@ -30,6 +31,7 @@ size = Vector3(1, 1.25, 0.1)
 [node name="Player" type="CharacterBody3D"]
 collision_layer = 16
 script = ExtResource("1_ovkwn")
+grenade_scene = ExtResource("2_jw5ya")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)

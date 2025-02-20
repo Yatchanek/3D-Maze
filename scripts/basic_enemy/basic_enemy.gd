@@ -32,3 +32,4 @@ func handle_movement(dir : Vector3):
 
 func change_color(color : Color):
 	$Body.mesh.material.albedo_color = color
+
