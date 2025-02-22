@@ -16,9 +16,10 @@ radius = 0.2
 height = 0.75
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rletg"]
+resource_local_to_scene = true
 albedo_color = Color(0, 1, 0, 1)
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_f7o2n"]
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_416pt"]
 resource_local_to_scene = true
 material = SubResource("StandardMaterial3D_rletg")
 radius = 0.2
@@ -54,7 +55,7 @@ shape = SubResource("CapsuleShape3D_fpmjc")
 
 [node name="Body" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.375, 0)
-mesh = SubResource("CapsuleMesh_f7o2n")
+mesh = SubResource("CapsuleMesh_416pt")
 skeleton = NodePath("../CollisionShape3D")
 
 [node name="Nose" type="MeshInstance3D" parent="Body"]

@@ -23,12 +23,10 @@ func physics_update(delta : float) -> void:
 		actor.look_at(actor.position + actor.velocity.normalized())
 		actor.basis = actor.basis.orthonormalized()
 
+	actor.body.rotation.x -= TAU * delta
+
 	actor.move_and_slide()
 
-	#elapsed_time += delta
-	#if elapsed_time > 5.0:
-		#get_new_destination()
-		#elapsed_time -= 5.0
 
 func get_new_destination() -> void:
 	var destination : int = actor.a_star.get_closest_point(Globals.player.position)
