@@ -1,5 +1,7 @@
 extends Node3D
 
+@export var MAZE_SIZE : int = 3
+@export var SMALL_ROOM_RATIO : float = 0.15
 @export var CULL_DISTANCE : int = 1
 @export_range(0., 1.0) var connectivity_ratio : float = 0.25
 @export var hex_room_scene: PackedScene
@@ -44,29 +46,29 @@ func _input(event: InputEvent) -> void:
 func _ready() -> void:
 	thread = Thread.new()
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	for q in range(-3, 4):
-		for r in range(-3, 4):
-			for s in range(-3, 4):
-				if q + r + s == 0:
-					var cell_data = CellData.new()
-					cell_data.coords = Vector3i(q, r, s)
-					cell_data.id = a_star.get_available_point_id()
-					cell_data.position = Vector3(q * (1.5 * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH * cos (PI / 6)), 0, q * (sqrt(3) * 0.5 * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH * 0.5)+ r * (sqrt(3) * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH))
-					if randf() < 0.25:
-						cell_data.type = cell_data.Type.SMALL
-					maze[Vector3i(q, r, s)] = cell_data
-					a_star.add_point(cell_data.id, cell_data.position)
-
-	Globals.maze = maze
-	current_room = Vector3i.ZERO
+	create_cells_and_grid()
 	create_maze()
 	break_walls()
+	Globals.maze = maze
+	current_room = Vector3i.ZERO
 	thread.start(build_maze)
 
 
 	player.start()
 
-
+func create_cells_and_grid():
+	for q in range(-MAZE_SIZE, MAZE_SIZE + 1):
+		for r in range(-MAZE_SIZE, MAZE_SIZE + 1):
+			for s in range(-MAZE_SIZE, MAZE_SIZE + 1):
+				if q + r + s == 0:
+					var cell_data = CellData.new()
+					cell_data.coords = Vector3i(q, r, s)
+					cell_data.id = a_star.get_available_point_id()
+					cell_data.position = Vector3(q * (1.5 * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH * cos (PI / 6)), 0, q * (sqrt(3) * 0.5 * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH * 0.5)+ r * (sqrt(3) * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH))
+					if randf() < SMALL_ROOM_RATIO:
+						cell_data.type = cell_data.Type.SMALL
+					maze[Vector3i(q, r, s)] = cell_data
+					a_star.add_point(cell_data.id, cell_data.position)
 
 func create_maze():
 	var unvisited: Array[Vector3i] = []
@@ -145,11 +147,10 @@ func create_room(coords : Vector3i):
 
 func adjust_visibility():
 	var neighbours : Array[Vector3i] = get_cells_in_range(current_room, CULL_DISTANCE)
-
 	for neighbour in neighbours:
 		if !room_dict.has(neighbour):
 			create_room(neighbour)
-		else:
+		elif neighbour != current_room:
 			room_dict[neighbour].call_deferred("enable_detector")
 
 	for room in room_dict.keys():
@@ -225,6 +226,7 @@ func spawn_enemy():
 	enemy.position = maze[pos].position
 	enemy.a_star = a_star
 	enemy.tick = start_tick
+	enemy.current_room = pos
 	enemy.died.connect(_on_enemy_destroyed)
 	enemy_array.append(enemy)
 
@@ -232,16 +234,23 @@ func spawn_enemy():
 
 
 func _on_rooms_created(first_time : bool = false):
-	thread.wait_to_finish()
-	for room in rooms_to_add:
-		call_deferred("add_child", room)
+	if thread.is_started():
+		thread.wait_to_finish()
+		for room in rooms_to_add:
+			call_deferred("add_child", room)
 
-	rooms_to_add = []
-	if first_time:
-		await get_tree().process_frame
-		room_dict[Vector3i.ZERO].call_deferred("disable_detector")
+		rooms_to_add = []
+		if first_time:
+			await get_tree().process_frame
+			room_dict[Vector3i.ZERO].call_deferred("disable_detector")
+	else:
+		for room in rooms_to_add:
+			call_deferred("add_child", room)
 
-	#hide_distant_rooms()
+		rooms_to_add = []
+		if first_time:
+			await get_tree().process_frame
+			room_dict[Vector3i.ZERO].call_deferred("disable_detector")
 
 func _on_room_entered(coords : Vector3i):
 	current_room = coords

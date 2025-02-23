@@ -126,7 +126,10 @@ mesh = ExtResource("11_6wa2b")
 
 [node name="EntranceDetector" type="Area3D" parent="."]
 collision_layer = 0
-collision_mask = 16
+collision_mask = 6
 monitorable = false
+
+[node name="Debug" type="Node3D" parent="."]
+visible = false
 
 [connection signal="body_entered" from="EntranceDetector" to="." method="_on_entrance_detector_body_entered"]

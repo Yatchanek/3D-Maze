@@ -5,7 +5,7 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_in6tj"]
 
 [node name="FullWall" type="StaticBody3D"]
-collision_mask = 18
+collision_mask = 6
 script = ExtResource("1_bcphk")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

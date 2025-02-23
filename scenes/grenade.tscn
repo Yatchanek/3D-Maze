@@ -161,6 +161,8 @@ draw_pass_1 = SubResource("ArrayMesh_dhybf")
 
 [node name="Hurtbox" parent="." instance=ExtResource("3_3iu5a")]
 collision_layer = 64
+collision_mask = 0
+damage = 10.0
 
 [node name="CollisionShape3D" parent="Hurtbox" index="0"]
 shape = SubResource("SphereShape3D_dykns")

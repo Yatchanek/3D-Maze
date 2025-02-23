@@ -88,15 +88,22 @@ func add_detector_collision(idx: int, exit : int) -> void:
 	if exit == 0:
 		return
 	
+	var mesh_instance : MeshInstance3D = MeshInstance3D.new()
+	var mesh : BoxMesh = BoxMesh.new()
+	mesh.size = Vector3(0.25, Globals.HEX_HEIGHT, Globals.WALL_WIDTH)
+	mesh_instance.mesh = mesh
 	var collision_shape : CollisionShape3D = CollisionShape3D.new()
 	var shape : BoxShape3D = BoxShape3D.new()
-	shape.size = Vector3(Globals.HEX_SIZE * 0.5, Globals.HEX_HEIGHT, Globals.WALL_WIDTH)
+	shape.size = Vector3(Globals.HEX_SIZE * 0.375, Globals.HEX_HEIGHT, Globals.WALL_WIDTH)
 	collision_shape.shape = shape
 
 	collision_shape.rotation_degrees = Vector3(0, idx * -60, 0)
+	mesh_instance.rotation_degrees = Vector3(0, idx * -60, 0)
 	var direction = Vector3.FORWARD.rotated(Vector3.UP, deg_to_rad(collision_shape.rotation_degrees.y))
-	collision_shape.position = direction * (sqrt(3) * Globals.HEX_SIZE * 0.5 + Globals.CORRIDOR_LENGTH * 0.25) + Vector3.UP * Globals.HEX_HEIGHT * 0.5
+	collision_shape.position = direction * (sqrt(3) * room_size * 0.5 + Globals.CORRIDOR_LENGTH * 0.15) + Vector3.UP * Globals.HEX_HEIGHT * 0.5
+	mesh_instance.position = collision_shape.position
 	entrance_detector.call_deferred("add_child", collision_shape)
+	$Debug.add_child(mesh_instance)
 
 func add_collision(idx: int, exit : int) -> void:
 	var static_body : StaticBody3D
@@ -111,12 +118,12 @@ func add_collision(idx: int, exit : int) -> void:
 	add_child(static_body)
 
 func disable_detector():
-	for collision_shape : CollisionShape3D in entrance_detector.get_children():
-		collision_shape.set_deferred("disabled", true)
+	entrance_detector.monitoring = false
+	#$Debug.hide()
 
 func enable_detector():
-	for collision_shape : CollisionShape3D in entrance_detector.get_children():
-		collision_shape.set_deferred("disabled", false)	
+	entrance_detector.monitoring = true
+	#$Debug.show()
 
 
 func make_invisible():
@@ -129,8 +136,11 @@ func make_visible():
 	$Floor.show()
 	$Ceiling.show()
 
-func _on_entrance_detector_body_entered(_body:Node3D) -> void:
-	entered.emit(room_data.coords)
+func _on_entrance_detector_body_entered(body:Node3D) -> void:
+	if body is Player:
+		entered.emit(room_data.coords)
+	elif body is Enemy:
+		body.current_room = room_data.coords
 
 func _exit_tree() -> void:
 	room_data.corridors = [false, false, false, false, false, false]

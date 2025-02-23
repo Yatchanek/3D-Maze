@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://b2kx3pbytijw1"]
+[gd_scene load_steps=17 format=3 uid="uid://b2kx3pbytijw1"]
 
 [ext_resource type="Script" path="res://scripts/hex_maze.gd" id="1_k0ibe"]
 [ext_resource type="PackedScene" uid="uid://cyrp51sdsmug" path="res://scenes/hex_room.tscn" id="2_a6gxg"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dupc2snhor4cq" path="res://scenes/enemy.tscn" id="4_t2nx0"]
 [ext_resource type="PackedScene" uid="uid://bcir1xrpmpjdm" path="res://scenes/seeker.tscn" id="5_2tns3"]
 [ext_resource type="Script" path="res://scripts/inventory.gd" id="7_6r1b2"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="7_342dg"]
 [ext_resource type="StyleBox" uid="uid://xn5os3rvqd5j" path="res://slot_stylebox_basic.tres" id="8_0rgb7"]
 [ext_resource type="StyleBox" uid="uid://02xefc6jnw6p" path="res://slot_stylebox_with_border.tres" id="9_iqbtt"]
 
@@ -44,6 +45,11 @@ border_width_top = 8
 border_width_right = 8
 corner_radius_top_left = 32
 corner_radius_top_right = 32
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ergwk"]
+bg_color = Color(0, 1, 0, 1)
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
 
 [node name="HexMaze" type="Node3D"]
 script = ExtResource("1_k0ibe")
@@ -108,15 +114,16 @@ autostart = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="Control" type="Control" parent="CanvasLayer"]
+[node name="HUD" type="Control" parent="CanvasLayer"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("7_342dg")
 
-[node name="Inventory" type="PanelContainer" parent="CanvasLayer/Control"]
+[node name="Inventory" type="PanelContainer" parent="CanvasLayer/HUD"]
 custom_minimum_size = Vector2(1000, 160)
 layout_mode = 1
 anchors_preset = 7
@@ -135,7 +142,7 @@ script = ExtResource("7_6r1b2")
 normal_style = ExtResource("8_0rgb7")
 border_style = ExtResource("9_iqbtt")
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control/Inventory"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/HUD/Inventory"]
 custom_minimum_size = Vector2(1000, 160)
 layout_mode = 2
 theme_override_constants/margin_left = 16
@@ -143,75 +150,102 @@ theme_override_constants/margin_top = 32
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 32
 
-[node name="InventoryBar" type="HBoxContainer" parent="CanvasLayer/Control/Inventory/MarginContainer"]
+[node name="InventoryBar" type="HBoxContainer" parent="CanvasLayer/HUD/Inventory/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 32
 alignment = 1
 
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/Control/Inventory/MarginContainer/InventoryBar"]
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar"]
 clip_children = 2
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 theme_override_styles/panel = ExtResource("9_iqbtt")
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/Inventory/MarginContainer/InventoryBar/PanelContainer"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer"]
 layout_mode = 2
 expand_mode = 2
 
-[node name="PanelContainer2" type="PanelContainer" parent="CanvasLayer/Control/Inventory/MarginContainer/InventoryBar"]
+[node name="PanelContainer2" type="PanelContainer" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar"]
 clip_children = 2
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 theme_override_styles/panel = ExtResource("8_0rgb7")
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/Inventory/MarginContainer/InventoryBar/PanelContainer2"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer2"]
 layout_mode = 2
 expand_mode = 3
 
-[node name="PanelContainer3" type="PanelContainer" parent="CanvasLayer/Control/Inventory/MarginContainer/InventoryBar"]
+[node name="PanelContainer3" type="PanelContainer" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar"]
 clip_children = 2
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 theme_override_styles/panel = ExtResource("8_0rgb7")
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/Inventory/MarginContainer/InventoryBar/PanelContainer3"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer3"]
 layout_mode = 2
 expand_mode = 3
 
-[node name="PanelContainer4" type="PanelContainer" parent="CanvasLayer/Control/Inventory/MarginContainer/InventoryBar"]
+[node name="PanelContainer4" type="PanelContainer" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar"]
 clip_children = 2
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 theme_override_styles/panel = ExtResource("8_0rgb7")
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/Inventory/MarginContainer/InventoryBar/PanelContainer4"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer4"]
 layout_mode = 2
 expand_mode = 3
 
-[node name="PanelContainer5" type="PanelContainer" parent="CanvasLayer/Control/Inventory/MarginContainer/InventoryBar"]
+[node name="PanelContainer5" type="PanelContainer" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar"]
 clip_children = 2
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 theme_override_styles/panel = ExtResource("8_0rgb7")
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/Inventory/MarginContainer/InventoryBar/PanelContainer5"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer5"]
 layout_mode = 2
 expand_mode = 3
 
-[node name="PanelContainer6" type="PanelContainer" parent="CanvasLayer/Control/Inventory/MarginContainer/InventoryBar"]
+[node name="PanelContainer6" type="PanelContainer" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar"]
 clip_children = 2
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 theme_override_styles/panel = ExtResource("8_0rgb7")
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/Inventory/MarginContainer/InventoryBar/PanelContainer6"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer6"]
 layout_mode = 2
 expand_mode = 3
 
-[node name="Timer" type="Timer" parent="CanvasLayer/Control/Inventory"]
+[node name="Timer" type="Timer" parent="CanvasLayer/HUD/Inventory"]
 wait_time = 2.0
 one_shot = true
 
+[node name="HealthBar" type="ProgressBar" parent="CanvasLayer/HUD"]
+custom_minimum_size = Vector2(256, 64)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -264.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = 72.0
+grow_horizontal = 0
+theme_override_styles/fill = SubResource("StyleBoxFlat_ergwk")
+max_value = 50.0
+value = 22.0
+show_percentage = false
+
+[node name="RedVeil" type="ColorRect" parent="CanvasLayer/HUD"]
+modulate = Color(1, 0, 0, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [connection signal="grenade_thrown" from="Player" to="." method="_on_player_grenade_thrown"]
+[connection signal="health_changed" from="Player" to="CanvasLayer/HUD" method="update_health"]
+[connection signal="ouch" from="Player" to="CanvasLayer/HUD" method="ouch"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
-[connection signal="timeout" from="CanvasLayer/Control/Inventory/Timer" to="CanvasLayer/Control/Inventory" method="_on_timer_timeout"]
+[connection signal="timeout" from="CanvasLayer/HUD/Inventory/Timer" to="CanvasLayer/HUD/Inventory" method="_on_timer_timeout"]

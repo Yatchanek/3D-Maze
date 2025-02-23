@@ -5,6 +5,13 @@ class_name HurtBox
 
 @export var damage : float = 0
 
+enum DamageType {
+	INSTANT,
+	CONTINUOUS
+}
+
+@export var damage_type : DamageType = DamageType.INSTANT
+
 func disable():
 	collision.set_deferred("disabled", true)
 

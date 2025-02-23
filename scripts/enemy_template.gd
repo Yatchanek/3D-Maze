@@ -14,6 +14,8 @@ var ray_directions : Array[Vector3] = []
 
 var path : PackedVector3Array = []
 
+var current_room : Vector3i
+
 signal died(enemy : Enemy)
 
 func check_line_sight(body : PhysicsBody3D = null) -> PhysicsBody3D:
@@ -33,6 +35,6 @@ func check_line_sight(body : PhysicsBody3D = null) -> PhysicsBody3D:
 	else:
 		return null
 
-func take_damage(_amount : float):
+func take_damage(_hurtbox : HurtBox):
 	queue_free()
 	died.emit(self)

@@ -5,8 +5,10 @@
 [node name="HitBox" type="Area3D"]
 collision_layer = 128
 collision_mask = 64
+monitorable = false
 script = ExtResource("1_aqqlj")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="area_exited" from="." to="." method="_on_area_exited"]

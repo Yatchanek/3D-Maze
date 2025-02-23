@@ -5,6 +5,7 @@
 [node name="Hurtbox" type="Area3D"]
 collision_layer = 66
 collision_mask = 128
+monitoring = false
 script = ExtResource("1_ftvss")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

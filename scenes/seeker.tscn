@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bcir1xrpmpjdm"]
+[gd_scene load_steps=15 format=3 uid="uid://bcir1xrpmpjdm"]
 
 [ext_resource type="Script" path="res://scripts/seeker_enemy/seeker.gd" id="1_6pkhf"]
 [ext_resource type="Texture2D" uid="uid://pm6re3tu8nvx" path="res://icon.svg" id="2_nrdwd"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://scripts/seeker_enemy/seek.gd" id="4_6kbps"]
 [ext_resource type="Script" path="res://scripts/context_steering_component.gd" id="5_2058m"]
 [ext_resource type="PackedScene" uid="uid://bi7vniosvwa8c" path="res://scenes/hit_box.tscn" id="6_837p5"]
+[ext_resource type="PackedScene" uid="uid://cabmscpkdhse4" path="res://scenes/hurtbox.tscn" id="8_as77w"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_3vg4m"]
 
@@ -64,10 +65,22 @@ ray_length = 1.5
 collision_mask = 3
 
 [node name="HitBox" parent="." node_paths=PackedStringArray("target") instance=ExtResource("6_837p5")]
+collision_layer = 0
 target = NodePath("..")
 
 [node name="CollisionShape3D" parent="HitBox" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("SphereShape3D_vgb46")
 
+[node name="Hurtbox" parent="." instance=ExtResource("8_as77w")]
+collision_layer = 128
+collision_mask = 0
+damage = 4.0
+damage_type = 1
+
+[node name="CollisionShape3D" parent="Hurtbox" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.375, 0)
+shape = SubResource("SphereShape3D_vgb46")
+
 [editable path="HitBox"]
+[editable path="Hurtbox"]

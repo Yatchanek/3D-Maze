@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://b1y1eap5q1dws"]
+[gd_scene load_steps=11 format=3 uid="uid://b1y1eap5q1dws"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ovkwn"]
 [ext_resource type="PackedScene" uid="uid://bkb4wd464le6g" path="res://scenes/grenade.tscn" id="2_jw5ya"]
 [ext_resource type="Material" uid="uid://crbopxk1glyq0" path="res://materials/indicator_material.tres" id="2_nrt8s"]
+[ext_resource type="PackedScene" uid="uid://bi7vniosvwa8c" path="res://scenes/hit_box.tscn" id="4_ge4ua"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_sv5h7"]
 radius = 0.25
@@ -29,7 +30,7 @@ material = SubResource("StandardMaterial3D_un68u")
 size = Vector3(1, 1.25, 0.1)
 
 [node name="Player" type="CharacterBody3D"]
-collision_layer = 16
+collision_layer = 4
 script = ExtResource("1_ovkwn")
 grenade_scene = ExtResource("2_jw5ya")
 
@@ -80,3 +81,14 @@ transform = Transform3D(1.5, 0, 0, 0, 1.5, -2.73286e-14, 0, 4.09929e-14, 1, 0, 0
 layers = 4
 mesh = SubResource("PrismMesh_dda7n")
 skeleton = NodePath("../../..")
+
+[node name="HitBox" parent="." node_paths=PackedStringArray("target") instance=ExtResource("4_ge4ua")]
+collision_layer = 0
+collision_mask = 192
+target = NodePath("..")
+
+[node name="CollisionShape3D" parent="HitBox" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+shape = SubResource("CapsuleShape3D_sv5h7")
+
+[editable path="HitBox"]

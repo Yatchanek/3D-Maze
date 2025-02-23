@@ -48,9 +48,12 @@ transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 2.05, 0)
 layers = 4
 mesh = ExtResource("12_qb31o")
 
+[node name="Debug" type="Node3D" parent="."]
+visible = false
+
 [node name="EntranceDetector" type="Area3D" parent="."]
 collision_layer = 0
-collision_mask = 16
+collision_mask = 6
 monitorable = false
 
 [connection signal="body_entered" from="EntranceDetector" to="." method="_on_entrance_detector_body_entered"]

@@ -8,4 +8,10 @@ class_name HitBox
 func _on_area_entered(area:Area3D) -> void:
 	if area is HurtBox:
 		if target.has_method("take_damage"):
-			target.take_damage(area.damage)
+			target.take_damage(area)
+
+
+func _on_area_exited(area:Area3D) -> void:
+	if area is HurtBox:
+		if target.has_method("hurtbox_gone"):
+			target.hurtbox_gone(area)

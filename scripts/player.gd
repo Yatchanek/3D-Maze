@@ -1,4 +1,5 @@
 extends CharacterBody3D
+class_name Player
 
 @export var grenade_scene : PackedScene
 
@@ -9,12 +10,26 @@ extends CharacterBody3D
 const SPEED = 4.0
 const JUMP_VELOCITY = 2.5
 
+const MAX_HEALTH : int = 50
+var current_health : float : 
+	set(value):
+		if !is_inside_tree():
+			return
+		current_health = clamp(value, 0, MAX_HEALTH)
+		health_changed.emit(current_health)
+		if current_health <= 0:
+			get_tree().reload_current_scene()
+
 var elapsed_time : float = 0.0
 var flicker_threshold : float = 0.2
-
 var flicker_offset : int = 1
 
+var damaging_agents : Array[HurtBox] = []
+var damage_time : float = 0.0
+
 signal grenade_thrown(grenade : RigidBody3D, impulse : Vector3)
+signal health_changed(value : float)
+signal ouch
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
@@ -24,11 +39,23 @@ func _input(event: InputEvent) -> void:
 
 
 func _ready() -> void:
+	set_process(false)
+	
 	Globals.player = self
 
 func start():
+	self.current_health = MAX_HEALTH
 	flicker()
 	$CollisionShape3D.set_deferred("disabled", false)
+
+func _process(delta: float) -> void:
+	for agent : HurtBox in damaging_agents:
+		current_health -= agent.damage * delta
+
+	damage_time += delta
+	if damage_time >= 0.5:
+		ouch.emit()
+		damage_time -= 0.5
 
 func _physics_process(delta: float) -> void:
 	if !is_on_floor():
@@ -66,3 +93,18 @@ func flicker():
 	var duration : float = randf_range(0.075, 0.125)
 	tw.tween_property(light, "position:y", flicker_offset * 0.025, duration)
 	tw.parallel().tween_property(light, "light_energy", 1.85 - randf_range(0.25, 0.65), duration)
+
+func take_damage(hurtbox : HurtBox):
+	if hurtbox.damage_type == HurtBox.DamageType.INSTANT:
+		current_health -= hurtbox.damage
+		ouch.emit()
+	else:
+		damaging_agents.append(hurtbox)
+		if !is_processing():
+			set_process(true)
+
+func hurtbox_gone(hurtbox : HurtBox):
+	damaging_agents.erase(hurtbox)
+	if damaging_agents.size() == 0:
+		set_process(false)
+		damage_time = 0.0

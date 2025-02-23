@@ -30,6 +30,7 @@ material = ExtResource("2_kgwkl")
 size = Vector2(2, 3)
 
 [node name="Corridor" type="StaticBody3D"]
+collision_mask = 6
 script = ExtResource("1_w1hrc")
 
 [node name="LeftCollision" type="CollisionShape3D" parent="."]

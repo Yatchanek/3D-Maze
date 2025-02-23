@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://dupc2snhor4cq"]
+[gd_scene load_steps=20 format=3 uid="uid://dupc2snhor4cq"]
 
 [ext_resource type="Script" path="res://scripts/basic_enemy/basic_enemy.gd" id="1_1ya0f"]
 [ext_resource type="Script" path="res://scripts/basic_enemy/basic_enemy_fsm.gd" id="2_u5gao"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://scripts/basic_enemy/resume_state.gd" id="7_kld31"]
 [ext_resource type="Script" path="res://scripts/context_steering_component.gd" id="9_yb1bp"]
 [ext_resource type="PackedScene" uid="uid://bi7vniosvwa8c" path="res://scenes/hit_box.tscn" id="10_2u718"]
+[ext_resource type="PackedScene" uid="uid://cabmscpkdhse4" path="res://scenes/hurtbox.tscn" id="11_5s4dp"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_fpmjc"]
 radius = 0.2
@@ -106,9 +107,20 @@ ray_length = 1.5
 collision_mask = 3
 
 [node name="HitBox" parent="." node_paths=PackedStringArray("target") instance=ExtResource("10_2u718")]
+collision_layer = 0
 target = NodePath("..")
 
 [node name="CollisionShape3D" parent="HitBox" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.375, 0)
+shape = SubResource("CapsuleShape3D_0qftu")
+
+[node name="Hurtbox" parent="." instance=ExtResource("11_5s4dp")]
+collision_layer = 128
+collision_mask = 0
+damage = 2.0
+damage_type = 1
+
+[node name="CollisionShape3D" parent="Hurtbox" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.375, 0)
 shape = SubResource("CapsuleShape3D_0qftu")
 
@@ -116,3 +128,4 @@ shape = SubResource("CapsuleShape3D_0qftu")
 [connection signal="body_exited" from="Detector" to="FSM" method="_on_detector_body_exited"]
 
 [editable path="HitBox"]
+[editable path="Hurtbox"]
