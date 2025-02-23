@@ -7,10 +7,21 @@ class_name Player
 @onready var camera : Camera3D = $CameraGimbal/Camera
 @onready var light : SpotLight3D = $CameraGimbal/Camera/Light
 
-const SPEED = 4.0
+const WALK_SPEED :float = 4.0
+const RUN_SPEED : float = 6.0
+var current_speed : float
+var target_speed : float
 const JUMP_VELOCITY = 2.5
 
 const MAX_HEALTH : int = 50
+const MAX_STAMINA : int = 50
+var current_stamina : float :
+	set(value):
+		if !is_inside_tree():
+			return
+		current_stamina = clamp(value, 0, MAX_STAMINA)
+		stamina_changed.emit(current_stamina)
+
 var current_health : float : 
 	set(value):
 		if !is_inside_tree():
@@ -27,8 +38,11 @@ var flicker_offset : int = 1
 var damaging_agents : Array[HurtBox] = []
 var damage_time : float = 0.0
 
+var move_offset : float = 0.0
+
 signal grenade_thrown(grenade : RigidBody3D, impulse : Vector3)
 signal health_changed(value : float)
+signal stamina_changed(value : float)
 signal ouch
 
 func _input(event: InputEvent) -> void:
@@ -40,11 +54,14 @@ func _input(event: InputEvent) -> void:
 
 func _ready() -> void:
 	set_process(false)
-	
+	current_speed = 0
+	target_speed = WALK_SPEED
+
 	Globals.player = self
 
 func start():
-	self.current_health = MAX_HEALTH
+	current_stamina = MAX_STAMINA
+	current_health = MAX_HEALTH
 	flicker()
 	$CollisionShape3D.set_deferred("disabled", false)
 
@@ -64,18 +81,32 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("action") and is_on_floor():
 		throw_grenade()
 
+	if Input.is_action_just_pressed("run") and current_stamina > 0:
+		target_speed = RUN_SPEED
+	elif Input.is_action_just_released("run"):
+		target_speed = WALK_SPEED
+
+	if target_speed > WALK_SPEED:
+		current_stamina -= 5 * delta
+		if current_stamina <=0 :
+			current_stamina = 0
+			target_speed = WALK_SPEED
+
+	elif current_stamina < MAX_STAMINA:
+		current_stamina = clamp(current_stamina + 2 * delta, 0, MAX_STAMINA)
 
 	var input_dir := Input.get_vector("strafe_left", "strafe_right", "forward", "back")
 	var direction : Vector3 = gimbal.basis * Vector3(input_dir.x, 0.0, input_dir.y).normalized()
 	if direction:
-		
-		velocity.z = direction.z * SPEED
-		velocity.x = direction.x * SPEED
+		current_speed = move_toward(current_speed, target_speed, 0.1 * target_speed)
+		velocity.z = direction.z * current_speed
+		velocity.x = direction.x * current_speed
+		move_offset += 3 * current_speed * delta
 	else:
-		velocity.x = move_toward(velocity.x, 0.0, SPEED)
-		velocity.z = move_toward(velocity.z, 0.0, SPEED)
+		velocity.x = move_toward(velocity.x, 0.0, current_speed)
+		velocity.z = move_toward(velocity.z, 0.0, current_speed)
 
-
+	camera.position.y = 0.1 * sin(move_offset)
 	move_and_slide()
 
 func throw_grenade():
@@ -92,7 +123,7 @@ func flicker():
 	tw.finished.connect(flicker)
 	var duration : float = randf_range(0.075, 0.125)
 	tw.tween_property(light, "position:y", flicker_offset * 0.025, duration)
-	tw.parallel().tween_property(light, "light_energy", 1.85 - randf_range(0.25, 0.65), duration)
+	tw.parallel().tween_property(light, "light_energy", 2.0 - randf_range(0.25, 0.85), duration)
 
 func take_damage(hurtbox : HurtBox):
 	if hurtbox.damage_type == HurtBox.DamageType.INSTANT:

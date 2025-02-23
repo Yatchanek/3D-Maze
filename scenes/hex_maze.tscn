@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://b2kx3pbytijw1"]
+[gd_scene load_steps=18 format=3 uid="uid://b2kx3pbytijw1"]
 
 [ext_resource type="Script" path="res://scripts/hex_maze.gd" id="1_k0ibe"]
 [ext_resource type="PackedScene" uid="uid://cyrp51sdsmug" path="res://scenes/hex_room.tscn" id="2_a6gxg"]
@@ -51,6 +51,11 @@ bg_color = Color(0, 1, 0, 1)
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8pins"]
+bg_color = Color(1, 1, 0, 1)
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+
 [node name="HexMaze" type="Node3D"]
 script = ExtResource("1_k0ibe")
 CULL_DISTANCE = 2
@@ -96,13 +101,18 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_8lijc")
 
 [node name="OrthCamera" type="Camera3D" parent="MiniMap/SubViewport/CanvasLayer"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 11.4109, 0)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 10, 0)
+keep_aspect = 0
 cull_mask = 1048572
 projection = 1
 current = true
 size = 25.0
+near = 0.001
+far = 100.0
 
 [node name="Floor" type="StaticBody3D" parent="."]
+collision_layer = 512
+collision_mask = 0
 physics_material_override = SubResource("PhysicsMaterial_3oeqy")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
@@ -235,6 +245,22 @@ max_value = 50.0
 value = 22.0
 show_percentage = false
 
+[node name="StaminaBar" type="ProgressBar" parent="CanvasLayer/HUD"]
+custom_minimum_size = Vector2(256, 64)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -264.0
+offset_top = 80.0
+offset_right = -8.0
+offset_bottom = 144.0
+grow_horizontal = 0
+theme_override_styles/fill = SubResource("StyleBoxFlat_8pins")
+max_value = 50.0
+value = 22.0
+show_percentage = false
+
 [node name="RedVeil" type="ColorRect" parent="CanvasLayer/HUD"]
 modulate = Color(1, 0, 0, 0)
 layout_mode = 1
@@ -247,5 +273,6 @@ grow_vertical = 2
 [connection signal="grenade_thrown" from="Player" to="." method="_on_player_grenade_thrown"]
 [connection signal="health_changed" from="Player" to="CanvasLayer/HUD" method="update_health"]
 [connection signal="ouch" from="Player" to="CanvasLayer/HUD" method="ouch"]
+[connection signal="stamina_changed" from="Player" to="CanvasLayer/HUD" method="update_stamina"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="CanvasLayer/HUD/Inventory/Timer" to="CanvasLayer/HUD/Inventory" method="_on_timer_timeout"]

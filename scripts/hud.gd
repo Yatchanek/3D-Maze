@@ -2,10 +2,14 @@ extends Control
 class_name HUD
 
 @onready var health_bar : ProgressBar = $HealthBar
+@onready var stamina_bar : ProgressBar = $StaminaBar
 @onready var red_veil : ColorRect = $RedVeil
 
 func update_health(value : float):
     health_bar.value = value
+
+func update_stamina(value : float):
+    stamina_bar.value = value
 
 func ouch():
     var tw : Tween = create_tween()

@@ -5,6 +5,7 @@ class_name HexRoom
 @export var full_collision_scene : PackedScene
 @export var exit_collision_scene : PackedScene
 @export var corridor_scenes : Array[PackedScene]
+@export var corridor_scene : PackedScene
 
 @export var materials : Array[Material]
 
@@ -56,29 +57,33 @@ func add_corridor(idx : int, exit : int) -> void:
 	if exit == 0 or Globals.CORRIDOR_LENGTH <= 0.0 or Globals.maze[neighbour].corridors[wrapi(idx + 3, 0, 6)]:
 		return
 
-	var corridor_type : Corridor.Type
+	var corridor_type : CorridorSlope.Type
 	var offset : int
 	
 	if Globals.maze[room_data.coords].type == room_data.Type.NORMAL and Globals.maze[neighbour].type == room_data.Type.NORMAL:
-		corridor_type = Corridor.Type.NORMAL
+		corridor_type = CorridorSlope.Type.NORMAL
 	elif Globals.maze[room_data.coords].type == room_data.Type.SMALL and Globals.maze[neighbour].type == room_data.Type.SMALL:
-		corridor_type = Corridor.Type.LONG
+		corridor_type = CorridorSlope.Type.LONG
 	elif Globals.maze[room_data.coords].type == room_data.Type.NORMAL and Globals.maze[neighbour].type == room_data.Type.SMALL:
-		corridor_type = Corridor.Type.SEMI_LONG
+		corridor_type = CorridorSlope.Type.SEMI_LONG
 		offset = 1
 	else:
-		corridor_type = Corridor.Type.SEMI_LONG
+		corridor_type = CorridorSlope.Type.SEMI_LONG
 		offset = -1
 
 
-	var corridor : StaticBody3D = corridor_scenes[corridor_type].instantiate()
+	var corridor : CorridorSlope = corridor_scene.instantiate()
 	
+	corridor.from = position.y
+	corridor.to = Globals.maze[neighbour].position.y
 	corridor.rotation_degrees = Vector3(0, idx * -60, 0)
 	var direction = Vector3.FORWARD.rotated(Vector3.UP, deg_to_rad(corridor.rotation_degrees.y))
-	corridor.position = direction * (sqrt(3) * Globals.HEX_SIZE * 0.5 + Globals.CORRIDOR_LENGTH * 0.5)
+	corridor.position = direction * (sqrt(3) * Globals.HEX_SIZE * 0.5 + Globals.CORRIDOR_LENGTH * 0.5) - Vector3.UP * position.y
 
-	if corridor_type == Corridor.Type.SEMI_LONG:
+	if corridor_type == CorridorSlope.Type.SEMI_LONG:
 		corridor.position += offset * direction * sqrt(3) * (Globals.HEX_SIZE - Globals.SMALL_HEX_SIZE) * 0.25
+
+	
 
 	corridor.type = corridor_type
 	room_data.corridors[idx] = true

@@ -1,0 +1,15 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://ckdxlinka4lgi"]
+
+[ext_resource type="Texture2D" uid="uid://bbbhc561cm573" path="res://textures/cobblestones_1.png" id="1_2jllg"]
+[ext_resource type="Texture2D" uid="uid://di77e71ixldy3" path="res://textures/cobblestones_1_n.png" id="2_f7mjw"]
+
+[resource]
+albedo_texture = ExtResource("1_2jllg")
+normal_enabled = true
+normal_scale = 0.25
+normal_texture = ExtResource("2_f7mjw")
+uv1_scale = Vector3(0.5, 0.5, 0.5)
+uv1_triplanar = true
+uv1_triplanar_sharpness = 3.0
+uv1_world_triplanar = true
+texture_filter = 0

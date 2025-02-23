@@ -27,7 +27,7 @@ func check_line_sight(body : PhysicsBody3D = null) -> PhysicsBody3D:
 	else:
 		to = global_position + Vector3.UP * 0.25 -basis.z * Globals.HEX_SIZE * 2
 	var state = get_world_3d().direct_space_state
-	var query = PhysicsRayQueryParameters3D.create(global_position + Vector3.UP * 0.25, to, 17)
+	var query = PhysicsRayQueryParameters3D.create(global_position + Vector3.UP * 0.25, to, 5)
 	var result : Dictionary = state.intersect_ray(query)
 
 	if result and result.collider is CharacterBody3D:

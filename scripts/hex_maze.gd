@@ -53,7 +53,7 @@ func _ready() -> void:
 	current_room = Vector3i.ZERO
 	thread.start(build_maze)
 
-
+	player.position.y = maze[Vector3i.ZERO].position.y
 	player.start()
 
 func create_cells_and_grid():
@@ -64,9 +64,10 @@ func create_cells_and_grid():
 					var cell_data = CellData.new()
 					cell_data.coords = Vector3i(q, r, s)
 					cell_data.id = a_star.get_available_point_id()
-					cell_data.position = Vector3(q * (1.5 * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH * cos (PI / 6)), 0, q * (sqrt(3) * 0.5 * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH * 0.5)+ r * (sqrt(3) * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH))
+					cell_data.position = Vector3(q * (1.5 * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH * cos (PI / 6)), randf_range(0, -1.5), q * (sqrt(3) * 0.5 * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH * 0.5)+ r * (sqrt(3) * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH))
 					if randf() < SMALL_ROOM_RATIO:
-						cell_data.type = cell_data.Type.SMALL
+						pass
+						#cell_data.type = cell_data.Type.SMALL
 					maze[Vector3i(q, r, s)] = cell_data
 					a_star.add_point(cell_data.id, cell_data.position)
 

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://gyte7uva0ui8"
-path.s3tc="res://.godot/imported/Fabric_Leather_01_Green_1.png-e580e0b0763ddc37f88fa1cdd49bd88e.s3tc.ctex"
+uid="uid://di77e71ixldy3"
+path.s3tc="res://.godot/imported/cobblestones_1_n.png-9bc6ae569b194b6a85002bc1d9c3d9ba.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://textures/Fabric_Leather_01_Green_1.png"
-dest_files=["res://.godot/imported/Fabric_Leather_01_Green_1.png-e580e0b0763ddc37f88fa1cdd49bd88e.s3tc.ctex"]
+source_file="res://textures/cobblestones_1_n.png"
+dest_files=["res://.godot/imported/cobblestones_1_n.png-9bc6ae569b194b6a85002bc1d9c3d9ba.s3tc.ctex"]
 
 [params]
 
@@ -20,12 +20,12 @@ compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
-compress/normal_map=0
+compress/normal_map=1
 compress/channel_pack=0
 mipmaps/generate=true
 mipmaps/limit=-1
-roughness/mode=0
-roughness/src_normal=""
+roughness/mode=1
+roughness/src_normal="res://textures/cobblestones_1_n.png"
 process/fix_alpha_border=true
 process/premult_alpha=false
 process/normal_map_invert_y=false

@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=4 uid="uid://cyrp51sdsmug"]
+[gd_scene load_steps=25 format=4 uid="uid://cyrp51sdsmug"]
 
 [ext_resource type="Script" path="res://scripts/hex_room.gd" id="1_4hbrt"]
 [ext_resource type="PackedScene" uid="uid://d23pegtrbefue" path="res://scenes/wall.tscn" id="2_bl8a7"]
@@ -9,6 +9,7 @@
 [ext_resource type="Material" uid="uid://ncplgtiws8qq" path="res://materials/wall_material_1.tres" id="7_7ou1p"]
 [ext_resource type="Material" uid="uid://dvo1r1d1ypcta" path="res://materials/floor_material_0.tres" id="7_c8mt0"]
 [ext_resource type="PackedScene" uid="uid://bdivpaurpge64" path="res://scenes/corridor_long.tscn" id="7_vx62r"]
+[ext_resource type="PackedScene" uid="uid://delb0vr0vc0cc" path="res://scenes/corridor_slope.tscn" id="8_rfafo"]
 [ext_resource type="Material" uid="uid://bf560ha2364y8" path="res://materials/wall_material_0.tres" id="8_sjrt4"]
 [ext_resource type="Material" uid="uid://c6n25dcaddypg" path="res://materials/wall_material_2.tres" id="10_hyakg"]
 [ext_resource type="ArrayMesh" uid="uid://bnr8ecux6edhl" path="res://meshes/hexes/hex_empty.res" id="10_mhljg"]
@@ -16,6 +17,7 @@
 [ext_resource type="ArrayMesh" uid="uid://cufy7sle0g3sq" path="res://meshes/outlines/outline_empty_plane.res" id="11_6wa2b"]
 [ext_resource type="Material" uid="uid://bdh3gpk7eqkiw" path="res://materials/wall_material_3.tres" id="11_fvq5f"]
 [ext_resource type="Material" uid="uid://cat4ifx6ilgi2" path="res://materials/wall_material_4.tres" id="12_4cxwg"]
+[ext_resource type="Material" uid="uid://ckdxlinka4lgi" path="res://materials/ceiling_material_0.tres" id="17_d4y61"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_ja1ki"]
 _surfaces = [{
@@ -85,7 +87,7 @@ _surfaces = [{
 "format": 34896613399,
 "index_count": 12,
 "index_data": PackedByteArray("BAAAAAMAAAACAAEAAgAEAAUAAAAEAAIA"),
-"material": ExtResource("8_sjrt4"),
+"material": ExtResource("17_d4y61"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 6,
@@ -94,12 +96,17 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_3d82s")
 
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_frf2h"]
+height = 0.5
+radius = 3.5
+
 [node name="HexRoom" type="Node3D"]
 script = ExtResource("1_4hbrt")
 wall_scene = ExtResource("2_bl8a7")
 full_collision_scene = ExtResource("3_cb8lo")
 exit_collision_scene = ExtResource("4_knxge")
 corridor_scenes = Array[PackedScene]([ExtResource("5_lvgyp"), ExtResource("6_geiuu"), ExtResource("7_vx62r")])
+corridor_scene = ExtResource("8_rfafo")
 materials = Array[Material]([ExtResource("8_sjrt4"), ExtResource("7_7ou1p"), ExtResource("10_hyakg"), ExtResource("11_fvq5f"), ExtResource("12_4cxwg")])
 
 [node name="Body" type="MeshInstance3D" parent="."]
@@ -131,5 +138,12 @@ monitorable = false
 
 [node name="Debug" type="Node3D" parent="."]
 visible = false
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+collision_mask = 6
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+shape = SubResource("CylinderShape3D_frf2h")
 
 [connection signal="body_entered" from="EntranceDetector" to="." method="_on_entrance_detector_body_entered"]
