@@ -18,7 +18,7 @@ static var directions : Array[Vector3i] = [
 	Vector3i(-1, 0, 1)
 ]
 
-static var HEX_SIZE : int = 4
+static var HEX_SIZE : float = 4
 static var SMALL_HEX_SIZE : float = 2.5
 static var HEX_HEIGHT : int = 2
 static var WALL_WIDTH : float = 0.25

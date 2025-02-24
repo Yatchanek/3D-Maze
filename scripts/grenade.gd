@@ -35,5 +35,7 @@ func explode():
 	tw.tween_property(shape, "radius", 1.75, 0.3)
 	tw.parallel().tween_property(flash, "light_energy", 8.0, 0.3)
 	tw.tween_property(flash, "light_energy", 0.0, 0.1)
-	await explosion.finished
+	await tw.finished
+	hurtbox.disable()
+	await get_tree().create_timer(0.5).timeout
 	queue_free()

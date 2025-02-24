@@ -8,6 +8,7 @@ func physics_update(delta : float) -> void:
 	elapsed_time += delta
 	actor.tick += 1
 	var direction : Vector3 = actor.get_context_steering(actor.position.direction_to(actor.last_target_position))
+	direction.y = 0
 	if actor.tick % 5 == 0:
 		actor.target = actor.check_line_sight()
 	if actor.target:
@@ -20,4 +21,4 @@ func physics_update(delta : float) -> void:
 		elapsed_time = 0.0
 
 	else:
-		actor.handle_movement(direction)
+		actor.handle_movement(direction, delta)

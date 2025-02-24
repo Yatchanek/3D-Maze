@@ -30,10 +30,13 @@ func physics_update(delta : float) -> void:
 
 func get_new_destination() -> void:
 	var destination : int = actor.a_star.get_closest_point(Globals.player.position)
-
-	path = actor.a_star.get_point_path(actor.a_star.get_closest_point(actor.position), destination)
-	path.remove_at(0)
-	if path.size() > 0:
-		waypoint = path[0]
-	else:
+	if destination == actor.a_star.get_closest_point(actor.position):
 		transition.emit("Idle")
+	else:
+		path = actor.a_star.get_point_path(actor.a_star.get_closest_point(actor.position), destination)
+
+		path.remove_at(0)
+		if path.size() > 0:
+			waypoint = path[0]
+		else:
+			transition.emit("Idle")

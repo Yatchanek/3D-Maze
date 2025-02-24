@@ -14,6 +14,8 @@ var ray_directions : Array[Vector3] = []
 
 var path : PackedVector3Array = []
 
+var is_in_instantiated_room : bool = false
+
 var current_room : Vector3i
 
 signal died(enemy : Enemy)

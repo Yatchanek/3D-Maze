@@ -18,7 +18,10 @@ func physics_update(delta : float) -> void:
 	var direction : Vector3 = Vector3.ZERO
 	if actor.target:
 		direction = actor.position.direction_to(actor.target.position)
+		
 	else:
 		direction = -actor.basis.z
+	
+	direction.y = 0
 
-	actor.handle_movement(direction)
+	actor.handle_movement(direction, delta)

@@ -10,7 +10,7 @@ func physics_update(delta : float) -> void:
 	if !actor.a_star:
 		return
 	actor.tick += 1
-	if actor.position.distance_squared_to(actor.waypoint) < 0.05 * 0.05:
+	if actor.position.distance_squared_to(actor.waypoint) < 0.15 * 0.15:
 		if actor.path.size() > 1:
 			actor.path.remove_at(0)
 			actor.waypoint = actor.path[0]
@@ -26,10 +26,16 @@ func physics_update(delta : float) -> void:
 				transition.emit("Chase")
 
 	var direction : Vector3 = actor.position.direction_to(actor.waypoint)
-	if actor.tick % 5 == 0:
+	
+	
+	if actor.tick % 3 == 0:
 		direction = actor.get_context_steering(direction)
-
-	actor.handle_movement(direction)
+	
+	if actor.is_in_instantiated_room:
+		direction.y = 0
+		direction = direction.normalized()
+		
+	actor.handle_movement(direction, delta)
 
 
 func get_new_destination():
@@ -39,5 +45,8 @@ func get_new_destination():
 	while from == to:
 		to = ids[randi() % ids.size()]
 	actor.path = actor.a_star.get_point_path(from, to)
-	actor.path.remove_at(0)
-	actor.waypoint = actor.path[0]
+	if actor.path.size() > 1:
+		actor.path.remove_at(0)
+		actor.waypoint = actor.path[0]
+	else:
+		get_new_destination()

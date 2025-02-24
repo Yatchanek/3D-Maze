@@ -1,9 +1,10 @@
-[gd_scene load_steps=20 format=3 uid="uid://cv7vir4skba8n"]
+[gd_scene load_steps=21 format=3 uid="uid://cv7vir4skba8n"]
 
 [ext_resource type="Script" path="res://scripts/hex_room.gd" id="1_l0c6j"]
 [ext_resource type="PackedScene" uid="uid://d23pegtrbefue" path="res://scenes/wall.tscn" id="2_q60wa"]
 [ext_resource type="PackedScene" uid="uid://cbvc8w1a6warn" path="res://scenes/full_wall_small.tscn" id="3_aj5pc"]
 [ext_resource type="PackedScene" uid="uid://k1ab71k1wxyh" path="res://scenes/exit_wall_small.tscn" id="4_hgfq1"]
+[ext_resource type="PackedScene" uid="uid://dtpaa13xyi7u1" path="res://scenes/detector_collision.tscn" id="5_blpa0"]
 [ext_resource type="PackedScene" uid="uid://bt4medw7i0qd2" path="res://scenes/corridor.tscn" id="5_m1m00"]
 [ext_resource type="PackedScene" uid="uid://cm23almacxsok" path="res://scenes/corridor_semi_long.tscn" id="6_5jyf4"]
 [ext_resource type="Material" uid="uid://bf560ha2364y8" path="res://materials/wall_material_0.tres" id="6_833ja"]
@@ -28,6 +29,7 @@ script = ExtResource("1_l0c6j")
 wall_scene = ExtResource("2_q60wa")
 full_collision_scene = ExtResource("3_aj5pc")
 exit_collision_scene = ExtResource("4_hgfq1")
+detector_collision_scene = ExtResource("5_blpa0")
 corridor_scenes = Array[PackedScene]([ExtResource("5_m1m00"), ExtResource("6_5jyf4"), ExtResource("7_rtjir")])
 corridor_scene = ExtResource("8_buug5")
 materials = Array[Material]([ExtResource("6_833ja"), ExtResource("7_x2opm"), ExtResource("10_ob1q8"), ExtResource("11_vxmjp"), ExtResource("12_035im")])
@@ -54,15 +56,13 @@ transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 2.05, 0)
 layers = 4
 mesh = ExtResource("12_qb31o")
 
-[node name="Debug" type="Node3D" parent="."]
-visible = false
-
 [node name="EntranceDetector" type="Area3D" parent="."]
 collision_layer = 0
 collision_mask = 6
 monitorable = false
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
+collision_layer = 8
 collision_mask = 6
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]

@@ -4,6 +4,7 @@ class_name HexRoom
 @export var wall_scene : PackedScene
 @export var full_collision_scene : PackedScene
 @export var exit_collision_scene : PackedScene
+@export var detector_collision_scene : PackedScene
 @export var corridor_scenes : Array[PackedScene]
 @export var corridor_scene : PackedScene
 
@@ -16,19 +17,19 @@ var material_index : int = 0
 
 var room_size : float
 
+var children_to_add : Array = []
+
 signal entered(coords : Vector3i)
 
-func _ready() -> void:
+func initialize(data : CellData):
+	room_data = data
 	position = room_data.position
-
 	if room_data.type == room_data.Type.NORMAL:
 		room_size = Globals.HEX_SIZE
 	else:
 		room_size = Globals.SMALL_HEX_SIZE
 
-
 	material_index = randi_range(0, 4)
-	$Body.set_surface_override_material(0, materials[material_index])
 	
 	var exits : Array [int] = [Globals.N, Globals.NE, Globals.SE, Globals.S, Globals.SW, Globals.NW]
 	
@@ -39,7 +40,13 @@ func _ready() -> void:
 		add_detector_collision(i, mask)
 		add_corridor(i, mask)
 
-		
+func _ready() -> void:
+	$Body.set_surface_override_material(0, materials[material_index])
+	for child in children_to_add:
+		entrance_detector.call_deferred("add_child", child)
+
+	#$Label3D.text = str(room_data.coords)
+
 func create_wall(idx: int, exit : int) -> void:	
 	if exit != 0:
 		return
@@ -92,23 +99,15 @@ func add_corridor(idx : int, exit : int) -> void:
 func add_detector_collision(idx: int, exit : int) -> void:
 	if exit == 0:
 		return
-	
-	var mesh_instance : MeshInstance3D = MeshInstance3D.new()
-	var mesh : BoxMesh = BoxMesh.new()
-	mesh.size = Vector3(0.25, Globals.HEX_HEIGHT, Globals.WALL_WIDTH)
-	mesh_instance.mesh = mesh
-	var collision_shape : CollisionShape3D = CollisionShape3D.new()
-	var shape : BoxShape3D = BoxShape3D.new()
-	shape.size = Vector3(Globals.HEX_SIZE * 0.375, Globals.HEX_HEIGHT, Globals.WALL_WIDTH)
-	collision_shape.shape = shape
 
-	collision_shape.rotation_degrees = Vector3(0, idx * -60, 0)
-	mesh_instance.rotation_degrees = Vector3(0, idx * -60, 0)
-	var direction = Vector3.FORWARD.rotated(Vector3.UP, deg_to_rad(collision_shape.rotation_degrees.y))
-	collision_shape.position = direction * (sqrt(3) * room_size * 0.5 + Globals.CORRIDOR_LENGTH * 0.15) + Vector3.UP * Globals.HEX_HEIGHT * 0.5
-	mesh_instance.position = collision_shape.position
-	entrance_detector.call_deferred("add_child", collision_shape)
-	$Debug.add_child(mesh_instance)
+	var detector_collision = detector_collision_scene.instantiate()
+	detector_collision.rotation_degrees = Vector3(0, idx * -60, 0)
+
+	var direction = Vector3.FORWARD.rotated(Vector3.UP, deg_to_rad(detector_collision.rotation_degrees.y))
+	detector_collision.position = direction * (sqrt(3) * room_size * 0.5 + Globals.CORRIDOR_LENGTH * 0.15) + Vector3.UP * Globals.HEX_HEIGHT * 0.5
+
+	children_to_add.append(detector_collision)
+
 
 func add_collision(idx: int, exit : int) -> void:
 	var static_body : StaticBody3D
@@ -124,11 +123,9 @@ func add_collision(idx: int, exit : int) -> void:
 
 func disable_detector():
 	entrance_detector.monitoring = false
-	#$Debug.hide()
 
 func enable_detector():
 	entrance_detector.monitoring = true
-	#$Debug.show()
 
 
 func make_invisible():
@@ -146,6 +143,7 @@ func _on_entrance_detector_body_entered(body:Node3D) -> void:
 		entered.emit(room_data.coords)
 	elif body is Enemy:
 		body.current_room = room_data.coords
+		body.is_in_instantiated_room = true
 
 func _exit_tree() -> void:
 	room_data.corridors = [false, false, false, false, false, false]

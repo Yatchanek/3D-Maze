@@ -7,7 +7,8 @@
 [ext_resource type="Material" uid="uid://3be68um7y4vv" path="res://materials/floor_material_0_top.tres" id="5_8pfbq"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_d6r7e"]
-size = Vector3(0.5, 2, 3)
+resource_local_to_scene = true
+size = Vector3(0.5, 4, 3)
 
 [sub_resource type="BoxMesh" id="BoxMesh_fdslq"]
 resource_local_to_scene = true
@@ -15,6 +16,7 @@ material = ExtResource("2_ugxse")
 size = Vector3(0.5, 4, 3)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_kwqyh"]
+resource_local_to_scene = true
 material = ExtResource("3_o4nxa")
 size = Vector2(0.5, 3)
 
@@ -38,15 +40,16 @@ resource_local_to_scene = true
 size = Vector3(1.5, 0.1, 1)
 
 [node name="Corridor" type="StaticBody3D"]
+collision_layer = 8
 collision_mask = 6
 script = ExtResource("1_w4wwj")
 
 [node name="LeftCollision" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
 shape = SubResource("BoxShape3D_d6r7e")
 
 [node name="RightCollision" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
 shape = SubResource("BoxShape3D_d6r7e")
 
 [node name="LeftWall" type="MeshInstance3D" parent="."]

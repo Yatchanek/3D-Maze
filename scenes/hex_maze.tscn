@@ -103,7 +103,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_8lijc")
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 10, 0)
 keep_aspect = 0
-cull_mask = 1048572
+cull_mask = 1048573
 projection = 1
 current = true
 size = 25.0
@@ -120,7 +120,6 @@ shape = SubResource("WorldBoundaryShape3D_i5o6u")
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 5.0
-autostart = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
