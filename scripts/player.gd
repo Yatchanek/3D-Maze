@@ -40,6 +40,8 @@ var damage_time : float = 0.0
 
 var move_offset : float = 0.0
 
+var current_room : Vector3i
+
 signal grenade_thrown(grenade : RigidBody3D, impulse : Vector3)
 signal health_changed(value : float)
 signal stamina_changed(value : float)

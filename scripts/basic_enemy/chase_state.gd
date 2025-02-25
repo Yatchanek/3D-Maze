@@ -8,20 +8,23 @@ func _enter_state(_precious_state : State) -> void:
 func physics_update(delta : float) -> void:
 
 	elapsed_time += delta
-	if elapsed_time > 0.1:
-		elapsed_time -= 0.1
-		actor.last_target_position = actor.target.position
-		actor.target = actor.check_line_sight(actor.target)
-		if !actor.target:
-			transition.emit("CheckLast")
+	if elapsed_time > 0.5:
+		elapsed_time -= 0.5
+		if actor.position.distance_squared_to(actor.target.position) > 0.25:
+			actor.last_target_position = actor.target.position
+			actor.target = actor.check_line_sight(actor.target)
+			if !actor.target:
+				transition.emit("CheckLast")
 
-	var direction : Vector3 = Vector3.ZERO
-	if actor.target:
-		direction = actor.position.direction_to(actor.target.position)
+	if is_instance_valid(actor.target) and actor.position.distance_squared_to(actor.target.position) > 0.2:
+
+		var direction : Vector3 = Vector3.ZERO
+		if actor.target:
+			direction = actor.position.direction_to(actor.target.position)
+			
+		else:
+			direction = -actor.basis.z
 		
-	else:
-		direction = -actor.basis.z
-	
-	direction.y = 0
+		direction.y = 0
 
-	actor.handle_movement(direction, delta)
+		actor.handle_movement(direction, delta)

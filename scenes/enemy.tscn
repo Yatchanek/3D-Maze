@@ -124,6 +124,10 @@ damage_type = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.375, 0)
 shape = SubResource("CapsuleShape3D_0qftu")
 
+[node name="GroundCheck" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.186577, -0.447536)
+collision_mask = 8
+
 [connection signal="body_entered" from="Detector" to="FSM" method="_on_detector_body_entered"]
 [connection signal="body_exited" from="Detector" to="FSM" method="_on_detector_body_exited"]
 

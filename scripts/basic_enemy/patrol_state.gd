@@ -10,7 +10,7 @@ func physics_update(delta : float) -> void:
 	if !actor.a_star:
 		return
 	actor.tick += 1
-	if actor.position.distance_squared_to(actor.waypoint) < 0.15 * 0.15:
+	if actor.position.distance_squared_to(actor.waypoint) < 0.05 * 0.05:
 		if actor.path.size() > 1:
 			actor.path.remove_at(0)
 			actor.waypoint = actor.path[0]
@@ -25,16 +25,25 @@ func physics_update(delta : float) -> void:
 			if actor.target:
 				transition.emit("Chase")
 
+	if !actor.ground_check.is_colliding() and actor.is_in_instantiated_room:
+		print("Floor gone!")
+		actor.is_in_instantiated_room = false
+
+	elif actor.ground_check.is_colliding() and !actor.is_in_instantiated_room:
+		print("Floor appeared!")
+		actor.is_in_instantiated_room = true
+
+
 	var direction : Vector3 = actor.position.direction_to(actor.waypoint)
 	
-	
-	if actor.tick % 3 == 0:
-		direction = actor.get_context_steering(direction)
 	
 	if actor.is_in_instantiated_room:
 		direction.y = 0
 		direction = direction.normalized()
-		
+
+		if actor.tick % 3 == 0:
+			direction = actor.get_context_steering(direction)
+
 	actor.handle_movement(direction, delta)
 
 
@@ -42,11 +51,10 @@ func get_new_destination():
 	var from : int = actor.a_star.get_closest_point(actor.position)
 	var ids : PackedInt64Array = actor.a_star.get_point_ids()
 	var to : int = ids[randi() % ids.size()]
-	while from == to:
-		to = ids[randi() % ids.size()]
 	actor.path = actor.a_star.get_point_path(from, to)
-	if actor.path.size() > 1:
-		actor.path.remove_at(0)
-		actor.waypoint = actor.path[0]
-	else:
-		get_new_destination()
+	while actor.path.size() < 4:
+		to = ids[randi() % ids.size()]
+		actor.path = actor.a_star.get_point_path(from, to)
+	
+	actor.path.remove_at(0)
+	actor.waypoint = actor.path[0]

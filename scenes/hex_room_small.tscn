@@ -4,7 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://d23pegtrbefue" path="res://scenes/wall.tscn" id="2_q60wa"]
 [ext_resource type="PackedScene" uid="uid://cbvc8w1a6warn" path="res://scenes/full_wall_small.tscn" id="3_aj5pc"]
 [ext_resource type="PackedScene" uid="uid://k1ab71k1wxyh" path="res://scenes/exit_wall_small.tscn" id="4_hgfq1"]
-[ext_resource type="PackedScene" uid="uid://dtpaa13xyi7u1" path="res://scenes/detector_collision.tscn" id="5_blpa0"]
 [ext_resource type="PackedScene" uid="uid://bt4medw7i0qd2" path="res://scenes/corridor.tscn" id="5_m1m00"]
 [ext_resource type="PackedScene" uid="uid://cm23almacxsok" path="res://scenes/corridor_semi_long.tscn" id="6_5jyf4"]
 [ext_resource type="Material" uid="uid://bf560ha2364y8" path="res://materials/wall_material_0.tres" id="6_833ja"]
@@ -15,21 +14,23 @@
 [ext_resource type="ArrayMesh" uid="uid://b8sxmi20gkdug" path="res://meshes/floor.res" id="9_ia82y"]
 [ext_resource type="ArrayMesh" uid="uid://pdaj2el2fg6c" path="res://meshes/floor_2.res" id="10_lhygq"]
 [ext_resource type="Material" uid="uid://c6n25dcaddypg" path="res://materials/wall_material_2.tres" id="10_ob1q8"]
-[ext_resource type="ArrayMesh" uid="uid://hn73a80ujian" path="res://meshes/ceiling.res" id="11_23fw3"]
+[ext_resource type="ArrayMesh" uid="uid://hn73a80ujian" path="res://meshes/ceiling_old.res" id="11_23fw3"]
 [ext_resource type="Material" uid="uid://bdh3gpk7eqkiw" path="res://materials/wall_material_3.tres" id="11_vxmjp"]
 [ext_resource type="Material" uid="uid://cat4ifx6ilgi2" path="res://materials/wall_material_4.tres" id="12_035im"]
 [ext_resource type="ArrayMesh" uid="uid://cnuft8m7jd2jc" path="res://meshes/outlines/outiline_empty_plane_small.res" id="12_qb31o"]
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_i5eem"]
+radius = 2.3
+
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_cdkes"]
 height = 0.5
-radius = 2.15
+radius = 2.2
 
 [node name="HexRoomSmall" type="Node3D"]
 script = ExtResource("1_l0c6j")
 wall_scene = ExtResource("2_q60wa")
 full_collision_scene = ExtResource("3_aj5pc")
 exit_collision_scene = ExtResource("4_hgfq1")
-detector_collision_scene = ExtResource("5_blpa0")
 corridor_scenes = Array[PackedScene]([ExtResource("5_m1m00"), ExtResource("6_5jyf4"), ExtResource("7_rtjir")])
 corridor_scene = ExtResource("8_buug5")
 materials = Array[Material]([ExtResource("6_833ja"), ExtResource("7_x2opm"), ExtResource("10_ob1q8"), ExtResource("11_vxmjp"), ExtResource("12_035im")])
@@ -60,6 +61,9 @@ mesh = ExtResource("12_qb31o")
 collision_layer = 0
 collision_mask = 6
 monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EntranceDetector"]
+shape = SubResource("SphereShape3D_i5eem")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 collision_layer = 8

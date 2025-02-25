@@ -4,7 +4,6 @@ class_name HexRoom
 @export var wall_scene : PackedScene
 @export var full_collision_scene : PackedScene
 @export var exit_collision_scene : PackedScene
-@export var detector_collision_scene : PackedScene
 @export var corridor_scenes : Array[PackedScene]
 @export var corridor_scene : PackedScene
 
@@ -33,11 +32,15 @@ func initialize(data : CellData):
 	
 	var exits : Array [int] = [Globals.N, Globals.NE, Globals.SE, Globals.S, Globals.SW, Globals.NW]
 	
+	if room_data.has_hole:
+		add_ceiling_light()
+
+
+
 	for i in exits.size():
 		var mask : int = room_data.layout & exits[i]
 		create_wall(i, mask)
 		add_collision(i, mask)
-		add_detector_collision(i, mask)
 		add_corridor(i, mask)
 
 func _ready() -> void:
@@ -45,7 +48,17 @@ func _ready() -> void:
 	for child in children_to_add:
 		entrance_detector.call_deferred("add_child", child)
 
-	#$Label3D.text = str(room_data.coords)
+
+func add_ceiling_light():
+	$Ceiling.mesh = load("res://meshes/ceiling_hole.res")
+	var light : OmniLight3D = OmniLight3D.new()
+
+	light.position = Vector3.UP * 3
+	light.light_energy = 0.5
+	light.omni_range = 5
+	light.omni_attenuation = 1.5
+
+	add_child(light)
 
 func create_wall(idx: int, exit : int) -> void:	
 	if exit != 0:
@@ -93,20 +106,10 @@ func add_corridor(idx : int, exit : int) -> void:
 	
 
 	corridor.type = corridor_type
+	corridor.add_to_group("Corridors")
 	room_data.corridors[idx] = true
+
 	call_deferred("add_child", corridor)
-
-func add_detector_collision(idx: int, exit : int) -> void:
-	if exit == 0:
-		return
-
-	var detector_collision = detector_collision_scene.instantiate()
-	detector_collision.rotation_degrees = Vector3(0, idx * -60, 0)
-
-	var direction = Vector3.FORWARD.rotated(Vector3.UP, deg_to_rad(detector_collision.rotation_degrees.y))
-	detector_collision.position = direction * (sqrt(3) * room_size * 0.5 + Globals.CORRIDOR_LENGTH * 0.15) + Vector3.UP * Globals.HEX_HEIGHT * 0.5
-
-	children_to_add.append(detector_collision)
 
 
 func add_collision(idx: int, exit : int) -> void:
@@ -141,9 +144,11 @@ func make_visible():
 func _on_entrance_detector_body_entered(body:Node3D) -> void:
 	if body is Player:
 		entered.emit(room_data.coords)
+		body.current_room = room_data.coords
 	elif body is Enemy:
 		body.current_room = room_data.coords
 		body.is_in_instantiated_room = true
+
 
 func _exit_tree() -> void:
 	room_data.corridors = [false, false, false, false, false, false]

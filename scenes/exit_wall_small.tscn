@@ -9,7 +9,9 @@ collision_mask = 6
 script = ExtResource("1_dp7tw")
 
 [node name="CollisionLeft" type="CollisionShape3D" parent="."]
+visible = false
 shape = SubResource("BoxShape3D_2rj72")
 
 [node name="CollisionRight" type="CollisionShape3D" parent="."]
+visible = false
 shape = SubResource("BoxShape3D_2rj72")

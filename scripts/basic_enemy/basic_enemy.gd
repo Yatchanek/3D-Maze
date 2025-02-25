@@ -3,6 +3,7 @@ class_name BasicEnemy
 
 @onready var context_steering_component : ContextSteeringComponent = $ContextSteeringComponent
 @onready var body : MeshInstance3D = $Body
+@onready var ground_check : RayCast3D = $GroundCheck
 
 var maze : Dictionary = {}
 
@@ -21,6 +22,8 @@ func handle_movement(dir : Vector3, delta : float):
 	if dir.is_equal_approx(Vector3.ZERO):
 		return
 	
+
+
 	var desired_velocity : Vector3 = dir * SPEED
 	
 	velocity = lerp(velocity, desired_velocity, 0.15)
@@ -30,10 +33,12 @@ func handle_movement(dir : Vector3, delta : float):
 			velocity.y += -9.8 * delta
 
 		if !position.is_equal_approx(position + dir):
-			look_at(position + dir * 5.0)
+			look_at(position + dir)
 			basis = basis.orthonormalized()
 
+
 	move_and_slide()
+
 	if position.y < -5:
 		print("Fell down")
 		queue_free()

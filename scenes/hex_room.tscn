@@ -1,10 +1,9 @@
-[gd_scene load_steps=26 format=4 uid="uid://cyrp51sdsmug"]
+[gd_scene load_steps=25 format=4 uid="uid://cyrp51sdsmug"]
 
 [ext_resource type="Script" path="res://scripts/hex_room.gd" id="1_4hbrt"]
 [ext_resource type="PackedScene" uid="uid://d23pegtrbefue" path="res://scenes/wall.tscn" id="2_bl8a7"]
 [ext_resource type="PackedScene" uid="uid://cd6euvc8pcasg" path="res://scenes/full_wall.tscn" id="3_cb8lo"]
 [ext_resource type="PackedScene" uid="uid://dedse6bl0jd5a" path="res://scenes/exit_wall.tscn" id="4_knxge"]
-[ext_resource type="PackedScene" uid="uid://dtpaa13xyi7u1" path="res://scenes/detector_collision.tscn" id="5_3s2p6"]
 [ext_resource type="PackedScene" uid="uid://bt4medw7i0qd2" path="res://scenes/corridor.tscn" id="5_lvgyp"]
 [ext_resource type="PackedScene" uid="uid://cm23almacxsok" path="res://scenes/corridor_semi_long.tscn" id="6_geiuu"]
 [ext_resource type="Material" uid="uid://ncplgtiws8qq" path="res://materials/wall_material_1.tres" id="7_7ou1p"]
@@ -18,7 +17,7 @@
 [ext_resource type="ArrayMesh" uid="uid://cufy7sle0g3sq" path="res://meshes/outlines/outline_empty_plane.res" id="11_6wa2b"]
 [ext_resource type="Material" uid="uid://bdh3gpk7eqkiw" path="res://materials/wall_material_3.tres" id="11_fvq5f"]
 [ext_resource type="Material" uid="uid://cat4ifx6ilgi2" path="res://materials/wall_material_4.tres" id="12_4cxwg"]
-[ext_resource type="Material" uid="uid://ckdxlinka4lgi" path="res://materials/ceiling_material_0.tres" id="17_d4y61"]
+[ext_resource type="ArrayMesh" uid="uid://6qfg8qjk2qnc" path="res://meshes/ceiling.res" id="17_n8yq7"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_ja1ki"]
 _surfaces = [{
@@ -67,35 +66,13 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_ja1ki")
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_3d82s"]
-_surfaces = [{
-"aabb": AABB(-8, 0, -6.9282, 16, 1e-05, 13.8564),
-"format": 34896613377,
-"index_count": 12,
-"index_data": PackedByteArray("BAAAAAMAAAACAAEAAgAEAAUAAAAEAAIA"),
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 6,
-"vertex_data": PackedByteArray("/78AAP//AAD//wAA/38AAP+/AAAAAAAA/z8AAP//AAAAAAAA/38AAP8/AAAAAAAA")
-}]
-blend_shape_mode = 0
+[sub_resource type="SphereShape3D" id="SphereShape3D_fvjhl"]
+radius = 3.55
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_cg7y4"]
-resource_name = "floor_Plane"
-_surfaces = [{
-"aabb": AABB(-8, 0, -6.9282, 16, 1e-05, 13.8564),
-"attribute_data": PackedByteArray("/3///9ju/7/Y7v8/JhH/vyYR/z//fwAA"),
-"format": 34896613399,
-"index_count": 12,
-"index_data": PackedByteArray("BAAAAAMAAAACAAEAAgAEAAUAAAAEAAIA"),
-"material": ExtResource("17_d4y61"),
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 6,
-"vertex_data": PackedByteArray("/78AAP//usL//wAA/3+6wv+/AAAAALrC/z8AAP//usIAAAAA/3+6wv8/AAAAALrCqulWU6rpVlOq6VZTqulWU6rpVlOq6VZT")
-}]
-blend_shape_mode = 0
-shadow_mesh = SubResource("ArrayMesh_3d82s")
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_8vi6p"]
+rough = true
+bounce = 0.25
+absorbent = true
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_frf2h"]
 height = 0.5
@@ -106,7 +83,6 @@ script = ExtResource("1_4hbrt")
 wall_scene = ExtResource("2_bl8a7")
 full_collision_scene = ExtResource("3_cb8lo")
 exit_collision_scene = ExtResource("4_knxge")
-detector_collision_scene = ExtResource("5_3s2p6")
 corridor_scenes = Array[PackedScene]([ExtResource("5_lvgyp"), ExtResource("6_geiuu"), ExtResource("7_vx62r")])
 corridor_scene = ExtResource("8_rfafo")
 materials = Array[Material]([ExtResource("8_sjrt4"), ExtResource("7_7ou1p"), ExtResource("10_hyakg"), ExtResource("11_fvq5f"), ExtResource("12_4cxwg")])
@@ -125,8 +101,8 @@ layers = 4
 mesh = SubResource("ArrayMesh_crpa3")
 
 [node name="Ceiling" type="MeshInstance3D" parent="."]
-transform = Transform3D(-0.5, -4.37114e-08, 0, 4.37114e-08, -0.5, 0, 0, 0, 0.5, 0, 2.01, 0)
-mesh = SubResource("ArrayMesh_cg7y4")
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 2.01, 0)
+mesh = ExtResource("17_n8yq7")
 
 [node name="MapOutline" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 2.05, 0)
@@ -138,9 +114,13 @@ collision_layer = 0
 collision_mask = 6
 monitorable = false
 
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EntranceDetector"]
+shape = SubResource("SphereShape3D_fvjhl")
+
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 collision_layer = 8
 collision_mask = 6
+physics_material_override = SubResource("PhysicsMaterial_8vi6p")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)

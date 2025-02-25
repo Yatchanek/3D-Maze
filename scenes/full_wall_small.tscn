@@ -9,4 +9,5 @@ collision_mask = 6
 script = ExtResource("1_c0d5j")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+visible = false
 shape = SubResource("BoxShape3D_vkdfx")

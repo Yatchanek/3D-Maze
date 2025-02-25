@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://b2kx3pbytijw1"]
+[gd_scene load_steps=16 format=3 uid="uid://b2kx3pbytijw1"]
 
 [ext_resource type="Script" path="res://scripts/hex_maze.gd" id="1_k0ibe"]
 [ext_resource type="PackedScene" uid="uid://cyrp51sdsmug" path="res://scenes/hex_room.tscn" id="2_a6gxg"]
@@ -13,7 +13,9 @@
 
 [sub_resource type="Environment" id="Environment_prdqm"]
 background_mode = 1
-ambient_light_energy = 0.0
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_sky_contribution = 0.0
+tonemap_mode = 2
 fog_mode = 1
 fog_light_color = Color(0.787759, 0.787759, 0.787759, 1)
 fog_light_energy = 2.0
@@ -31,12 +33,6 @@ border_width_top = 8
 border_width_right = 8
 border_width_bottom = 8
 border_color = Color(7.78515e-06, 0.255032, 0.0431681, 1)
-
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3oeqy"]
-rough = true
-absorbent = true
-
-[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_i5o6u"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tmlh1"]
 bg_color = Color(0, 0, 0, 1)
@@ -103,23 +99,17 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_8lijc")
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 10, 0)
 keep_aspect = 0
-cull_mask = 1048573
+cull_mask = 1048572
 projection = 1
 current = true
-size = 25.0
+size = 26.0
 near = 0.001
 far = 100.0
 
-[node name="Floor" type="StaticBody3D" parent="."]
-collision_layer = 512
-collision_mask = 0
-physics_material_override = SubResource("PhysicsMaterial_3oeqy")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
-shape = SubResource("WorldBoundaryShape3D_i5o6u")
-
 [node name="Timer" type="Timer" parent="."]
 wait_time = 5.0
+one_shot = true
+autostart = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

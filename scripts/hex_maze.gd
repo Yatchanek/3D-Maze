@@ -76,8 +76,10 @@ func create_cells_and_grid():
 					cell_data.position = HexUtils.get_position(cell_data.coords)
 					if randf() < SMALL_ROOM_RATIO:
 						cell_data.type = cell_data.Type.SMALL
+					elif randf() < 0.5:
+						cell_data.has_hole = true
 					maze[Vector3i(q, r, s)] = cell_data
-					a_star.add_point(cell_data.id, cell_data.position)
+					a_star.add_point(cell_data.id, cell_data.position + Vector3.UP * 0.01)
 
 
 func create_maze():
@@ -119,20 +121,10 @@ func get_neighbours(cell: Vector3i, unvisited: Array) -> Array[Vector3i]:
 	return neighbours
 
 
-func get_cells_in_range(coords: Vector3i, dist : int) -> Array[Vector3i]:
-	var cells : Array[Vector3i] = []
-	for q : int in range(-dist, dist + 1):
-		for r : int in range(max(-dist, -q - dist), min(dist, -q + dist) + 1):
-			var s : int = -q - r
-			var result : Vector3i = coords + Vector3i(q, r, s)
 
-			if maze.has(result):
-				cells.append(coords + Vector3i(q, r, s))
-
-	return cells
 
 func build_maze():
-	var neighbours : Array[Vector3i] = get_cells_in_range(Vector3i.ZERO, CULL_DISTANCE)
+	var neighbours : Array[Vector3i] = HexUtils.get_cells_in_range(maze, Vector3i.ZERO, CULL_DISTANCE)
 	for cell in neighbours:
 		create_room(cell)
 
@@ -151,12 +143,12 @@ func create_room(coords : Vector3i):
 	room_dict[coords] = hex_room	
 
 func adjust_visibility():
-	var neighbours : Array[Vector3i] = get_cells_in_range(current_room, CULL_DISTANCE)
+	var neighbours : Array[Vector3i] = HexUtils.get_cells_in_range(maze, current_room, CULL_DISTANCE)
 	for neighbour in neighbours:
 		if !room_dict.has(neighbour):
 			create_room(neighbour)
-		elif neighbour != current_room:
-			room_dict[neighbour].call_deferred("enable_detector")
+		# elif neighbour != current_room:
+		# 	room_dict[neighbour].call_deferred("enable_detector")
 
 	for room in room_dict.keys():
 		if !neighbours.has(room):
@@ -239,7 +231,7 @@ func spawn_enemy():
 	if enemy_array.size() >= max_enemies:
 		return
 
-	var neighbours : Array[Vector3i]= get_cells_in_range(Vector3i.ZERO, 1)
+	var neighbours : Array[Vector3i]= HexUtils.get_cells_in_range(maze, player.current_room, 1)
 
 	var start_tick : int = randi_range(0, 5)
 	var pos : Vector3i = maze.keys().pick_random()
@@ -261,18 +253,21 @@ func spawn_enemy():
 		enemy.is_in_instantiated_room = true
 	call_deferred("add_child", enemy)
 
+func adjust_enemies():
+	for enemy in enemy_array:
+		if is_instance_valid(enemy):
+			if enemy.current_room == Vector3i(9999, 9999, 9999) or !room_dict.has(enemy.current_room):
+				enemy.is_in_instantiated_room = false
+			else:
+				enemy.is_in_instantiated_room = true
 
-func _on_rooms_created(first_time : bool = false):
+func _on_rooms_created(_first_time : bool = false):
 	if thread.is_started():
 		thread.wait_to_finish()
 		for room in rooms_to_add:
 			call_deferred("add_child", room)
 
-		rooms_to_add = []
-		if first_time:
-			await get_tree().process_frame
-			room_dict[Vector3i.ZERO].call_deferred("disable_detector")
-		
+		rooms_to_add = []		
 		hide_distant_rooms.call_deferred()
 
 	else:
@@ -280,21 +275,16 @@ func _on_rooms_created(first_time : bool = false):
 			call_deferred("add_child", room)
 
 		rooms_to_add = []
-		if first_time:
-			await get_tree().process_frame
-			room_dict[Vector3i.ZERO].call_deferred("disable_detector")
+		hide_distant_rooms.call_deferred()
 
 func _on_room_entered(coords : Vector3i):
+	if player.current_room == coords:
+		return
 	current_room = coords
-	room_dict[current_room].call_deferred("disable_detector")
-	thread.start(adjust_visibility)
+	if !thread.is_started():
+		thread.start(adjust_visibility)
 
-	for enemy in enemy_array:
-		if is_instance_valid(enemy):
-			if enemy.global_position.distance_squared_to(player.global_position) > 2.25 * Globals.HEX_SIZE * Globals.HEX_SIZE:
-				enemy.is_in_instantiated_room = false
-			else:
-				enemy.is_in_instantiated_room = true	
+	
 
 func _process(_delta: float) -> void:
 	orth_camera.position = Vector3(player.position.x, 5, player.position.z)
