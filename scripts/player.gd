@@ -29,7 +29,7 @@ var current_health : float :
 		current_health = clamp(value, 0, MAX_HEALTH)
 		health_changed.emit(current_health)
 		if current_health <= 0:
-			get_tree().reload_current_scene()
+			get_tree().call_deferred("reload_current_scene")
 
 var elapsed_time : float = 0.0
 var flicker_threshold : float = 0.2

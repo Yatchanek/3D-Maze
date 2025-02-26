@@ -17,6 +17,7 @@ func _ready() -> void:
 			states[child.name] = child
 			child.transition.connect(_on_state_transition)
 			child.actor = actor
+
 	call_deferred("_on_state_transition", default_state)
 
 func change_state(new_state : State):

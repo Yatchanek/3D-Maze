@@ -7,10 +7,6 @@ class_name BasicEnemy
 
 var maze : Dictionary = {}
 
-var target : CharacterBody3D
-var potential_target : CharacterBody3D
-var target_in_range : bool = false
-var last_target_position : Vector3
 
 var rotation_time : float = 0.0
 

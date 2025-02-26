@@ -4,7 +4,10 @@ var path : PackedVector3Array = []
 var waypoint : Vector3
 
 func _enter_state(_previous_state : State) -> void:
+	print("Seek Entered")
 	actor.SPEED = 2.25
+	actor.anim_player.speed_scale = 1.0
+	actor.anim_player.play("Bite")
 	get_new_destination()
 
 func physics_update(delta : float) -> void:
@@ -13,19 +16,26 @@ func physics_update(delta : float) -> void:
 		get_new_destination()
 
 	var direction : Vector3 = actor.position.direction_to(waypoint)
-	if actor.tick % 3:
-		direction = actor.get_context_steering(direction)
-	var desired_velocity : Vector3 = direction * actor.SPEED
 
-	actor.velocity = lerp(actor.velocity, desired_velocity, 0.15)
+	actor.check_for_floor()
 
-	if actor.velocity != Vector3.ZERO:
-		actor.look_at(actor.position + actor.velocity.normalized())
-		actor.basis = actor.basis.orthonormalized()
+	if actor.is_in_instantiated_room:
+		direction.y = 0
+		direction = direction.normalized()
 
-	actor.body.rotation.x -= TAU * delta
+		if actor.tick % 3:
+			direction = actor.get_context_steering(direction)
 
-	actor.move_and_slide()
+
+		if actor.target_in_range:
+			elapsed_time += delta
+			if elapsed_time >= 0.075:
+				elapsed_time -= 0.075
+				actor.target = actor.check_line_sight(actor.potential_target)
+				if actor.target:
+					transition.emit("Chase")
+
+	actor.handle_movement(direction, delta)
 
 
 func get_new_destination() -> void:
@@ -40,3 +50,6 @@ func get_new_destination() -> void:
 			waypoint = path[0]
 		else:
 			transition.emit("Idle")
+
+
+

@@ -4,8 +4,8 @@ class_name HexRoom
 @export var wall_scene : PackedScene
 @export var full_collision_scene : PackedScene
 @export var exit_collision_scene : PackedScene
-@export var corridor_scenes : Array[PackedScene]
 @export var corridor_scene : PackedScene
+@export var chest_scene : PackedScene
 
 @export var materials : Array[Material]
 
@@ -48,6 +48,10 @@ func _ready() -> void:
 	for child in children_to_add:
 		entrance_detector.call_deferred("add_child", child)
 
+	if room_data.has_hole:
+		var chest = chest_scene.instantiate()
+		chest.rotation.y = -PI / 3 * randi_range(0, 5)
+		add_child(chest)
 
 func add_ceiling_light():
 	$Ceiling.mesh = load("res://meshes/ceiling_hole.res")

@@ -239,7 +239,7 @@ func spawn_enemy():
 		pos = maze.keys().pick_random()
 
 	var enemy : Enemy
-	if randf() < 1.88:
+	if randf() > 1.88:
 		enemy = basic_enemy_scene.instantiate()
 	else:
 		enemy = seeker_enemy_scene.instantiate()

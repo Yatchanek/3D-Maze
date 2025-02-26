@@ -9,6 +9,12 @@ var a_star : AStar3D
 var waypoint : Vector3
 var tick : int
 
+
+var target : CharacterBody3D
+var potential_target : CharacterBody3D
+var target_in_range : bool = false
+var last_target_position : Vector3
+
 var interest : Array[float] = []
 var ray_directions : Array[Vector3] = []
 
