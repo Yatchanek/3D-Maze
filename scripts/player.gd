@@ -56,6 +56,7 @@ func _input(event: InputEvent) -> void:
 
 func _ready() -> void:
 	set_process(false)
+	set_physics_process(false)
 	current_speed = 0
 	target_speed = WALK_SPEED
 
@@ -64,6 +65,7 @@ func _ready() -> void:
 func start():
 	current_stamina = MAX_STAMINA
 	current_health = MAX_HEALTH
+	set_physics_process(true)
 	flicker()
 	$CollisionShape3D.set_deferred("disabled", false)
 

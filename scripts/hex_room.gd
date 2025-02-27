@@ -6,8 +6,11 @@ class_name HexRoom
 @export var exit_collision_scene : PackedScene
 @export var corridor_scene : PackedScene
 @export var chest_scene : PackedScene
+@export var guillotine_scene : PackedScene
+
 
 @export var materials : Array[Material]
+
 
 @onready var entrance_detector : Area3D = $EntranceDetector
 
@@ -15,8 +18,6 @@ var room_data : CellData
 var material_index : int = 0
 
 var room_size : float
-
-var children_to_add : Array = []
 
 signal entered(coords : Vector3i)
 
@@ -42,16 +43,11 @@ func initialize(data : CellData):
 		create_wall(i, mask)
 		add_collision(i, mask)
 		add_corridor(i, mask)
+		add_guillotine(i, mask)
 
 func _ready() -> void:
 	$Body.set_surface_override_material(0, materials[material_index])
-	for child in children_to_add:
-		entrance_detector.call_deferred("add_child", child)
 
-	if room_data.has_hole:
-		var chest = chest_scene.instantiate()
-		chest.rotation.y = -PI / 3 * randi_range(0, 5)
-		add_child(chest)
 
 func add_ceiling_light():
 	$Ceiling.mesh = load("res://meshes/ceiling_hole.res")
@@ -73,7 +69,7 @@ func create_wall(idx: int, exit : int) -> void:
 	var direction = Vector3.FORWARD.rotated(Vector3.UP, deg_to_rad(wall.rotation_degrees.y))
 	wall.position = direction * (sqrt(3) * room_size * 0.5 - Globals.WALL_WIDTH * 0.5)
 	wall.material = materials[material_index]
-	call_deferred("add_child", wall)
+	add_child(wall)
 
 
 func add_corridor(idx : int, exit : int) -> void:
@@ -113,8 +109,17 @@ func add_corridor(idx : int, exit : int) -> void:
 	corridor.add_to_group("Corridors")
 	room_data.corridors[idx] = true
 
-	call_deferred("add_child", corridor)
+	add_child(corridor)
 
+
+func add_guillotine(idx : int, exit : int):
+	if exit == 0 or randf() > 0.075:
+		return
+	var guillotine = guillotine_scene.instantiate()
+	guillotine.rotation_degrees = Vector3(0, idx * -60, 0)
+	var direction = Vector3.FORWARD.rotated(Vector3.UP, guillotine.rotation.y)
+	guillotine.position = direction * (sqrt(3) * room_size * 0.5 - Globals.WALL_WIDTH * 0.5)
+	add_child(guillotine)
 
 func add_collision(idx: int, exit : int) -> void:
 	var static_body : StaticBody3D

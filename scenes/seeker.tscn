@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://cabmscpkdhse4" path="res://scenes/hurtbox.tscn" id="8_as77w"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_3vg4m"]
+radius = 0.45
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_igcsn"]
 albedo_color = Color(0, 1, 0, 1)
@@ -23,6 +24,35 @@ material = SubResource("StandardMaterial3D_igcsn")
 size = Vector3(1, 1, 0.1)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_vgb46"]
+
+[sub_resource type="Animation" id="Animation_2e170"]
+resource_name = "Bite"
+loop_mode = 1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TopJaw:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 0.75),
+"transitions": PackedFloat32Array(0.406126, 5, 5),
+"update": 0,
+"values": [Vector3(0.0872665, 0, 0), Vector3(0.610865, 0, 0), Vector3(0.0872665, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Hurtbox/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.7, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, false, false]
+}
 
 [sub_resource type="Animation" id="Animation_4keg2"]
 resource_name = "Idle"
@@ -67,35 +97,6 @@ tracks/1/keys = {
 "values": [true]
 }
 
-[sub_resource type="Animation" id="Animation_2e170"]
-resource_name = "Bite"
-loop_mode = 1
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("TopJaw:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5, 0.75),
-"transitions": PackedFloat32Array(0.406126, 5, 5),
-"update": 0,
-"values": [Vector3(0.0872665, 0, 0), Vector3(0.610865, 0, 0), Vector3(0.0872665, 0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Hurtbox/CollisionShape3D:disabled")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.7, 1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [true, false, false]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_xr6of"]
 _data = {
 "Bite": SubResource("Animation_2e170"),
@@ -112,15 +113,15 @@ collision_mask = 9
 script = ExtResource("1_6pkhf")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
 shape = SubResource("SphereShape3D_3vg4m")
 
 [node name="TopJaw" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.5, 0, 0, 0, 0.498097, -0.0435779, 0, 0.0435779, 0.498097, 0, 0.5, 0.5)
+transform = Transform3D(0.45, 0, 0, 0, 0.448288, -0.0392201, 0, 0.0392201, 0.448288, 0, 0.5, 0.5)
 mesh = ExtResource("2_57iui")
 
 [node name="BottomJaw" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.5, 0.5)
+transform = Transform3D(0.45, 0, 0, 0, 0.45, 0, 0, 0, 0.45, 0, 0.5, 0.5)
 mesh = ExtResource("3_kie3d")
 
 [node name="Marker" type="MeshInstance3D" parent="."]
@@ -144,8 +145,7 @@ script = ExtResource("7_xaa3g")
 
 [node name="ContextSteeringComponent" type="Node" parent="."]
 script = ExtResource("5_2058m")
-num_rays = 12
-ray_length = 1.5
+num_rays = 16
 collision_mask = 3
 
 [node name="HitBox" parent="." node_paths=PackedStringArray("target") instance=ExtResource("6_837p5")]

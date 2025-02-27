@@ -75,7 +75,6 @@ layers = 4
 mesh = SubResource("PlaneMesh_kwqyh")
 
 [node name="Floor" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("PlaneMesh_j2ho1")
 
 [node name="FloorTop" type="MeshInstance3D" parent="."]

@@ -1,7 +1,6 @@
 extends State
 
 func _enter_state(_previous_state : State) -> void:
-	print("Enter Idle")
 	actor.anim_player.speed_scale = 1.0
 	actor.anim_player.play("Idle")
 

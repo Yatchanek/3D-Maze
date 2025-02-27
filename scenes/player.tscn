@@ -57,7 +57,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, -0.038)
 cull_mask = 1048571
 fov = 65.0
 near = 0.02
-far = 40.0
+far = 100.0
 
 [node name="Light" type="SpotLight3D" parent="CameraGimbal/Camera"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.215, 0.5)

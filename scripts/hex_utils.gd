@@ -21,4 +21,4 @@ static func get_cells_in_range(maze: Dictionary, coords: Vector3i, dist : int) -
 static func distance(from: Vector3i, to : Vector3i) -> int:
 	var dir : Vector3i = to - from
 
-	return int((abs(dir.x + dir.y + dir.z)) * 0.5)
+	return int((abs(dir.x) + abs(dir.y) + abs(dir.z)) * 0.5)

@@ -1,10 +1,11 @@
-[gd_scene load_steps=23 format=4 uid="uid://cyrp51sdsmug"]
+[gd_scene load_steps=24 format=4 uid="uid://cyrp51sdsmug"]
 
 [ext_resource type="Script" path="res://scripts/hex_room.gd" id="1_4hbrt"]
 [ext_resource type="PackedScene" uid="uid://d23pegtrbefue" path="res://scenes/wall.tscn" id="2_bl8a7"]
 [ext_resource type="PackedScene" uid="uid://cd6euvc8pcasg" path="res://scenes/full_wall.tscn" id="3_cb8lo"]
 [ext_resource type="PackedScene" uid="uid://dedse6bl0jd5a" path="res://scenes/exit_wall.tscn" id="4_knxge"]
 [ext_resource type="PackedScene" uid="uid://48d0mgvb4dda" path="res://scenes/chest.tscn" id="6_okfbl"]
+[ext_resource type="PackedScene" uid="uid://dkkiqbuhdnqar" path="res://scenes/guillotine.tscn" id="7_0ylvw"]
 [ext_resource type="Material" uid="uid://ncplgtiws8qq" path="res://materials/wall_material_1.tres" id="7_7ou1p"]
 [ext_resource type="Material" uid="uid://dvo1r1d1ypcta" path="res://materials/floor_material_0.tres" id="7_c8mt0"]
 [ext_resource type="PackedScene" uid="uid://delb0vr0vc0cc" path="res://scenes/corridor_slope.tscn" id="8_rfafo"]
@@ -83,6 +84,7 @@ full_collision_scene = ExtResource("3_cb8lo")
 exit_collision_scene = ExtResource("4_knxge")
 corridor_scene = ExtResource("8_rfafo")
 chest_scene = ExtResource("6_okfbl")
+guillotine_scene = ExtResource("7_0ylvw")
 materials = Array[Material]([ExtResource("8_sjrt4"), ExtResource("7_7ou1p"), ExtResource("10_hyakg"), ExtResource("11_fvq5f"), ExtResource("12_4cxwg")])
 
 [node name="Body" type="MeshInstance3D" parent="."]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://b2kx3pbytijw1"]
+[gd_scene load_steps=19 format=3 uid="uid://b2kx3pbytijw1"]
 
 [ext_resource type="Script" path="res://scripts/hex_maze.gd" id="1_k0ibe"]
 [ext_resource type="PackedScene" uid="uid://cyrp51sdsmug" path="res://scenes/hex_room.tscn" id="2_a6gxg"]
@@ -6,25 +6,32 @@
 [ext_resource type="PackedScene" uid="uid://cv7vir4skba8n" path="res://scenes/hex_room_small.tscn" id="3_tymju"]
 [ext_resource type="PackedScene" uid="uid://dupc2snhor4cq" path="res://scenes/enemy.tscn" id="4_t2nx0"]
 [ext_resource type="PackedScene" uid="uid://bcir1xrpmpjdm" path="res://scenes/seeker.tscn" id="5_2tns3"]
+[ext_resource type="PackedScene" uid="uid://48d0mgvb4dda" path="res://scenes/chest.tscn" id="6_7spxe"]
 [ext_resource type="Script" path="res://scripts/inventory.gd" id="7_6r1b2"]
 [ext_resource type="Script" path="res://scripts/hud.gd" id="7_342dg"]
 [ext_resource type="StyleBox" uid="uid://xn5os3rvqd5j" path="res://slot_stylebox_basic.tres" id="8_0rgb7"]
 [ext_resource type="StyleBox" uid="uid://02xefc6jnw6p" path="res://slot_stylebox_with_border.tres" id="9_iqbtt"]
 
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0twwp"]
+ground_bottom_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Sky" id="Sky_ya488"]
+sky_material = SubResource("ProceduralSkyMaterial_0twwp")
+
 [sub_resource type="Environment" id="Environment_prdqm"]
 background_mode = 1
-ambient_light_color = Color(1, 1, 1, 1)
+sky = SubResource("Sky_ya488")
 ambient_light_sky_contribution = 0.0
 tonemap_mode = 2
 fog_mode = 1
-fog_light_color = Color(0.787759, 0.787759, 0.787759, 1)
-fog_light_energy = 2.0
+fog_light_color = Color(0.724643, 0.724643, 0.724643, 1)
+fog_light_energy = 10.0
 fog_density = 1.0
 fog_sky_affect = 0.0
-volumetric_fog_density = 0.7342
+fog_depth_begin = 1025.6
+fog_depth_end = 1025.6
 volumetric_fog_albedo = Color(0, 0, 0, 1)
-volumetric_fog_emission = Color(0.533037, 0.533037, 0.533037, 1)
-volumetric_fog_length = 15.0
+volumetric_fog_length = 73.76
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8lijc"]
 draw_center = false
@@ -60,8 +67,10 @@ hex_room_scene = ExtResource("2_a6gxg")
 small_hex_room_scene = ExtResource("3_tymju")
 basic_enemy_scene = ExtResource("4_t2nx0")
 seeker_enemy_scene = ExtResource("5_2tns3")
+chest_scene = ExtResource("6_7spxe")
 
 [node name="Player" parent="." instance=ExtResource("3_3ttit")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 100, 0)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_prdqm")
@@ -102,7 +111,7 @@ keep_aspect = 0
 cull_mask = 1048572
 projection = 1
 current = true
-size = 26.0
+size = 50.0
 near = 0.001
 far = 100.0
 
@@ -258,6 +267,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Chests" type="Node3D" parent="."]
+
+[node name="Rooms" type="Node3D" parent="."]
 
 [connection signal="grenade_thrown" from="Player" to="." method="_on_player_grenade_thrown"]
 [connection signal="health_changed" from="Player" to="CanvasLayer/HUD" method="update_health"]

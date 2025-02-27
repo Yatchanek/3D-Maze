@@ -8,9 +8,12 @@ extends Node3D
 @export var small_hex_room_scene: PackedScene
 @export var basic_enemy_scene : PackedScene
 @export var seeker_enemy_scene : PackedScene
+@export var chest_scene : PackedScene
 
 @onready var orth_camera : Camera3D = %OrthCamera
 @onready var player = $Player
+@onready var rooms_node : Node3D = $Rooms
+@onready var chests_node : Node3D = $Chests
 
 var walls: Dictionary = {
 	Vector3i(0, -1, 1): Globals.N,
@@ -34,6 +37,8 @@ var rotations : Dictionary = {
 var maze: Dictionary = {}
 
 var room_dict : Dictionary = {}
+
+var chests : Array[Vector3i] = []
 
 var a_star : AStar3D = AStar3D.new()
 
@@ -59,10 +64,13 @@ func _ready() -> void:
 	create_maze()
 	break_walls()
 	Globals.maze = maze
-	current_room = Vector3i.ZERO
+	var start_pos : Vector3i = maze.keys().pick_random()
+	current_room = start_pos
+	player.current_room = start_pos
 	thread.start(build_maze)
-
-	player.position.y = maze[Vector3i.ZERO].position.y
+	player.position = maze[current_room].position
+	chests.append(start_pos)
+	spawn_chests()
 	player.start()
 
 func create_cells_and_grid():
@@ -76,8 +84,6 @@ func create_cells_and_grid():
 					cell_data.position = HexUtils.get_position(cell_data.coords)
 					if randf() < SMALL_ROOM_RATIO:
 						cell_data.type = cell_data.Type.SMALL
-					elif randf() < 0.5:
-						cell_data.has_hole = true
 					maze[Vector3i(q, r, s)] = cell_data
 					a_star.add_point(cell_data.id, cell_data.position + Vector3.UP * 0.01)
 
@@ -124,7 +130,7 @@ func get_neighbours(cell: Vector3i, unvisited: Array) -> Array[Vector3i]:
 
 
 func build_maze():
-	var neighbours : Array[Vector3i] = HexUtils.get_cells_in_range(maze, Vector3i.ZERO, CULL_DISTANCE)
+	var neighbours : Array[Vector3i] = HexUtils.get_cells_in_range(maze, current_room, CULL_DISTANCE)
 	for cell in neighbours:
 		create_room(cell)
 
@@ -157,7 +163,6 @@ func adjust_visibility():
 
 
 	call_deferred("_on_rooms_created")
-	#call_deferred("adjust_enemies")
 
 
 
@@ -227,6 +232,28 @@ func add_astar_point_in_corridor(from : Vector3i, to : Vector3i):
 	a_star.connect_points(new_id, maze[to].id)
 
 
+func spawn_chests(attempts : int = 0):
+	if attempts > 50:
+		chests.remove_at(0)
+		return
+
+	var chest_pos = maze.keys().pick_random()
+	var valid : bool = true
+	for chest : Vector3i in chests:
+		if chest == chest_pos or HexUtils.distance(chest, chest_pos) < 2:
+			valid = false
+			break
+	if valid:
+		var chest : StaticBody3D = chest_scene.instantiate()
+		chest.position = maze[chest_pos].position
+		chests.append(chest_pos)
+		maze[chest_pos].has_hole = true
+		chests_node.call_deferred("add_child", chest)
+		spawn_chests()
+	else:
+		attempts += 1
+		spawn_chests(attempts)
+
 func spawn_enemy():
 	if enemy_array.size() >= max_enemies:
 		return
@@ -265,14 +292,14 @@ func _on_rooms_created(_first_time : bool = false):
 	if thread.is_started():
 		thread.wait_to_finish()
 		for room in rooms_to_add:
-			call_deferred("add_child", room)
+			rooms_node.call_deferred("add_child", room)
 
 		rooms_to_add = []		
 		hide_distant_rooms.call_deferred()
 
 	else:
 		for room in rooms_to_add:
-			call_deferred("add_child", room)
+			rooms_node.call_deferred("add_child", room)
 
 		rooms_to_add = []
 		hide_distant_rooms.call_deferred()
@@ -281,6 +308,7 @@ func _on_room_entered(coords : Vector3i):
 	if player.current_room == coords:
 		return
 	current_room = coords
+	player.current_room = coords
 	if !thread.is_started():
 		thread.start(adjust_visibility)
 
