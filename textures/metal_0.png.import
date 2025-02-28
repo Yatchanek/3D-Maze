@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://chsyd5l38l6qp"
-path.s3tc="res://.godot/imported/Rock_Grey_02.png-4aad576ead3c2eb181f738f38b4ab89a.s3tc.ctex"
+uid="uid://c4d3sjkudqwq7"
+path.s3tc="res://.godot/imported/metal_0.png-0030e89afed747c7096b398d0c00fa94.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://textures/Rock_Grey_02.png"
-dest_files=["res://.godot/imported/Rock_Grey_02.png-4aad576ead3c2eb181f738f38b4ab89a.s3tc.ctex"]
+source_file="res://textures/metal_0.png"
+dest_files=["res://.godot/imported/metal_0.png-0030e89afed747c7096b398d0c00fa94.s3tc.ctex"]
 
 [params]
 

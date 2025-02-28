@@ -4,6 +4,13 @@ class_name Seeker
 @onready var context_steering_component : ContextSteeringComponent = $ContextSteeringComponent
 @onready var ground_check : RayCast3D = $GroundCheck
 @onready var anim_player : AnimationPlayer = $AnimationPlayer
+@onready var upper_jaw : MeshInstance3D = $UpperJaw
+@onready var bottom_jaw : MeshInstance3D = $BottomJaw
+
+func _ready() -> void:
+	var body_scale_x : float = pow(-1, randi() % 2)
+	upper_jaw.scale.x *= body_scale_x
+	bottom_jaw.scale.x *= body_scale_x
 
 func get_context_steering(dir : Vector3) -> Vector3:
 	return context_steering_component.get_context_steering(dir, rotation.y)

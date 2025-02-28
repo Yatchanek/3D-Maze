@@ -4,7 +4,7 @@ var path : PackedVector3Array = []
 var waypoint : Vector3
 
 func _enter_state(_previous_state : State) -> void:
-	actor.SPEED = 2.25
+	actor.SPEED = 1.25
 	actor.anim_player.speed_scale = 1.0
 	actor.anim_player.play("Bite")
 	get_new_destination()

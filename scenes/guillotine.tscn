@@ -1,22 +1,11 @@
-[gd_scene load_steps=14 format=4 uid="uid://dkkiqbuhdnqar"]
+[gd_scene load_steps=13 format=4 uid="uid://dkkiqbuhdnqar"]
 
 [ext_resource type="PackedScene" uid="uid://cabmscpkdhse4" path="res://scenes/hurtbox.tscn" id="1_2aow4"]
 [ext_resource type="Script" path="res://scripts/guillotine.gd" id="1_08oeh"]
-[ext_resource type="Texture2D" uid="uid://demdwdxmuh8m1" path="res://textures/Metal_01_Grey_Rust_3.png" id="2_8dawi"]
+[ext_resource type="Material" uid="uid://dqmg73cwa48q8" path="res://materials/metal_material.tres" id="2_c7f15"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_pgek1"]
 size = Vector3(1.5, 2, 0.2)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v7huv"]
-resource_name = "Material"
-cull_mode = 2
-albedo_color = Color(0.906332, 0.906332, 0.906332, 1)
-albedo_texture = ExtResource("2_8dawi")
-metallic = 1.0
-metallic_specular = 0.3
-roughness = 0.4
-emission_energy_multiplier = 0.1
-emission_texture = ExtResource("2_8dawi")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_kj416"]
 _surfaces = [{
@@ -40,7 +29,7 @@ _surfaces = [{
 "format": 34359742487,
 "index_count": 186,
 "index_data": PackedByteArray("DwAIAAsADwATAAgADQAFAAIADQARAAUAIgBZAAwAIgBWAFkAHABQAA4AIAAMAAAAIAAiAAwAOgAiACAAOgBAACIAOABAADoAOAA8AEAAEgAWAAYAFgA8ADgAGAAWABIAPAAWABgAQQBNACMANQBEAB0APQBJAEEAHwBHABsAPgBGADYAGQBFAD0AMQBIADUANwBLAD8AQgBKADIAKQBMADEAMwBPAEMAJABOACoAGgBRAB4AGgBUAFEAEgBTABgADwBVABMADwBSAFUAVwBdAFoAVwBgAF0AKwBYACUAKwBhAFgADQBeABEADQBbAF4AEABfACgAEABcAF8AFAAOAAkAFAAcAA4ALgAcABQALgA0ABwALAA0AC4ALAAwADQAEAAmAAMAJgAwACwAKAAmABAAMAAmACgAFwAKAAcAFwAVAAoAOQAVABcAOQAvABUAOwAvADkAOwAtAC8ABAAhAAEAIQAtADsAJwAhAAQALQAhACcA"),
-"material": SubResource("StandardMaterial3D_v7huv"),
+"material": ExtResource("2_c7f15"),
 "name": "Material",
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
@@ -72,7 +61,7 @@ _surfaces = [{
 "format": 34359742487,
 "index_count": 132,
 "index_data": PackedByteArray("AgAXAA8AAgAFABcACwAbABMACwAIABsAFgBQAA4AQABEACoALQBHACkAMgBLAC0AMAAAAAwAMAAcAAAALAAcADAALAAeABwABgAoABgAKAAeACwAIAAoAAYAHgAoACAAHQAEAAEAHQAnAAQAHwAnAB0AHwAlACcACgAhAAcAIQAlAB8AIwAhAAoAJQAhACMAEQBCAD8AKQBDABkAGgBFABIAKwBJAEEAPABIAC4APwBGADsALwBNAD0AOABMADMAOwBKADcANgBOABUADQBPADEANABRADkAPgAJABAAPgAiAAkAOgAiAD4AOgAkACIAAwA1ABQANQAkADoAJgA1AAMAJAA1ACYA"),
-"material": SubResource("StandardMaterial3D_v7huv"),
+"material": ExtResource("2_c7f15"),
 "name": "Material",
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
@@ -84,6 +73,57 @@ shadow_mesh = SubResource("ArrayMesh_wriqk")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_llqek"]
 size = Vector3(1.5, 2, 0.1)
+
+[sub_resource type="Animation" id="Animation_yhca7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Hurtbox/CollisionShape3D:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Top:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0.5, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Bottom:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, -1.25, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CollisionShape3D:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Animation_6o6or"]
 resource_name = "Slash"
@@ -136,57 +176,6 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
 "values": [true, false, false, true]
-}
-
-[sub_resource type="Animation" id="Animation_yhca7"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Hurtbox/CollisionShape3D:disabled")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Top:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0.5, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Bottom:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, -1.25, 0)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("CollisionShape3D:disabled")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_lcquj"]

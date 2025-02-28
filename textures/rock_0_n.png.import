@@ -2,20 +2,17 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://m6nuwwxchb24"
-path.s3tc="res://.godot/imported/chest_Material Base Color.png-239a36a2aa6200ee0effe89371a22d94.s3tc.ctex"
+uid="uid://dgtjtroiei5ul"
+path.s3tc="res://.godot/imported/rock_0_n.png-420abf3b7ae5280244e8658d71b726ed.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
-generator_parameters={
-"md5": "2ebd8d1014679e0855fd0bb1161078a3"
-}
 
 [deps]
 
-source_file="res://meshes/chest_Material Base Color.png"
-dest_files=["res://.godot/imported/chest_Material Base Color.png-239a36a2aa6200ee0effe89371a22d94.s3tc.ctex"]
+source_file="res://textures/rock_0_n.png"
+dest_files=["res://.godot/imported/rock_0_n.png-420abf3b7ae5280244e8658d71b726ed.s3tc.ctex"]
 
 [params]
 
@@ -23,12 +20,12 @@ compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
-compress/normal_map=0
+compress/normal_map=1
 compress/channel_pack=0
 mipmaps/generate=true
 mipmaps/limit=-1
-roughness/mode=0
-roughness/src_normal=""
+roughness/mode=1
+roughness/src_normal="res://textures/rock_0_n.png"
 process/fix_alpha_border=true
 process/premult_alpha=false
 process/normal_map_invert_y=false

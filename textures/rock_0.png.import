@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://demdwdxmuh8m1"
-path.s3tc="res://.godot/imported/Metal_01_Grey_Rust_3.png-cabc6197a8ee628385b588c8894d4a5e.s3tc.ctex"
+uid="uid://chsyd5l38l6qp"
+path.s3tc="res://.godot/imported/rock_0.png-4d91ec88eaa186df202e694b3761e4b7.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://textures/Metal_01_Grey_Rust_3.png"
-dest_files=["res://.godot/imported/Metal_01_Grey_Rust_3.png-cabc6197a8ee628385b588c8894d4a5e.s3tc.ctex"]
+source_file="res://textures/rock_0.png"
+dest_files=["res://.godot/imported/rock_0.png-4d91ec88eaa186df202e694b3761e4b7.s3tc.ctex"]
 
 [params]
 

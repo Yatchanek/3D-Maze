@@ -1,0 +1,18 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://dqmg73cwa48q8"]
+
+[ext_resource type="Texture2D" uid="uid://c4d3sjkudqwq7" path="res://textures/metal_0.png" id="1_6loov"]
+[ext_resource type="Texture2D" uid="uid://d8wxvpduviv" path="res://textures/metal_0_n.png" id="2_j4fa5"]
+
+[resource]
+albedo_texture = ExtResource("1_6loov")
+metallic = 1.0
+roughness = 0.2
+emission_enabled = true
+emission = Color(0.288518, 0.288518, 0.288518, 1)
+emission_energy_multiplier = 1.25
+emission_operator = 1
+emission_texture = ExtResource("1_6loov")
+normal_enabled = true
+normal_texture = ExtResource("2_j4fa5")
+uv1_triplanar = true
+texture_filter = 0

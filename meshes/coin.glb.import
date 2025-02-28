@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bagpmi32fca3j"
-path="res://.godot/imported/untitled.glb-6de038165b384b08aeb959d2f8aea1f6.scn"
+uid="uid://dkatgf6mirwsg"
+path="res://.godot/imported/coin.glb-f446f54957e8c11082c5cf45e765e5b6.scn"
 
 [deps]
 
-source_file="res://meshes/untitled.glb"
-dest_files=["res://.godot/imported/untitled.glb-6de038165b384b08aeb959d2f8aea1f6.scn"]
+source_file="res://meshes/coin.glb"
+dest_files=["res://.godot/imported/coin.glb-f446f54957e8c11082c5cf45e765e5b6.scn"]
 
 [params]
 
@@ -33,23 +33,14 @@ animation/import_rest_as_RESET=false
 import_script/path=""
 _subresources={
 "meshes": {
-"untitled_Icosphere": {
+"coin_Cylinder_001": {
 "generate/lightmap_uv": 0,
 "generate/lods": 0,
 "generate/shadow_meshes": 0,
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/path": "res://meshes/untitled_Icosphere.res"
-},
-"untitled_Icosphere_001": {
-"generate/lightmap_uv": 0,
-"generate/lods": 0,
-"generate/shadow_meshes": 0,
-"lods/normal_merge_angle": 60.0,
-"lods/normal_split_angle": 25.0,
-"save_to_file/enabled": true,
-"save_to_file/path": "res://meshes/untitled_Icosphere_001.res"
+"save_to_file/path": "res://meshes/coin_Cylinder_001.res"
 }
 }
 }

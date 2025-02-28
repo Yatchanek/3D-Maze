@@ -1,8 +1,8 @@
 [gd_scene load_steps=20 format=3 uid="uid://bcir1xrpmpjdm"]
 
 [ext_resource type="Script" path="res://scripts/seeker_enemy/seeker.gd" id="1_6pkhf"]
-[ext_resource type="ArrayMesh" uid="uid://culxh8mw1qudf" path="res://meshes/top_jaw.res" id="2_57iui"]
-[ext_resource type="ArrayMesh" uid="uid://w0d4hl7n4hnh" path="res://meshes/bottom_jaw.res" id="3_kie3d"]
+[ext_resource type="ArrayMesh" uid="uid://rwc0ynpr13tk" path="res://meshes/pacman_top.res" id="2_6rkqm"]
+[ext_resource type="ArrayMesh" uid="uid://46soxo64roes" path="res://meshes/pacman_bottom.res" id="3_82i7r"]
 [ext_resource type="Script" path="res://scripts/seeker_enemy/idle_state.gd" id="3_kvm0l"]
 [ext_resource type="Script" path="res://scripts/seeker_enemy/seek.gd" id="4_6kbps"]
 [ext_resource type="Script" path="res://scripts/seeker_enemy/seeker_fsm.gd" id="4_fs2xy"]
@@ -32,7 +32,7 @@ step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("TopJaw:rotation")
+tracks/0/path = NodePath("UpperJaw:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -60,7 +60,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("TopJaw:rotation")
+tracks/0/path = NodePath("UpperJaw:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -75,7 +75,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("TopJaw:rotation")
+tracks/0/path = NodePath("UpperJaw:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -116,13 +116,13 @@ script = ExtResource("1_6pkhf")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
 shape = SubResource("SphereShape3D_3vg4m")
 
-[node name="TopJaw" type="MeshInstance3D" parent="."]
+[node name="UpperJaw" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.45, 0, 0, 0, 0.448288, -0.0392201, 0, 0.0392201, 0.448288, 0, 0.5, 0.5)
-mesh = ExtResource("2_57iui")
+mesh = ExtResource("2_6rkqm")
 
 [node name="BottomJaw" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.45, 0, 0, 0, 0.45, 0, 0, 0, 0.45, 0, 0.5, 0.5)
-mesh = ExtResource("3_kie3d")
+mesh = ExtResource("3_82i7r")
 
 [node name="Marker" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 4, -0.149)

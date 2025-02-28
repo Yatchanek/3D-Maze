@@ -5,13 +5,12 @@ class_name HexRoom
 @export var full_collision_scene : PackedScene
 @export var exit_collision_scene : PackedScene
 @export var corridor_scene : PackedScene
-@export var chest_scene : PackedScene
 @export var guillotine_scene : PackedScene
-
+@export var coin_scene : PackedScene
 
 @export var materials : Array[Material]
 
-
+@onready var coins_node : Node3D = $Coins
 @onready var entrance_detector : Area3D = $EntranceDetector
 
 var room_data : CellData
@@ -43,7 +42,13 @@ func initialize(data : CellData):
 		create_wall(i, mask)
 		add_collision(i, mask)
 		add_corridor(i, mask)
-		add_guillotine(i, mask)
+		if room_data.first_instantiate:
+			add_guillotine(i, mask)
+	
+	place_guillotines()
+	place_coins()
+	room_data.first_instantiate = false
+
 
 func _ready() -> void:
 	$Body.set_surface_override_material(0, materials[material_index])
@@ -112,14 +117,26 @@ func add_corridor(idx : int, exit : int) -> void:
 	add_child(corridor)
 
 
-func add_guillotine(idx : int, exit : int):
-	if exit == 0 or randf() > 0.075:
+func add_guillotine(i : int, exit : int):
+	if exit == 0 or randf() > 0.05:
 		return
 	var guillotine = guillotine_scene.instantiate()
-	guillotine.rotation_degrees = Vector3(0, idx * -60, 0)
+	guillotine.rotation_degrees = Vector3(0, i * -60, 0)
 	var direction = Vector3.FORWARD.rotated(Vector3.UP, guillotine.rotation.y)
 	guillotine.position = direction * (sqrt(3) * room_size * 0.5 - Globals.WALL_WIDTH * 0.5)
-	add_child(guillotine)
+	room_data.guillotines[i] = true
+	add_child(guillotine)	
+
+func place_guillotines():
+	if room_data.first_instantiate:
+		return
+	for i in 6:
+		if room_data.guillotines[i]:
+			var guillotine = guillotine_scene.instantiate()
+			guillotine.rotation_degrees = Vector3(0, i * -60, 0)
+			var direction = Vector3.FORWARD.rotated(Vector3.UP, guillotine.rotation.y)
+			guillotine.position = direction * (sqrt(3) * room_size * 0.5 - Globals.WALL_WIDTH * 0.5)
+			add_child(guillotine)
 
 func add_collision(idx: int, exit : int) -> void:
 	var static_body : StaticBody3D
@@ -133,6 +150,36 @@ func add_collision(idx: int, exit : int) -> void:
 
 	add_child(static_body)
 
+
+func place_coins():
+	var radius : float = room_size - 1.25
+
+	if room_data.first_instantiate:
+		var coin_count : int = randi_range(3, 7)
+		room_data.coin_count = coin_count
+		for i in coin_count:
+			var coin : Coin = coin_scene.instantiate()
+			coin.idx = i
+			var angle_increment : float = TAU / coin_count
+			coin.position = Vector3.FORWARD.rotated(Vector3.UP, angle_increment * i) * radius + Vector3.UP * 0.4
+			
+			coin.picked.connect(_on_coin_picked)
+			add_child(coin)
+			room_data.coins.append(i)
+		
+
+	else:
+		for i in room_data.coins:
+			var angle_increment : float = TAU / room_data.coin_count
+			var coin : Coin = coin_scene.instantiate()
+			coin.idx = i
+			coin.position = Vector3.FORWARD.rotated(Vector3.UP, angle_increment * i) * radius + Vector3.UP * 0.4
+			
+			coin.picked.connect(_on_coin_picked)
+			add_child(coin)
+
+
+
 func disable_detector():
 	entrance_detector.monitoring = false
 
@@ -144,11 +191,16 @@ func make_invisible():
 	$Body.hide()
 	$Floor.hide()
 	$Ceiling.hide()
+	$Coins.hide()
 
 func make_visible():
 	$Body.show()
 	$Floor.show()
 	$Ceiling.show()
+	$Coins.show()
+
+func _on_coin_picked(idx : int):
+	room_data.coins.erase(idx)
 
 func _on_entrance_detector_body_entered(body:Node3D) -> void:
 	if body is Player:

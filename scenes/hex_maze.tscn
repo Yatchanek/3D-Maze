@@ -61,7 +61,6 @@ corner_radius_bottom_right = 8
 
 [node name="HexMaze" type="Node3D"]
 script = ExtResource("1_k0ibe")
-CULL_DISTANCE = 2
 connectivity_ratio = 0.5
 hex_room_scene = ExtResource("2_a6gxg")
 small_hex_room_scene = ExtResource("3_tymju")
