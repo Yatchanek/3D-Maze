@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=4 uid="uid://cyrp51sdsmug"]
+[gd_scene load_steps=19 format=3 uid="uid://cyrp51sdsmug"]
 
 [ext_resource type="Script" path="res://scripts/hex_room.gd" id="1_4hbrt"]
 [ext_resource type="PackedScene" uid="uid://d23pegtrbefue" path="res://scenes/wall.tscn" id="2_bl8a7"]
@@ -6,64 +6,15 @@
 [ext_resource type="PackedScene" uid="uid://dedse6bl0jd5a" path="res://scenes/exit_wall.tscn" id="4_knxge"]
 [ext_resource type="PackedScene" uid="uid://dkkiqbuhdnqar" path="res://scenes/guillotine.tscn" id="7_0ylvw"]
 [ext_resource type="Material" uid="uid://ncplgtiws8qq" path="res://materials/wall_material_1.tres" id="7_7ou1p"]
-[ext_resource type="Material" uid="uid://dvo1r1d1ypcta" path="res://materials/floor_material_0.tres" id="7_c8mt0"]
 [ext_resource type="PackedScene" uid="uid://bxccq776gy1wp" path="res://scenes/coin.tscn" id="8_eob7v"]
 [ext_resource type="PackedScene" uid="uid://delb0vr0vc0cc" path="res://scenes/corridor_slope.tscn" id="8_rfafo"]
 [ext_resource type="Material" uid="uid://bf560ha2364y8" path="res://materials/wall_material_0.tres" id="8_sjrt4"]
 [ext_resource type="Material" uid="uid://c6n25dcaddypg" path="res://materials/wall_material_2.tres" id="10_hyakg"]
 [ext_resource type="ArrayMesh" uid="uid://bnr8ecux6edhl" path="res://meshes/hexes/hex_empty.res" id="10_mhljg"]
-[ext_resource type="Material" uid="uid://3be68um7y4vv" path="res://materials/floor_material_0_top.tres" id="10_sb6ot"]
-[ext_resource type="ArrayMesh" uid="uid://cufy7sle0g3sq" path="res://meshes/outlines/outline_empty_plane.res" id="11_6wa2b"]
 [ext_resource type="Material" uid="uid://bdh3gpk7eqkiw" path="res://materials/wall_material_3.tres" id="11_fvq5f"]
 [ext_resource type="Material" uid="uid://cat4ifx6ilgi2" path="res://materials/wall_material_4.tres" id="12_4cxwg"]
+[ext_resource type="ArrayMesh" uid="uid://bldncfftqdlqh" path="res://meshes/floor.res" id="14_wbxvs"]
 [ext_resource type="ArrayMesh" uid="uid://6qfg8qjk2qnc" path="res://meshes/ceiling.res" id="17_n8yq7"]
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_ja1ki"]
-_surfaces = [{
-"aabb": AABB(-8, 0, -6.9282, 16, 1e-05, 13.8564),
-"format": 34896613377,
-"index_count": 12,
-"index_data": PackedByteArray("BAAAAAMAAAACAAEAAgAEAAUAAAAEAAIA"),
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 6,
-"vertex_data": PackedByteArray("/78AAP//AAD//wAA/38AAP+/AAAAAAAA/z8AAP//AAAAAAAA/38AAP8/AAAAAAAA")
-}]
-blend_shape_mode = 0
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_bvbcw"]
-resource_name = "floor_Plane"
-_surfaces = [{
-"aabb": AABB(-8, 0, -6.9282, 16, 1e-05, 13.8564),
-"attribute_data": PackedByteArray("/3///9ju/7/Y7v8/JhH/vyYR/z//fwAA"),
-"format": 34896613399,
-"index_count": 12,
-"index_data": PackedByteArray("BAAAAAMAAAACAAEAAgAEAAUAAAAEAAIA"),
-"material": ExtResource("7_c8mt0"),
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 6,
-"vertex_data": PackedByteArray("/78AAP//usL//wAA/3+6wv+/AAAAALrC/z8AAP//usIAAAAA/3+6wv8/AAAAALrCqulWU6rpVlOq6VZTqulWU6rpVlOq6VZT")
-}]
-blend_shape_mode = 0
-shadow_mesh = SubResource("ArrayMesh_ja1ki")
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_crpa3"]
-resource_name = "floor_Plane"
-_surfaces = [{
-"aabb": AABB(-8, 0, -6.9282, 16, 1e-05, 13.8564),
-"attribute_data": PackedByteArray("/3///9ju/7/Y7v8/JhH/vyYR/z//fwAA"),
-"format": 34896613399,
-"index_count": 12,
-"index_data": PackedByteArray("BAAAAAMAAAACAAEAAgAEAAUAAAAEAAIA"),
-"material": ExtResource("10_sb6ot"),
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 6,
-"vertex_data": PackedByteArray("/78AAP//usL//wAA/3+6wv+/AAAAALrC/z8AAP//usIAAAAA/3+6wv8/AAAAALrCqulWU6rpVlOq6VZTqulWU6rpVlOq6VZT")
-}]
-blend_shape_mode = 0
-shadow_mesh = SubResource("ArrayMesh_ja1ki")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_fvjhl"]
 radius = 3.55
@@ -93,21 +44,11 @@ mesh = ExtResource("10_mhljg")
 
 [node name="Floor" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
-mesh = SubResource("ArrayMesh_bvbcw")
-
-[node name="Floor2" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.25, 0, 0.433013, 0, 0.5, 0, -0.433013, 0, 0.25, 0, 2.02886, 0)
-layers = 4
-mesh = SubResource("ArrayMesh_crpa3")
+mesh = ExtResource("14_wbxvs")
 
 [node name="Ceiling" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 2.01, 0)
 mesh = ExtResource("17_n8yq7")
-
-[node name="MapOutline" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 2.05, 0)
-layers = 4
-mesh = ExtResource("11_6wa2b")
 
 [node name="EntranceDetector" type="Area3D" parent="."]
 collision_layer = 0

@@ -10,7 +10,7 @@ class_name HexRoom
 
 @export var materials : Array[Material]
 
-@onready var entrance_detector : Area3D = $EntranceDetector
+#@onready var entrance_detector : Area3D = $EntranceDetector
 
 var room_data : CellData
 var material_index : int = 0
@@ -39,7 +39,7 @@ func initialize(data : CellData):
 	if room_data.exits.size() == 0:
 		for i in exits.size():
 			room_data.exits.append(room_data.layout & exits[i] > 0)
-		define_corridors()
+		#define_corridors()
 		define_guillotines()
 		define_coins()
 		
@@ -69,8 +69,8 @@ func add_ceiling_light():
 	add_child(light)
 
 func place_walls() -> void:	
-	for i in room_data.exits.size():
-		if room_data.exits[i] == false:
+	for i in 6:
+		if 1 << i & room_data.layout == 0:
 			var wall : Wall = wall_scene.instantiate()
 			wall.rotation_degrees = Vector3(0, i * -60, 0)
 			var direction = Vector3.FORWARD.rotated(Vector3.UP, wall.rotation.y)
@@ -80,7 +80,7 @@ func place_walls() -> void:
 
 
 func place_collisions() -> void:
-	for i in room_data.exits.size():
+	for i in 6:
 		var static_body : StaticBody3D
 		if room_data.exits[i]:
 			static_body = exit_collision_scene.instantiate()
@@ -95,11 +95,19 @@ func place_collisions() -> void:
 		add_child(static_body)
 
 func define_corridors():
-	for i in room_data.exits.size():
-		if room_data.exits[i]:
+	for i in 6:
+		if 1 << i & room_data.layout:
 			var neighbour : Vector3i = room_data.coords + Globals.directions[i]
 			if !Globals.maze[neighbour].corridors[wrapi(i + 3, 0, 6)]:
-				room_data.corridors[i] = true
+				
+				if Globals.maze[room_data.coords].type == room_data.Type.NORMAL and Globals.maze[neighbour].type == room_data.Type.NORMAL:
+					room_data.corridors[i] = 1.0
+				elif Globals.maze[room_data.coords].type == room_data.Type.SMALL and Globals.maze[neighbour].type == room_data.Type.SMALL:
+					room_data.corridors[i] = 2.0
+				elif Globals.maze[room_data.coords].type == room_data.Type.NORMAL and Globals.maze[neighbour].type == room_data.Type.SMALL:
+					room_data.corridors[i] = 1.5
+				else:
+					room_data.corridors[i] = -1.5
 
 func place_corridors() -> void:
 	var corridor_index : int = 0
@@ -109,11 +117,11 @@ func place_corridors() -> void:
 			var corridor_type : CorridorSlope.Type
 			var offset : int
 			
-			if Globals.maze[room_data.coords].type == room_data.Type.NORMAL and Globals.maze[neighbour].type == room_data.Type.NORMAL:
+			if Globals.maze[room_data.coords].corridors[i] == 1:
 				corridor_type = CorridorSlope.Type.NORMAL
-			elif Globals.maze[room_data.coords].type == room_data.Type.SMALL and Globals.maze[neighbour].type == room_data.Type.SMALL:
+			elif Globals.maze[room_data.coords].corridors[i] == 2:
 				corridor_type = CorridorSlope.Type.LONG
-			elif Globals.maze[room_data.coords].type == room_data.Type.NORMAL and Globals.maze[neighbour].type == room_data.Type.SMALL:
+			elif Globals.maze[room_data.coords].corridors[i] == 1.5:
 				corridor_type = CorridorSlope.Type.SEMI_LONG
 				offset = 1
 			else:
@@ -137,8 +145,8 @@ func place_corridors() -> void:
 			corridor_index += 1
 
 func define_guillotines():
-	for i in room_data.exits.size():
-		room_data.guillotines.append(!(room_data.exits[i] == false or randf() > 0.05))
+	for i in 6:
+		room_data.guillotines.append(!(1 << i & room_data.layout == 0 or randf() > 0.05))
 
 
 func place_guillotines():
@@ -158,7 +166,7 @@ func define_coins():
 	if room_data.type == room_data.Type.SMALL:
 		coin_count = randi_range(0, 3)
 		max_offset = 5
-		
+
 	for i in coin_count:
 		room_data.coins.append(randi_range(0, max_offset))
 
@@ -197,11 +205,11 @@ func place_coins():
 			corridor.place_coins(room_data.corridor_coins[corridor_index])
 			corridor_index += 1
 
-func disable_detector():
-	entrance_detector.monitoring = false
+# func disable_detector():
+# 	entrance_detector.monitoring = false
 
-func enable_detector():
-	entrance_detector.monitoring = true
+# func enable_detector():
+# 	entrance_detector.monitoring = true
 
 
 func toggle_visibility(visibility : bool):
@@ -210,7 +218,7 @@ func toggle_visibility(visibility : bool):
 	$Ceiling.visible = visibility
 	$Coins.visible = visibility
 	for corridor : CorridorSlope in $Corridors.get_children():
-		corridor.toggle_visibility(visibility)
+		corridor.visible = visibility
 
 
 func _on_coin_picked(idx : int):
@@ -220,9 +228,8 @@ func _on_corridor_coin_picked(idx : int, corridor_idx : int):
 	room_data.corridor_coins[corridor_idx][idx] = -1
 
 func _on_entrance_detector_body_entered(body:Node3D) -> void:
-	if body is Player:
+	if body is Player and body.current_room != room_data.coords:
 		entered.emit(room_data.coords)
-		body.current_room = room_data.coords
 	elif body is Enemy:
 		body.current_room = room_data.coords
 		body.is_in_instantiated_room = true

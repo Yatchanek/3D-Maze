@@ -6,10 +6,8 @@ class_name CorridorSlope
 @onready var left_wall : MeshInstance3D = $LeftWall
 @onready var left_collision : CollisionShape3D = $LeftCollision
 @onready var floor_collision : CollisionShape3D = $FloorCollision
-@onready var left_outline : MeshInstance3D = $LeftOutline
 @onready var ceiling : MeshInstance3D = $Ceiling
 @onready var floor_mesh : MeshInstance3D = $Floor
-@onready var floor_top : MeshInstance3D = $FloorTop
 
 enum Type {
 	NORMAL,
@@ -50,7 +48,6 @@ func initialize(_index : int, from: float, to : float, type : Type):
 func _ready() -> void:
 	left_wall.mesh.size.z = length
 	left_collision.shape.size.z = length
-	left_outline.mesh.size.y = length
 
 	ceiling.rotation.x += slope_angle
 	floor_mesh.rotation.x = slope_angle
@@ -58,7 +55,7 @@ func _ready() -> void:
 	floor_mesh.position.y = bottom
 	ceiling.mesh.size.y = slope_length
 	floor_mesh.mesh.size.y = slope_length
-	floor_top.mesh.size.y = length
+
 
 	floor_collision.shape.size.z = slope_length
 	floor_collision.rotation.x = slope_angle

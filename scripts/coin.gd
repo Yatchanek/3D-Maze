@@ -23,4 +23,4 @@ func _on_body_entered(body:Node3D) -> void:
 
 func _process(delta: float) -> void:
 	rotation.y += (PI + rotation_offset) * delta * 0.75
-	position.y = base_pos_y + 0.1 * sin(rotation.y) 
+	position.y = base_pos_y + 0.1 * sin(rotation.y) * 0.5

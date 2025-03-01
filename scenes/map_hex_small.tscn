@@ -1,0 +1,78 @@
+[gd_scene load_steps=7 format=3 uid="uid://fe2u7rpk2iq8"]
+
+[ext_resource type="ArrayMesh" uid="uid://d2v64htrpurd8" path="res://meshes/floor_small_2.res" id="1_5y4c8"]
+[ext_resource type="Script" path="res://scripts/map_hex.gd" id="2_o8mcr"]
+[ext_resource type="ArrayMesh" uid="uid://cnuft8m7jd2jc" path="res://meshes/outlines/outiline_empty_plane_small.res" id="3_eqia3"]
+[ext_resource type="PackedScene" uid="uid://bog3fjo0nfmu0" path="res://scenes/map_corridor.tscn" id="4_vl237"]
+[ext_resource type="Material" uid="uid://7hen55jioufw" path="res://materials/outline_material.tres" id="5_oex71"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_22kxw"]
+material = ExtResource("5_oex71")
+size = Vector2(1.5, 0.5)
+
+[node name="MapHexSmall" type="Node3D"]
+script = ExtResource("2_o8mcr")
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+layers = 4
+mesh = ExtResource("1_5y4c8")
+
+[node name="MapOutline" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.1, 0)
+layers = 4
+mesh = ExtResource("3_eqia3")
+skeleton = NodePath("")
+
+[node name="Corridors" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0590365)
+
+[node name="MapCorridor" parent="Corridors" instance=ExtResource("4_vl237")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.60757)
+
+[node name="MapCorridor2" parent="Corridors" instance=ExtResource("4_vl237")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="MapCorridor3" parent="Corridors" instance=ExtResource("4_vl237")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="MapCorridor4" parent="Corridors" instance=ExtResource("4_vl237")]
+
+[node name="MapCorridor5" parent="Corridors" instance=ExtResource("4_vl237")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="MapCorridor6" parent="Corridors" instance=ExtResource("4_vl237")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Walls" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.005, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Walls"]
+visible = false
+layers = 4
+mesh = SubResource("PlaneMesh_22kxw")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Walls"]
+visible = false
+layers = 4
+mesh = SubResource("PlaneMesh_22kxw")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Walls"]
+visible = false
+layers = 4
+mesh = SubResource("PlaneMesh_22kxw")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Walls"]
+visible = false
+layers = 4
+mesh = SubResource("PlaneMesh_22kxw")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Walls"]
+visible = false
+layers = 4
+mesh = SubResource("PlaneMesh_22kxw")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="Walls"]
+visible = false
+layers = 4
+mesh = SubResource("PlaneMesh_22kxw")
