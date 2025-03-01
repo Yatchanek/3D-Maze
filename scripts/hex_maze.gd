@@ -169,16 +169,14 @@ func adjust_visibility():
 func hide_distant_rooms():
 	for room in room_dict.keys():
 		if room != current_room:
-			room_dict[room].make_invisible()
+			room_dict[room].toggle_visibility(false)
 
 	for dir : Vector3i in walls.keys():
 		if !maze.has(current_room + dir):
 			continue
-		if maze[current_room].layout & walls[dir] == 0:
-			room_dict[current_room + dir].make_invisible()
-		else:
-			room_dict[current_room + dir].make_visible()
-		
+		if maze[current_room].layout & walls[dir] > 0:
+			room_dict[current_room + dir].toggle_visibility(true)
+
 			
 
 func break_walls():
