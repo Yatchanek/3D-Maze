@@ -16,7 +16,6 @@ func physics_update(delta : float) -> void:
 
 	var direction : Vector3 = actor.position.direction_to(waypoint)
 
-	actor.check_for_floor()
 
 	if actor.is_in_instantiated_room:
 		direction.y = 0

@@ -62,5 +62,7 @@ run={
 3d_physics/layer_1="Environment"
 3d_physics/layer_2="Enemies"
 3d_physics/layer_3="Player"
+3d_physics/layer_4="Floors"
+3d_physics/layer_5="Obstacles"
 3d_physics/layer_7="Weapon Hurtbox"
 3d_physics/layer_8="Enemy Hurtbox"

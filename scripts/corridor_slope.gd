@@ -5,7 +5,7 @@ class_name CorridorSlope
 
 @onready var left_wall : MeshInstance3D = $LeftWall
 @onready var left_collision : CollisionShape3D = $LeftCollision
-@onready var floor_collision : CollisionShape3D = $FloorCollision
+@onready var floor_collision : CollisionShape3D = $StaticBody3D/FloorCollision
 @onready var ceiling : MeshInstance3D = $Ceiling
 @onready var floor_mesh : MeshInstance3D = $Floor
 
@@ -49,7 +49,7 @@ func _ready() -> void:
 	left_wall.mesh.size.z = length
 	left_collision.shape.size.z = length
 
-	ceiling.rotation.x += slope_angle
+	ceiling.rotation.x = slope_angle
 	floor_mesh.rotation.x = slope_angle
 	ceiling.position.y = top
 	floor_mesh.position.y = bottom
@@ -57,9 +57,9 @@ func _ready() -> void:
 	floor_mesh.mesh.size.y = slope_length
 
 
-	floor_collision.shape.size.z = slope_length
+	floor_collision.shape.size.z = slope_length - 0.1
 	floor_collision.rotation.x = slope_angle
-	floor_collision.position.y = floor_mesh.position.y -0.05
+	floor_collision.position.y = floor_mesh.position.y - 0.1
 
 	
 

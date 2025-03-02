@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://bcir1xrpmpjdm"]
+[gd_scene load_steps=21 format=3 uid="uid://bcir1xrpmpjdm"]
 
 [ext_resource type="Script" path="res://scripts/seeker_enemy/seeker.gd" id="1_6pkhf"]
 [ext_resource type="ArrayMesh" uid="uid://rwc0ynpr13tk" path="res://meshes/pacman_top.res" id="2_6rkqm"]
@@ -24,6 +24,9 @@ material = SubResource("StandardMaterial3D_igcsn")
 size = Vector3(1, 1, 0.1)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_vgb46"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1yy75"]
+size = Vector3(1, 0.325317, 0.478394)
 
 [sub_resource type="Animation" id="Animation_2e170"]
 resource_name = "Bite"
@@ -117,11 +120,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
 shape = SubResource("SphereShape3D_3vg4m")
 
 [node name="UpperJaw" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.45, 0, 0, 0, 0.448288, -0.0392201, 0, 0.0392201, 0.448288, 0, 0.5, 0.5)
+transform = Transform3D(0.45, 0, 0, 0, 0.448288, -0.0392201, 0, 0.0392201, 0.448288, 0, 0.424331, 0.5)
 mesh = ExtResource("2_6rkqm")
 
 [node name="BottomJaw" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.45, 0, 0, 0, 0.45, 0, 0, 0, 0.45, 0, 0.5, 0.5)
+transform = Transform3D(0.45, 0, 0, 0, 0.45, 0, 0, 0, 0.45, 0, 0.424331, 0.5)
 mesh = ExtResource("3_82i7r")
 
 [node name="Marker" type="MeshInstance3D" parent="."]
@@ -155,6 +158,7 @@ target = NodePath("..")
 [node name="CollisionShape3D" parent="HitBox" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("SphereShape3D_vgb46")
+disabled = true
 
 [node name="Hurtbox" parent="." instance=ExtResource("8_as77w")]
 collision_layer = 128
@@ -166,9 +170,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.375, 0)
 shape = SubResource("SphereShape3D_vgb46")
 disabled = true
 
-[node name="GroundCheck" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.186577, -0.447536)
+[node name="GroundCheck" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.182465)
 collision_mask = 8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GroundCheck"]
+shape = SubResource("BoxShape3D_1yy75")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -184,6 +191,8 @@ monitorable = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.306571, 0)
 shape = SubResource("SphereShape3D_d2xo4")
 
+[connection signal="body_entered" from="GroundCheck" to="." method="_on_ground_check_body_entered"]
+[connection signal="body_exited" from="GroundCheck" to="." method="_on_ground_check_body_exited"]
 [connection signal="body_entered" from="Detector" to="FiniteStateMachine" method="_on_detector_body_entered"]
 [connection signal="body_exited" from="Detector" to="FiniteStateMachine" method="_on_detector_body_exited"]
 

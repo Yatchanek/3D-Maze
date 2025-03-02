@@ -9,10 +9,6 @@
 resource_local_to_scene = true
 size = Vector3(0.5, 4, 3)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_lef5f"]
-resource_local_to_scene = true
-size = Vector3(1.5, 0.1, 1)
-
 [sub_resource type="BoxMesh" id="BoxMesh_fdslq"]
 resource_local_to_scene = true
 material = ExtResource("2_ugxse")
@@ -23,13 +19,16 @@ resource_local_to_scene = true
 material = ExtResource("4_saacp")
 size = Vector2(2, 3)
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_lm2df"]
-resource_local_to_scene = true
+[sub_resource type="PlaneMesh" id="PlaneMesh_e502a"]
 material = ExtResource("2_ugxse")
-size = Vector2(2, 3)
+flip_faces = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lef5f"]
+resource_local_to_scene = true
+size = Vector3(1.5, 0.2, 1)
 
 [node name="Corridor" type="StaticBody3D"]
-collision_layer = 8
+collision_layer = 9
 collision_mask = 6
 script = ExtResource("1_w4wwj")
 coin_scene = ExtResource("2_e4gh7")
@@ -41,10 +40,6 @@ shape = SubResource("BoxShape3D_d6r7e")
 [node name="RightCollision" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
 shape = SubResource("BoxShape3D_d6r7e")
-
-[node name="FloorCollision" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-shape = SubResource("BoxShape3D_lef5f")
 
 [node name="LeftWall" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
@@ -58,5 +53,13 @@ mesh = SubResource("BoxMesh_fdslq")
 mesh = SubResource("PlaneMesh_j2ho1")
 
 [node name="Ceiling" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 1.51, 0)
-mesh = SubResource("PlaneMesh_lm2df")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.51, 0)
+mesh = SubResource("PlaneMesh_e502a")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+collision_layer = 8
+collision_mask = 6
+
+[node name="FloorCollision" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_lef5f")

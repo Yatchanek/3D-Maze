@@ -205,11 +205,7 @@ func place_coins():
 			corridor.place_coins(room_data.corridor_coins[corridor_index])
 			corridor_index += 1
 
-# func disable_detector():
-# 	entrance_detector.monitoring = false
 
-# func enable_detector():
-# 	entrance_detector.monitoring = true
 
 
 func toggle_visibility(visibility : bool):

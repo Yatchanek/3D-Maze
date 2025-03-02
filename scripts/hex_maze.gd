@@ -2,7 +2,8 @@ extends Node3D
 
 @export var MAZE_SIZE : int = 3
 @export var SMALL_ROOM_RATIO : float = 0.2
-@export var CULL_DISTANCE : int = 1
+@export var CULL_DISTANCE : int = 2
+@export var VIEW_DISTANCE : int = 4
 @export_range(0., 1.0) var connectivity_ratio : float = 0.25
 @export var hex_room_scene: PackedScene
 @export var small_hex_room_scene: PackedScene
@@ -96,7 +97,7 @@ func create_cells_and_grid():
 						cell_data.type = cell_data.Type.SMALL
 						cell_data.room_size = Globals.SMALL_HEX_SIZE
 					maze[Vector3i(q, r, s)] = cell_data
-					a_star.add_point(cell_data.id, cell_data.position + Vector3.UP * 0.01)
+					a_star.add_point(cell_data.id, cell_data.position + Vector3.UP * 0.05)
 
 
 func create_maze():
@@ -178,6 +179,12 @@ func instantiate_rooms():
 	for direction : Vector3i in walls.keys():
 		if maze[current_room].layout & walls[direction] > 0:
 			rooms_to_instantiate.append(current_room + direction)
+			var i : int = 1
+			while maze[current_room + direction * i].layout & walls[direction] > 0:
+				rooms_to_instantiate.append(current_room + direction * (i + 1))
+				i += 1
+				if i > VIEW_DISTANCE:
+					break
 	
 	for room : Vector3i in rooms_to_instantiate:
 		if !room_dict.has(room):
@@ -248,11 +255,17 @@ func add_astar_point_in_corridor(from : Vector3i, to : Vector3i):
 	var cor_start = maze[from].position + Vector3.FORWARD.rotated(Vector3.UP, deg_to_rad(rotations[dir])) * sqrt(3) * current_room_size * 0.5
 	var cor_end = maze[to].position + Vector3.FORWARD.rotated(Vector3.UP, deg_to_rad(rotations[-dir])) * sqrt(3) * next_room_size * 0.5
 
-	var middle_point : Vector3 = (cor_start + cor_end) * 0.5
+	var middle_point : Vector3 = (cor_start + cor_end) * 0.5 + Vector3.UP * 0.05
 	var new_id = a_star.get_available_point_id()
 	a_star.add_point(new_id, middle_point)
 	a_star.connect_points(maze[from].id, new_id)
 	a_star.connect_points(new_id, maze[to].id)
+
+	var m : MeshInstance3D = MeshInstance3D.new()
+	m.mesh = SphereMesh.new()
+	m.mesh.radius = 0.25
+	m.position = middle_point
+	add_child(m)
 
 
 func spawn_chests(attempts : int = 0):
