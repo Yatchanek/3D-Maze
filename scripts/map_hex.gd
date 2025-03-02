@@ -7,7 +7,7 @@ func initialize(room_data : CellData):
         var wall : MeshInstance3D = $Walls.get_child(i)
         var offset : int = 0
         if 1 << i & room_data.layout == 0:
-             wall.show()
+             wall.hide()
         if room_data.corridors[i] == 0:
             corridor.hide()
         elif room_data.corridors[i] == 1:

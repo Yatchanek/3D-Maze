@@ -1,9 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://dcswnwd42le1n"]
+[gd_scene load_steps=6 format=3 uid="uid://dcswnwd42le1n"]
 
-[ext_resource type="ArrayMesh" uid="uid://dofs148w3lptk" path="res://meshes/floor_2.res" id="1_0dsfa"]
+[ext_resource type="ArrayMesh" uid="uid://fr6cyvc8p3yi" path="res://meshes/floor_2.res" id="1_0dsfa"]
 [ext_resource type="Script" path="res://scripts/map_hex.gd" id="2_pbkr1"]
 [ext_resource type="PackedScene" uid="uid://bog3fjo0nfmu0" path="res://scenes/map_corridor.tscn" id="3_6mdiq"]
-[ext_resource type="ArrayMesh" uid="uid://cufy7sle0g3sq" path="res://meshes/outlines/outline_empty_plane.res" id="3_nnf6t"]
 [ext_resource type="Material" uid="uid://7hen55jioufw" path="res://materials/outline_material.tres" id="5_bkuix"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_olpuy"]
@@ -18,14 +17,8 @@ transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 layers = 4
 mesh = ExtResource("1_0dsfa")
 
-[node name="MapOutline" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.01, 0)
-layers = 4
-mesh = ExtResource("3_nnf6t")
-skeleton = NodePath("")
-
 [node name="Corridors" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+visible = false
 
 [node name="MapCorridor" parent="Corridors" instance=ExtResource("3_6mdiq")]
 

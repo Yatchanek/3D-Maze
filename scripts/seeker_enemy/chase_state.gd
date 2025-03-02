@@ -11,11 +11,15 @@ func physics_update(delta : float) -> void:
 	elapsed_time += delta
 	if elapsed_time > 0.5:
 		elapsed_time -= 0.5
-		if actor.position.distance_squared_to(actor.target.position) > 0.2:
-			actor.target = actor.check_line_sight(actor.target)
-			if !actor.target:
-				actor.collision_mask -= 16
-				transition.emit("Seek")
+		if is_instance_valid(actor.target):
+			if actor.position.distance_squared_to(actor.target.position) > 0.2:
+				actor.target = actor.check_line_sight(actor.target)
+				if !actor.target:
+					actor.collision_mask -= 16
+					transition.emit("Seek")
+		else:
+			actor.collision_mask -= 16
+			transition.emit("Seek")
 
 	if is_instance_valid(actor.target) and actor.position.distance_squared_to(actor.target.position) > 0.2:
 
