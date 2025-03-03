@@ -1,0 +1,75 @@
+[gd_scene load_steps=12 format=3 uid="uid://cmyjlv3sryllg"]
+
+[ext_resource type="Script" uid="uid://b6wsyho2xaurv" path="res://scripts/little_enemy/little_enemy.gd" id="1_ouvm7"]
+[ext_resource type="Material" uid="uid://crbopxk1glyq0" path="res://materials/indicator_material.tres" id="2_d8duo"]
+[ext_resource type="PackedScene" uid="uid://cogstiod36jom" path="res://scenes/context_steering_component.tscn" id="2_s5iao"]
+[ext_resource type="Script" uid="uid://bwbges2hoof8m" path="res://scripts/fsm.gd" id="3_d8duo"]
+[ext_resource type="Script" uid="uid://crnw1mxi5ynta" path="res://scripts/little_enemy/wander_state.gd" id="4_0oq60"]
+[ext_resource type="Script" uid="uid://di4strnxj0qq0" path="res://scripts/little_enemy/idle_state.gd" id="6_d8duo"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_s5iao"]
+radius = 0.1
+
+[sub_resource type="PrismMesh" id="PrismMesh_5frf0"]
+material = ExtResource("2_d8duo")
+size = Vector3(0.25, 0.25, 0.15)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ouvm7"]
+size = Vector3(1, 0.606506, 0.478394)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q2dia"]
+albedo_color = Color(1, 1, 0, 1)
+emission_enabled = true
+emission = Color(1, 1, 0, 1)
+
+[sub_resource type="PrismMesh" id="PrismMesh_s5iao"]
+material = SubResource("StandardMaterial3D_q2dia")
+size = Vector3(1, 1, 0.1)
+
+[node name="LittleEnemy" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 27
+script = ExtResource("1_ouvm7")
+TOP_SPEED = 2.15
+STEER_FORCE = 2.5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+shape = SubResource("SphereShape3D_s5iao")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.075, 0)
+mesh = SubResource("PrismMesh_5frf0")
+
+[node name="ContextSteeringComponent" parent="." instance=ExtResource("2_s5iao")]
+num_rays = 16
+ray_length = 1.0
+collision_mask = 19
+check_height = 0.1
+
+[node name="FSM" type="Node" parent="." node_paths=PackedStringArray("actor")]
+script = ExtResource("3_d8duo")
+actor = NodePath("..")
+default_state = "IdleState"
+
+[node name="WanderState" type="Node" parent="FSM"]
+script = ExtResource("4_0oq60")
+
+[node name="IdleState" type="Node" parent="FSM"]
+script = ExtResource("6_d8duo")
+
+[node name="GroundCheck" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.282002)
+collision_mask = 8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GroundCheck"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.140595, 0)
+shape = SubResource("BoxShape3D_ouvm7")
+
+[node name="Marker" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 4, -0.149)
+layers = 4
+mesh = SubResource("PrismMesh_s5iao")
+
+[connection signal="body_entered" from="GroundCheck" to="." method="_on_ground_check_body_entered"]
+[connection signal="body_exited" from="GroundCheck" to="." method="_on_ground_check_body_exited"]

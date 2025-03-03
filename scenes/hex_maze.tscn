@@ -1,17 +1,18 @@
-[gd_scene load_steps=21 format=3 uid="uid://b2kx3pbytijw1"]
+[gd_scene load_steps=22 format=3 uid="uid://b2kx3pbytijw1"]
 
-[ext_resource type="Script" path="res://scripts/hex_maze.gd" id="1_k0ibe"]
-[ext_resource type="PackedScene" uid="uid://cyrp51sdsmug" path="res://scenes/hex_room.tscn" id="2_a6gxg"]
+[ext_resource type="Script" uid="uid://ds1758psbybo5" path="res://scripts/hex_maze.gd" id="1_k0ibe"]
+[ext_resource type="PackedScene" uid="uid://cyrp51sdsmug" path="res://scenes/room_elements/hex_room.tscn" id="2_a6gxg"]
 [ext_resource type="PackedScene" uid="uid://b1y1eap5q1dws" path="res://scenes/player.tscn" id="3_3ttit"]
-[ext_resource type="PackedScene" uid="uid://cv7vir4skba8n" path="res://scenes/hex_room_small.tscn" id="3_tymju"]
-[ext_resource type="PackedScene" uid="uid://dupc2snhor4cq" path="res://scenes/enemy.tscn" id="4_t2nx0"]
-[ext_resource type="PackedScene" uid="uid://bcir1xrpmpjdm" path="res://scenes/seeker.tscn" id="5_2tns3"]
+[ext_resource type="PackedScene" uid="uid://cv7vir4skba8n" path="res://scenes/room_elements/hex_room_small.tscn" id="3_tymju"]
+[ext_resource type="PackedScene" uid="uid://dupc2snhor4cq" path="res://scenes/enemies/patroling_enemy.tscn" id="4_t2nx0"]
+[ext_resource type="PackedScene" uid="uid://bcir1xrpmpjdm" path="res://scenes/enemies/seeker.tscn" id="5_2tns3"]
 [ext_resource type="PackedScene" uid="uid://48d0mgvb4dda" path="res://scenes/chest.tscn" id="6_7spxe"]
-[ext_resource type="Script" path="res://scripts/inventory.gd" id="7_6r1b2"]
-[ext_resource type="Script" path="res://scripts/hud.gd" id="7_342dg"]
-[ext_resource type="PackedScene" uid="uid://dcswnwd42le1n" path="res://scenes/map_hex.tscn" id="7_lyi48"]
+[ext_resource type="PackedScene" uid="uid://cmyjlv3sryllg" path="res://scenes/enemies/little_enemy.tscn" id="6_bikdm"]
+[ext_resource type="Script" uid="uid://cff07puqlply8" path="res://scripts/inventory.gd" id="7_6r1b2"]
+[ext_resource type="Script" uid="uid://d1ycc265if6hj" path="res://scripts/hud.gd" id="7_342dg"]
+[ext_resource type="PackedScene" uid="uid://dcswnwd42le1n" path="res://scenes/map_elements/map_hex.tscn" id="7_lyi48"]
 [ext_resource type="StyleBox" uid="uid://xn5os3rvqd5j" path="res://slot_stylebox_basic.tres" id="8_0rgb7"]
-[ext_resource type="PackedScene" uid="uid://fe2u7rpk2iq8" path="res://scenes/map_hex_small.tscn" id="8_5japd"]
+[ext_resource type="PackedScene" uid="uid://fe2u7rpk2iq8" path="res://scenes/map_elements/map_hex_small.tscn" id="8_5japd"]
 [ext_resource type="StyleBox" uid="uid://02xefc6jnw6p" path="res://slot_stylebox_with_border.tres" id="9_iqbtt"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0twwp"]
@@ -70,6 +71,7 @@ hex_room_scene = ExtResource("2_a6gxg")
 small_hex_room_scene = ExtResource("3_tymju")
 basic_enemy_scene = ExtResource("4_t2nx0")
 seeker_enemy_scene = ExtResource("5_2tns3")
+little_enemy_scene = ExtResource("6_bikdm")
 chest_scene = ExtResource("6_7spxe")
 map_hex_scene = ExtResource("7_lyi48")
 small_map_hex_scene = ExtResource("8_5japd")

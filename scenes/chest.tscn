@@ -1,7 +1,7 @@
 [gd_scene load_steps=13 format=4 uid="uid://48d0mgvb4dda"]
 
 [ext_resource type="Texture2D" uid="uid://m6nuwwxchb24" path="res://meshes/chest_Material Base Color.png" id="1_7i0cm"]
-[ext_resource type="Script" path="res://scripts/chest.gd" id="1_kuqd0"]
+[ext_resource type="Script" uid="uid://kge3ym5nv7tu" path="res://scripts/chest.gd" id="1_kuqd0"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2i63u"]
 size = Vector3(0.75, 0.5, 0.5)
@@ -42,8 +42,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_b4emf"]
 _data = {
-"Open": SubResource("Animation_drpkp"),
-"RESET": SubResource("Animation_tqoug")
+&"Open": SubResource("Animation_drpkp"),
+&"RESET": SubResource("Animation_tqoug")
 }
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_51pmb"]
@@ -136,7 +136,7 @@ shape = SubResource("BoxShape3D_rti6f")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_b4emf")
+&"": SubResource("AnimationLibrary_b4emf")
 }
 
 [node name="Top" type="MeshInstance3D" parent="."]

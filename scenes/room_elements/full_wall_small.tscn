@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://cbvc8w1a6warn"]
+
+[ext_resource type="Script" uid="uid://nt38un37140j" path="res://scripts/full_wall_small.gd" id="1_c0d5j"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vkdfx"]
+
+[node name="FullWallSmall" type="StaticBody3D"]
+collision_mask = 6
+script = ExtResource("1_c0d5j")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+visible = false
+shape = SubResource("BoxShape3D_vkdfx")

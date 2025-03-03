@@ -6,6 +6,12 @@ enum Type {
     SMALL
 }
 
+enum SubType {
+    NORMAL,
+    HOLE,
+    DOME,
+    HIGH
+}
 
 var coords : Vector3i = Vector3i(0, 0, 0)
 var room_size : float = Globals.HEX_SIZE
@@ -14,9 +20,12 @@ var layout : int = 0
 var position : Vector3 = Vector3(0, 0, 0)
 var exits : Array[bool] = []
 var corridors : Array[float] = [0, 0, 0, 0, 0, 0]
-var guillotines : Array[bool] = []
+var guillotines : Array[float] = [-1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
 var type : Type = Type.NORMAL
-var has_hole : bool = false
+var subtype : SubType = SubType.NORMAL
+
 
 var coins : PackedInt32Array = []
 var corridor_coins : Array[PackedInt32Array] = []
+
+var has_been_instantiated : bool = false

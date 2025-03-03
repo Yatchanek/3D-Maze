@@ -1,0 +1,201 @@
+[gd_scene load_steps=21 format=3 uid="uid://bcir1xrpmpjdm"]
+
+[ext_resource type="Script" uid="uid://rsbeuwa2mb1h" path="res://scripts/seeker_enemy/seeker.gd" id="1_6pkhf"]
+[ext_resource type="ArrayMesh" uid="uid://rwc0ynpr13tk" path="res://meshes/pacman_top.res" id="2_6rkqm"]
+[ext_resource type="ArrayMesh" uid="uid://46soxo64roes" path="res://meshes/pacman_bottom.res" id="3_82i7r"]
+[ext_resource type="Script" uid="uid://d6apj6pbrwjb" path="res://scripts/seeker_enemy/idle_state.gd" id="3_kvm0l"]
+[ext_resource type="Script" uid="uid://q2xmjyht2aus" path="res://scripts/seeker_enemy/seek.gd" id="4_6kbps"]
+[ext_resource type="Script" uid="uid://dadrcm1b5f6lp" path="res://scripts/seeker_enemy/seeker_fsm.gd" id="4_fs2xy"]
+[ext_resource type="Script" uid="uid://qh0c7h813ehd" path="res://scripts/context_steering_component.gd" id="5_2058m"]
+[ext_resource type="PackedScene" uid="uid://bi7vniosvwa8c" path="res://scenes/hit_box.tscn" id="6_837p5"]
+[ext_resource type="Script" uid="uid://deklqry8jvfr3" path="res://scripts/seeker_enemy/chase_state.gd" id="7_xaa3g"]
+[ext_resource type="PackedScene" uid="uid://cabmscpkdhse4" path="res://scenes/hurtbox.tscn" id="8_as77w"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_3vg4m"]
+radius = 0.45
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_igcsn"]
+albedo_color = Color(0, 1, 0, 1)
+emission_enabled = true
+emission = Color(0, 1, 0, 1)
+
+[sub_resource type="PrismMesh" id="PrismMesh_ftc33"]
+material = SubResource("StandardMaterial3D_igcsn")
+size = Vector3(1, 1, 0.1)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_vgb46"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1yy75"]
+size = Vector3(1, 0.606506, 0.478394)
+
+[sub_resource type="Animation" id="Animation_2e170"]
+resource_name = "Bite"
+loop_mode = 1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("UpperJaw:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 0.75),
+"transitions": PackedFloat32Array(0.406126, 5, 5),
+"update": 0,
+"values": [Vector3(0.0872665, 0, 0), Vector3(0.610865, 0, 0), Vector3(0.0872665, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Hurtbox/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.7, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, false, false]
+}
+
+[sub_resource type="Animation" id="Animation_4keg2"]
+resource_name = "Idle"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("UpperJaw:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0.0872665, 0, 0), Vector3(0.174533, 0, 0), Vector3(0.0872665, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_f18oj"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("UpperJaw:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.0872665, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Hurtbox/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_xr6of"]
+_data = {
+&"Bite": SubResource("Animation_2e170"),
+&"Idle": SubResource("Animation_4keg2"),
+&"RESET": SubResource("Animation_f18oj")
+}
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_d2xo4"]
+radius = 4.0
+
+[node name="Seeker" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 9
+script = ExtResource("1_6pkhf")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+shape = SubResource("SphereShape3D_3vg4m")
+
+[node name="UpperJaw" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.45, 0, 0, 0, 0.448288, -0.0392201, 0, 0.0392201, 0.448288, 0, 0.424331, 0.5)
+mesh = ExtResource("2_6rkqm")
+
+[node name="BottomJaw" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.45, 0, 0, 0, 0.45, 0, 0, 0, 0.45, 0, 0.424331, 0.5)
+mesh = ExtResource("3_82i7r")
+
+[node name="Marker" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 4, -0.149)
+layers = 4
+mesh = SubResource("PrismMesh_ftc33")
+
+[node name="FiniteStateMachine" type="Node" parent="." node_paths=PackedStringArray("actor")]
+script = ExtResource("4_fs2xy")
+actor = NodePath("..")
+default_state = "Idle"
+
+[node name="Idle" type="Node" parent="FiniteStateMachine"]
+script = ExtResource("3_kvm0l")
+
+[node name="Seek" type="Node" parent="FiniteStateMachine"]
+script = ExtResource("4_6kbps")
+
+[node name="Chase" type="Node" parent="FiniteStateMachine"]
+script = ExtResource("7_xaa3g")
+
+[node name="ContextSteeringComponent" type="Node" parent="."]
+script = ExtResource("5_2058m")
+num_rays = 16
+collision_mask = 19
+
+[node name="HitBox" parent="." node_paths=PackedStringArray("target") instance=ExtResource("6_837p5")]
+collision_layer = 0
+target = NodePath("..")
+
+[node name="CollisionShape3D" parent="HitBox" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("SphereShape3D_vgb46")
+disabled = true
+
+[node name="Hurtbox" parent="." instance=ExtResource("8_as77w")]
+collision_layer = 128
+collision_mask = 0
+damage = 5.0
+
+[node name="CollisionShape3D" parent="Hurtbox" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.375, 0)
+shape = SubResource("SphereShape3D_vgb46")
+disabled = true
+
+[node name="GroundCheck" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.282002)
+collision_mask = 8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GroundCheck"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.140595, 0)
+shape = SubResource("BoxShape3D_1yy75")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_xr6of")
+}
+
+[node name="Detector" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 4
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Detector"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.306571, 0)
+shape = SubResource("SphereShape3D_d2xo4")
+
+[connection signal="body_entered" from="GroundCheck" to="." method="_on_ground_check_body_entered"]
+[connection signal="body_exited" from="GroundCheck" to="." method="_on_ground_check_body_exited"]
+[connection signal="body_entered" from="Detector" to="FiniteStateMachine" method="_on_detector_body_entered"]
+[connection signal="body_exited" from="Detector" to="FiniteStateMachine" method="_on_detector_body_exited"]
+
+[editable path="HitBox"]
+[editable path="Hurtbox"]

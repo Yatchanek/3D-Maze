@@ -9,6 +9,7 @@ extends Node3D
 @export var small_hex_room_scene: PackedScene
 @export var basic_enemy_scene : PackedScene
 @export var seeker_enemy_scene : PackedScene
+@export var little_enemy_scene : PackedScene
 @export var chest_scene : PackedScene
 
 @export var map_hex_scene : PackedScene
@@ -39,10 +40,10 @@ var rotations : Dictionary = {
 }
 
 
-var maze: Dictionary = {}
+var maze: Dictionary[Vector3i, CellData] = {}
 
-var room_dict : Dictionary = {}
-var map_dict : Dictionary = {}
+var room_dict : Dictionary[Vector3i, HexRoom] = {}
+var map_dict : Dictionary[Vector3i, MapHex] = {}
 
 var chests : Array[Vector3i] = []
 
@@ -78,9 +79,9 @@ func _ready() -> void:
 	var start_pos : Vector3i = maze.keys().pick_random()
 	current_room = start_pos
 	player.current_room = start_pos
+	chests.append(start_pos)
 	thread.start(instantiate_rooms)	
 	player.position = maze[current_room].position
-	chests.append(start_pos)
 	spawn_chests()
 	player.start()
 
@@ -283,7 +284,7 @@ func spawn_chests(attempts : int = 0):
 		var chest : StaticBody3D = chest_scene.instantiate()
 		chest.position = maze[chest_pos].position
 		chests.append(chest_pos)
-		maze[chest_pos].has_hole = true
+		maze[chest_pos].subtype = CellData.SubType.HOLE
 
 		var possible_rotations : Array[int] = []
 
@@ -312,20 +313,23 @@ func spawn_enemy():
 	while neighbours.has(pos):
 		pos = maze.keys().pick_random()
 
-	var enemy : Enemy
-	if randf() > 1.88:
-		enemy = basic_enemy_scene.instantiate()
-	else:
-		enemy = seeker_enemy_scene.instantiate()
-	enemy.position = maze[pos].position + Vector3.UP * 0.05
-	enemy.a_star = a_star
-	enemy.tick = start_tick
-	enemy.current_room = pos
-	enemy.died.connect(_on_enemy_destroyed)
-	enemy_array.append(enemy)
-	if room_dict.has(pos):
-		enemy.is_in_instantiated_room = true
-	call_deferred("add_child", enemy)
+	for i in 10:
+		var enemy : Enemy
+		if randf() > 1.88:
+			enemy = basic_enemy_scene.instantiate()
+		else:
+			enemy = little_enemy_scene.instantiate()
+		enemy.position = maze[pos].position + Vector3.UP * 0.01 + Vector3.FORWARD.rotated(Vector3.UP, randf_range(0, TAU)) * randf_range(1, maze[pos].room_size * 0.75)
+		enemy.pivot_position = maze[pos].position
+		enemy.max_radius = maze[pos].room_size * 0.75
+		enemy.a_star = a_star
+		enemy.tick = start_tick
+		enemy.current_room = pos
+		enemy.died.connect(_on_enemy_destroyed)
+		enemy_array.append(enemy)
+		if room_dict.has(pos):
+			enemy.is_in_instantiated_room = true
+		call_deferred("add_child", enemy)
 
 
 func _on_rooms_created():

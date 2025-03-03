@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://fe2u7rpk2iq8"]
+
+[ext_resource type="ArrayMesh" uid="uid://d2v64htrpurd8" path="res://meshes/floor_small_2.res" id="1_5y4c8"]
+[ext_resource type="Script" uid="uid://crad3cu42dybv" path="res://scripts/map_hex.gd" id="2_o8mcr"]
+[ext_resource type="PackedScene" uid="uid://bog3fjo0nfmu0" path="res://scenes/map_elements/map_corridor.tscn" id="4_vl237"]
+
+[node name="MapHexSmall" type="Node3D"]
+script = ExtResource("2_o8mcr")
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+layers = 4
+mesh = ExtResource("1_5y4c8")
+
+[node name="Corridors" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0590365)
+
+[node name="MapCorridor" parent="Corridors" instance=ExtResource("4_vl237")]
+
+[node name="MapCorridor2" parent="Corridors" instance=ExtResource("4_vl237")]
+
+[node name="MapCorridor3" parent="Corridors" instance=ExtResource("4_vl237")]
+
+[node name="MapCorridor4" parent="Corridors" instance=ExtResource("4_vl237")]
+
+[node name="MapCorridor5" parent="Corridors" instance=ExtResource("4_vl237")]
+
+[node name="MapCorridor6" parent="Corridors" instance=ExtResource("4_vl237")]

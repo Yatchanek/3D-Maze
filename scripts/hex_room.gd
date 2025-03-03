@@ -29,21 +29,28 @@ func initialize(data : CellData):
 		room_size = Globals.SMALL_HEX_SIZE
 
 	material_index = randi_range(0, 4)
-	
-	var exits : Array [int] = [Globals.N, Globals.NE, Globals.SE, Globals.S, Globals.SW, Globals.NW]
-	
-	if room_data.has_hole:
-		add_ceiling_light()
 
-
-	if room_data.exits.size() == 0:
-		for i in exits.size():
-			room_data.exits.append(room_data.layout & exits[i] > 0)
-		#define_corridors()
+	if !room_data.has_been_instantiated:
 		define_guillotines()
 		define_coins()
+		define_subtype()
 		
+	if room_data.subtype == CellData.SubType.HOLE:
+		add_ceiling_light()
+	elif room_data.subtype == CellData.SubType.HIGH:
+		var extension : MeshInstance3D = MeshInstance3D.new()
+		extension.mesh = load("res://meshes/hexes/extension.res")
+		extension.scale = Vector3(0.5, 1.0, 0.5)
+		extension.material_override = materials[material_index]
+		extension.position.y = 2.0
+		add_child(extension)
 
+		$Ceiling.position.y += 2.0
+
+	elif room_data.subtype == CellData.SubType.DOME:
+		$Ceiling.mesh = load("res://meshes/hexes/dome.res")
+		$Ceiling.material_override = materials[material_index]
+	
 
 	place_walls()	
 	place_collisions()
@@ -82,7 +89,7 @@ func place_walls() -> void:
 func place_collisions() -> void:
 	for i in 6:
 		var static_body : StaticBody3D
-		if room_data.exits[i]:
+		if 1 << i & room_data.layout > 0:
 			static_body = exit_collision_scene.instantiate()
 		
 		else:
@@ -93,6 +100,15 @@ func place_collisions() -> void:
 		static_body.position = direction * (sqrt(3) * room_size * 0.5 - Globals.WALL_WIDTH * 0.5) + Vector3.UP * (Globals.HEX_HEIGHT - 0.5) * 0.5
 
 		add_child(static_body)
+
+func define_subtype():
+	if room_data.subtype == CellData.SubType.HOLE:
+		return
+	var roll : float = randf()
+	if roll < 0.1:
+		room_data.subtype = CellData.SubType.DOME
+	elif roll < 0.3:
+		room_data.subtype = CellData.SubType.HIGH
 
 func define_corridors():
 	for i in 6:
@@ -145,17 +161,18 @@ func place_corridors() -> void:
 			corridor_index += 1
 
 func define_guillotines():
-	for i in 6:
-		room_data.guillotines.append(!(1 << i & room_data.layout == 0 or randf() > 0.05))
+	for i in room_data.corridors.size():
+		if room_data.corridors[i] and randf() < 0.05:
+			room_data.guillotines[i] = (randf_range(0.0, 1.0))
 
 
 func place_guillotines():
 	for i in room_data.guillotines.size():
-		if room_data.guillotines[i]:
+		if room_data.guillotines[i] > 0:
 			var guillotine = guillotine_scene.instantiate()
 			guillotine.rotation_degrees = Vector3(0, i * -60, 0)
 			var direction = Vector3.FORWARD.rotated(Vector3.UP, guillotine.rotation.y)
-			guillotine.position = direction * (sqrt(3) * room_size * 0.5 - Globals.WALL_WIDTH * 0.5)
+			guillotine.position = direction * (sqrt(3) * room_size * 0.5 - Globals.WALL_WIDTH * 0.5)# + $Corridors.get_child(i).length * room_data.guillotines[i])
 			add_child(guillotine)
 
 

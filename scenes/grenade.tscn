@@ -1,6 +1,6 @@
 [gd_scene load_steps=22 format=4 uid="uid://bkb4wd464le6g"]
 
-[ext_resource type="Script" path="res://scripts/grenade.gd" id="1_bchq8"]
+[ext_resource type="Script" uid="uid://c7gjfdn100miu" path="res://scripts/grenade.gd" id="1_bchq8"]
 [ext_resource type="PackedScene" uid="uid://cabmscpkdhse4" path="res://scenes/hurtbox.tscn" id="3_3iu5a"]
 [ext_resource type="ArrayMesh" uid="uid://b4mcsnfqtimku" path="res://meshes/grenade.res" id="3_y07fr"]
 

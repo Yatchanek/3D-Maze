@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://bxccq776gy1wp"]
 
-[ext_resource type="Script" path="res://scripts/coin.gd" id="1_djqgi"]
+[ext_resource type="Script" uid="uid://0ulnfbjmnnwi" path="res://scripts/coin.gd" id="1_djqgi"]
 [ext_resource type="ArrayMesh" uid="uid://bj1jmnbi3orgf" path="res://meshes/coin.res" id="2_08f62"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xnw0s"]

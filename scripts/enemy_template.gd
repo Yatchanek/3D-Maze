@@ -1,7 +1,9 @@
 extends CharacterBody3D
 class_name Enemy
 
-var TOP_SPEED : float = 3.0
+@export var TOP_SPEED : float = 3.0
+@export var STEER_FORCE : float = 0.1
+
 var SPEED : float
 
 var a_star : AStar3D
@@ -14,9 +16,6 @@ var target : CharacterBody3D
 var potential_target : CharacterBody3D
 var target_in_range : bool = false
 var last_target_position : Vector3
-
-var interest : Array[float] = []
-var ray_directions : Array[Vector3] = []
 
 var path : PackedVector3Array = []
 

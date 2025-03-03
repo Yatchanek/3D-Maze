@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://bog3fjo0nfmu0"]
+
+[ext_resource type="Script" uid="uid://fc2fh8q7ldad" path="res://scripts/map_corridor.gd" id="1_3ye7m"]
+[ext_resource type="Material" uid="uid://3be68um7y4vv" path="res://materials/floor_material_0_top.tres" id="3_xfbl4"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_u8ntr"]
+resource_local_to_scene = true
+material = ExtResource("3_xfbl4")
+size = Vector2(1.5, 3)
+
+[node name="MapCorridor" type="Node3D"]
+script = ExtResource("1_3ye7m")
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.5, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+layers = 4
+mesh = SubResource("PlaneMesh_u8ntr")

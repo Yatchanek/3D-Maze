@@ -8,7 +8,6 @@ var current_state : State = null
 var previous_state : State = null
 
 
-
 var states : Dictionary = {}
 
 func _ready() -> void:

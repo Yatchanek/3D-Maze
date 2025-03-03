@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://d23pegtrbefue"]
+
+[ext_resource type="BoxMesh" uid="uid://rshnra7j0fyx" path="res://meshes/wall.tres" id="1_d6t3q"]
+[ext_resource type="Script" uid="uid://cuwmu8naa4ct6" path="res://scripts/wall.gd" id="1_e1eiq"]
+
+[node name="Wall" type="MeshInstance3D"]
+mesh = ExtResource("1_d6t3q")
+script = ExtResource("1_e1eiq")

@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://k1ab71k1wxyh"]
+
+[ext_resource type="Script" uid="uid://d2ame06th7g1p" path="res://scripts/exit_wall_small.gd" id="1_dp7tw"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2rj72"]
+
+[node name="ExitWallSmall" type="StaticBody3D"]
+collision_mask = 6
+script = ExtResource("1_dp7tw")
+
+[node name="CollisionLeft" type="CollisionShape3D" parent="."]
+visible = false
+shape = SubResource("BoxShape3D_2rj72")
+
+[node name="CollisionRight" type="CollisionShape3D" parent="."]
+visible = false
+shape = SubResource("BoxShape3D_2rj72")
