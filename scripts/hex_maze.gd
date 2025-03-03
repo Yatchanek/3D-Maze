@@ -75,7 +75,6 @@ func _ready() -> void:
 	for data : CellData in maze.values():
 		HexUtils.define_corridors(data)
 
-	redraw_map()
 	var start_pos : Vector3i = maze.keys().pick_random()
 	current_room = start_pos
 	player.current_room = start_pos
@@ -149,14 +148,16 @@ func create_room(coords : Vector3i):
 
 	hex_room.initialize(maze[coords])
 	hex_room.entered.connect(_on_room_entered)
-	rooms_to_add.append(hex_room)
+	rooms_node.call_deferred("add_child", hex_room)
 	room_dict[coords] = hex_room	
 
 func redraw_map():
+	
 	var neighbours : Array[Vector3i] = HexUtils.get_cells_in_range(maze, current_room, CULL_DISTANCE)
-
 	var map_hex : MapHex
 	for neighbour in neighbours:
+		if map_dict.has(neighbour):
+			continue
 		if maze[neighbour].type == CellData.Type.NORMAL:
 			map_hex = map_hex_scene.instantiate()
 		else:
@@ -167,12 +168,19 @@ func redraw_map():
 		map_hex.position = maze[neighbour].position
 		map_hex.position.y = 0
 		map_dict[neighbour] = map_hex
-		map_hexes_to_add.append(map_hex)
-
+		map.call_deferred("add_child", map_hex)
+	
 	for hex : Vector3i in map_dict.keys():
 		if !neighbours.has(hex):
 			map_dict[hex].queue_free()
 			map_dict.erase(hex)
+
+	call_deferred("redraw_finished")
+
+func redraw_finished():
+	if thread.is_started():
+		thread.wait_to_finish()
+
 
 func instantiate_rooms():
 	var rooms_to_instantiate : Array[Vector3i] = [current_room]
@@ -197,7 +205,7 @@ func instantiate_rooms():
 
 	redraw_map()
 
-	call_deferred("_on_rooms_created")
+	#call_deferred("_on_rooms_created")
 
 func hide_distant_rooms():
 	for room in room_dict.keys():
@@ -262,11 +270,11 @@ func add_astar_point_in_corridor(from : Vector3i, to : Vector3i):
 	a_star.connect_points(maze[from].id, new_id)
 	a_star.connect_points(new_id, maze[to].id)
 
-	var m : MeshInstance3D = MeshInstance3D.new()
-	m.mesh = SphereMesh.new()
-	m.mesh.radius = 0.25
-	m.position = middle_point
-	add_child(m)
+	# var m : MeshInstance3D = MeshInstance3D.new()
+	# m.mesh = SphereMesh.new()
+	# m.mesh.radius = 0.25
+	# m.position = middle_point
+	# add_child(m)
 
 
 func spawn_chests(attempts : int = 0):
@@ -313,7 +321,7 @@ func spawn_enemy():
 	while neighbours.has(pos):
 		pos = maze.keys().pick_random()
 
-	for i in 10:
+	for i in 1:
 		var enemy : Enemy
 		if randf() > 1.88:
 			enemy = basic_enemy_scene.instantiate()
@@ -321,7 +329,7 @@ func spawn_enemy():
 			enemy = little_enemy_scene.instantiate()
 		enemy.position = maze[pos].position + Vector3.UP * 0.01 + Vector3.FORWARD.rotated(Vector3.UP, randf_range(0, TAU)) * randf_range(1, maze[pos].room_size * 0.75)
 		enemy.pivot_position = maze[pos].position
-		enemy.max_radius = maze[pos].room_size * 0.75
+		enemy.max_radius = maze[pos].room_size * 0.75 * sqrt(3)
 		enemy.a_star = a_star
 		enemy.tick = start_tick
 		enemy.current_room = pos
@@ -338,8 +346,8 @@ func _on_rooms_created():
 		for room in rooms_to_add:
 			rooms_node.call_deferred("add_child", room)
 
-		for map_hex in map_hexes_to_add:
-			map.add_child(map_hex)
+		# for map_hex in map_hexes_to_add:
+		# 	map.add_child(map_hex)
 
 		rooms_to_add = []		
 		map_hexes_to_add = []
@@ -348,8 +356,8 @@ func _on_rooms_created():
 		for room in rooms_to_add:
 			rooms_node.call_deferred("add_child", room)
 
-		for map_hex in map_hexes_to_add:
-			map.add_child(map_hex)
+		# for map_hex in map_hexes_to_add:
+		# 	map.add_child(map_hex)
 
 		rooms_to_add = []
 		map_hexes_to_add = []
@@ -377,3 +385,6 @@ func _on_enemy_destroyed(enemy : Enemy):
 
 func _on_timer_timeout() -> void:
 	spawn_enemy()
+
+func _exit_tree() -> void:
+	thread.wait_to_finish()

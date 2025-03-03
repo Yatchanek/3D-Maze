@@ -30,7 +30,7 @@ size = Vector3(1, 1, 0.1)
 collision_layer = 2
 collision_mask = 27
 script = ExtResource("1_ouvm7")
-TOP_SPEED = 2.15
+TOP_SPEED = 1.75
 STEER_FORCE = 2.5
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -43,7 +43,7 @@ mesh = SubResource("PrismMesh_5frf0")
 
 [node name="ContextSteeringComponent" parent="." instance=ExtResource("2_s5iao")]
 num_rays = 16
-ray_length = 1.0
+ray_length = 2.5
 collision_mask = 19
 check_height = 0.1
 

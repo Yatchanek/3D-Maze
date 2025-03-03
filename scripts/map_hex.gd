@@ -21,4 +21,3 @@ func initialize(room_data : CellData):
         var direction : Vector3 = Vector3.FORWARD.rotated(Vector3.UP, corridor.rotation.y)
 
         corridor.position = direction * (sqrt(3) * Globals.HEX_SIZE * 0.5 + Globals.CORRIDOR_LENGTH * 0.5) + offset * direction * sqrt(3) * (Globals.HEX_SIZE - Globals.SMALL_HEX_SIZE) * 0.25
-

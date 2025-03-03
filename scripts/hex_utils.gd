@@ -1,8 +1,10 @@
 extends Node
 class_name HexUtils
 
+const SQRT3 : float = sqrt(3)
+
 static func get_position(coords : Vector3i) -> Vector3:
-	return Vector3(coords.x * (1.5 * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH * cos (PI / 6)), randf_range(0, -1.5), coords.x * (sqrt(3) * 0.5 * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH * 0.5) + coords.y * (sqrt(3) * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH))
+	return Vector3(coords.x * (1.5 * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH * cos (PI / 6)), randf_range(0, -1.5), coords.x * (SQRT3 * 0.5 * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH * 0.5) + coords.y * (SQRT3 * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH))
 
 
 static func get_cells_in_range(maze: Dictionary, coords: Vector3i, dist : int) -> Array[Vector3i]:

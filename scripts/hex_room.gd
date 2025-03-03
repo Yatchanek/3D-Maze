@@ -162,17 +162,20 @@ func place_corridors() -> void:
 
 func define_guillotines():
 	for i in room_data.corridors.size():
-		if room_data.corridors[i] and randf() < 0.05:
+		if room_data.corridors[i] and randf() < 0.25:
 			room_data.guillotines[i] = (randf_range(0.0, 1.0))
 
 
 func place_guillotines():
+	var corridor_index : int = 0
 	for i in room_data.guillotines.size():
 		if room_data.guillotines[i] > 0:
 			var guillotine = guillotine_scene.instantiate()
 			guillotine.rotation_degrees = Vector3(0, i * -60, 0)
 			var direction = Vector3.FORWARD.rotated(Vector3.UP, guillotine.rotation.y)
-			guillotine.position = direction * (sqrt(3) * room_size * 0.5 - Globals.WALL_WIDTH * 0.5)# + $Corridors.get_child(i).length * room_data.guillotines[i])
+			var corridor : CorridorSlope = $Corridors.get_child(corridor_index)
+			guillotine.position = direction * (sqrt(3) * room_size * 0.5 - Globals.WALL_WIDTH * 0.5 + corridor.length * room_data.guillotines[i]) + Vector3.UP * corridor.length * room_data.guillotines[i] * tan(corridor.slope_angle) 
+			corridor_index += 1
 			add_child(guillotine)
 
 

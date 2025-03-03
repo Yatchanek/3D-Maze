@@ -83,9 +83,7 @@ func place_coins(coins : PackedInt32Array):
 			coin.add_to_group("Toggleables")
 			add_child(coin)
 
-			if j == 0:
-				coin_offset += 1
-			elif j % 2 == 0:
+			if j % 2 == 0:
 				coin_offset += 1
 			side *= -1
 
