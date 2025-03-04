@@ -34,7 +34,7 @@ func handle_movement(direction : Vector3, delta : float):
 	else:
 		$FSM.set_physics_process(false)
 		$FSM.set_process(false)
-		print("Disable process from handle_movement!")
+		#print("Disable process from handle_movement!")
 		
 
 

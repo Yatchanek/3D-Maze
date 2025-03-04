@@ -376,9 +376,14 @@ func _process(_delta: float) -> void:
 	orth_camera.position = Vector3(player.position.x, 5, player.position.z)
 
 
-func _on_player_grenade_thrown(grenade: RigidBody3D, impulse: Vector3) -> void:
+func _on_player_grenade_thrown(grenade: RigidBody3D, grenade_position : Vector3, impulse: Vector3) -> void:
+	grenade.position = grenade_position
 	grenade.apply_central_impulse(impulse)
 	call_deferred("add_child", grenade)
+
+func _on_player_spear_thrown(spear : Area3D, spear_position : Vector3) -> void:
+	spear.position = spear_position
+	call_deferred("add_child", spear)
 
 func _on_enemy_destroyed(enemy : Enemy):
 	enemy_array.erase(enemy)

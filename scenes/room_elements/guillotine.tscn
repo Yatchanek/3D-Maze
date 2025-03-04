@@ -196,11 +196,13 @@ disabled = true
 
 [node name="Top" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+layers = 2
 mesh = SubResource("ArrayMesh_c3oe0")
 skeleton = NodePath("")
 
 [node name="Bottom" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.25, 0)
+layers = 2
 mesh = SubResource("ArrayMesh_pil5i")
 skeleton = NodePath("")
 
@@ -216,7 +218,7 @@ disabled = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_lcquj")
+&"": SubResource("AnimationLibrary_lcquj")
 }
 autoplay = "Slash"
 

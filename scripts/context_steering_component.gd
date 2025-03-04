@@ -42,7 +42,7 @@ func get_context_steering(dir : Vector3, rotation : float):
 
 		if result:
 			#print("Hit!")
-			interest[i] = -1.0
+			interest[i] = -2.0
 
 	var chosen_direction : Vector3 = Vector3.ZERO
 

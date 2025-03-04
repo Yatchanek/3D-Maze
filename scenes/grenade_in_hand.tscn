@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://ceosq3m3rc0a3"]
+
+[ext_resource type="ArrayMesh" uid="uid://b3brdx6qn5yql" path="res://meshes/grenade_Icosphere.res" id="1_7twdk"]
+
+[node name="GrenadeInHand" type="MeshInstance3D"]
+cast_shadow = 0
+mesh = ExtResource("1_7twdk")

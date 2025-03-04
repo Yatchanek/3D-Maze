@@ -1,9 +1,12 @@
-[gd_scene load_steps=11 format=3 uid="uid://b1y1eap5q1dws"]
+[gd_scene load_steps=14 format=3 uid="uid://b1y1eap5q1dws"]
 
 [ext_resource type="Script" uid="uid://2g5u53bbybk7" path="res://scripts/player.gd" id="1_ovkwn"]
 [ext_resource type="PackedScene" uid="uid://bkb4wd464le6g" path="res://scenes/grenade.tscn" id="2_jw5ya"]
 [ext_resource type="Material" uid="uid://crbopxk1glyq0" path="res://materials/indicator_material.tres" id="2_nrt8s"]
+[ext_resource type="PackedScene" uid="uid://bqenhlxtrl1ma" path="res://scenes/spear.tscn" id="3_tuyoq"]
 [ext_resource type="PackedScene" uid="uid://bi7vniosvwa8c" path="res://scenes/hit_box.tscn" id="4_ge4ua"]
+[ext_resource type="ArrayMesh" uid="uid://8e2flesnj2ux" path="res://meshes/spear_Cube.res" id="5_fjrip"]
+[ext_resource type="PackedScene" uid="uid://ceosq3m3rc0a3" path="res://scenes/grenade_in_hand.tscn" id="5_qlg0r"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_sv5h7"]
 radius = 0.25
@@ -34,6 +37,7 @@ collision_layer = 4
 collision_mask = 25
 script = ExtResource("1_ovkwn")
 grenade_scene = ExtResource("2_jw5ya")
+spear_scene = ExtResource("3_tuyoq")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
@@ -54,21 +58,36 @@ mesh = SubResource("CapsuleMesh_g5bst")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, -0.038)
 
 [node name="Camera" type="Camera3D" parent="CameraGimbal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0954871)
 cull_mask = 1048571
 fov = 65.0
-near = 0.02
+near = 0.001
 far = 30.0
 
 [node name="Light" type="SpotLight3D" parent="CameraGimbal/Camera"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.215, 0.5)
 light_color = Color(1, 1, 0.756863, 1)
-light_energy = 2.0
+light_energy = 2.5
 shadow_enabled = true
 shadow_opacity = 0.7
-spot_range = 30.0
+spot_range = 40.0
 spot_attenuation = 2.0
 spot_angle = 40.0
 spot_angle_attenuation = 2.0
+
+[node name="WeaponSlot" type="Node3D" parent="CameraGimbal/Camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="GrenadeInHand" parent="CameraGimbal/Camera/WeaponSlot" instance=ExtResource("5_qlg0r")]
+transform = Transform3D(0.0342165, 0, 0.0364586, 0, 0.05, 0, -0.0364586, 0, 0.0342165, 0.125, -0.11, -0.2)
+visible = false
+skeleton = NodePath("../../../..")
+
+[node name="SpearInHand" type="MeshInstance3D" parent="CameraGimbal/Camera/WeaponSlot"]
+transform = Transform3D(0.96883, 0, 0.247726, 0.00108955, 0.99999, -0.00426112, -0.247724, 0.00439821, 0.96882, 0.214324, 0.0180335, 0.0971045)
+visible = false
+cast_shadow = 0
+mesh = ExtResource("5_fjrip")
 
 [node name="Marker" type="MeshInstance3D" parent="CameraGimbal"]
 transform = Transform3D(1.25, 0, 0, 0, -4.37114e-08, 1.25, 0, -1, -5.46392e-08, 0, 3, -0.062)

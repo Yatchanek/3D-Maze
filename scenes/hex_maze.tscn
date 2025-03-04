@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://b2kx3pbytijw1"]
+[gd_scene load_steps=23 format=3 uid="uid://b2kx3pbytijw1"]
 
 [ext_resource type="Script" uid="uid://ds1758psbybo5" path="res://scripts/hex_maze.gd" id="1_k0ibe"]
 [ext_resource type="PackedScene" uid="uid://cyrp51sdsmug" path="res://scenes/room_elements/hex_room.tscn" id="2_a6gxg"]
@@ -16,6 +16,7 @@
 [ext_resource type="StyleBox" uid="uid://02xefc6jnw6p" path="res://slot_stylebox_with_border.tres" id="9_iqbtt"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0twwp"]
+sky_cover_modulate = Color(0.868985, 0.868985, 0.868985, 1)
 ground_bottom_color = Color(0, 0, 0, 1)
 
 [sub_resource type="Sky" id="Sky_ya488"]
@@ -24,8 +25,9 @@ sky_material = SubResource("ProceduralSkyMaterial_0twwp")
 [sub_resource type="Environment" id="Environment_prdqm"]
 background_mode = 1
 sky = SubResource("Sky_ya488")
+ambient_light_source = 1
 ambient_light_sky_contribution = 0.0
-tonemap_mode = 2
+tonemap_exposure = 1.1
 fog_mode = 1
 fog_light_color = Color(0.724643, 0.724643, 0.724643, 1)
 fog_light_energy = 10.0
@@ -34,7 +36,9 @@ fog_sky_affect = 0.0
 fog_depth_begin = 1025.6
 fog_depth_end = 1025.6
 volumetric_fog_albedo = Color(0, 0, 0, 1)
-volumetric_fog_length = 73.76
+volumetric_fog_length = 50.0
+adjustment_enabled = true
+adjustment_saturation = 1.2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8lijc"]
 draw_center = false
@@ -51,6 +55,9 @@ border_width_top = 8
 border_width_right = 8
 corner_radius_top_left = 32
 corner_radius_top_right = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_bikdm"]
+font_size = 72
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ergwk"]
 bg_color = Color(0, 1, 0, 1)
@@ -180,6 +187,17 @@ theme_override_styles/panel = ExtResource("9_iqbtt")
 layout_mode = 2
 expand_mode = 2
 
+[node name="Label" type="Label" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer/TextureRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "G	"
+label_settings = SubResource("LabelSettings_bikdm")
+horizontal_alignment = 1
+
 [node name="PanelContainer2" type="PanelContainer" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar"]
 clip_children = 2
 custom_minimum_size = Vector2(128, 128)
@@ -189,6 +207,17 @@ theme_override_styles/panel = ExtResource("8_0rgb7")
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer2"]
 layout_mode = 2
 expand_mode = 3
+
+[node name="Label" type="Label" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer2/TextureRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "S"
+label_settings = SubResource("LabelSettings_bikdm")
+horizontal_alignment = 1
 
 [node name="PanelContainer3" type="PanelContainer" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar"]
 clip_children = 2
@@ -231,7 +260,7 @@ layout_mode = 2
 expand_mode = 3
 
 [node name="Timer" type="Timer" parent="CanvasLayer/HUD/Inventory"]
-wait_time = 2.0
+wait_time = 1.25
 one_shot = true
 
 [node name="HealthBar" type="ProgressBar" parent="CanvasLayer/HUD"]
@@ -281,9 +310,18 @@ grow_vertical = 2
 
 [node name="Map" type="Node3D" parent="."]
 
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+light_color = Color(0.854902, 1, 1, 1)
+light_energy = 0.1
+light_angular_distance = 0.5
+light_cull_mask = 4294967293
+
 [connection signal="grenade_thrown" from="Player" to="." method="_on_player_grenade_thrown"]
 [connection signal="health_changed" from="Player" to="CanvasLayer/HUD" method="update_health"]
 [connection signal="ouch" from="Player" to="CanvasLayer/HUD" method="ouch"]
+[connection signal="spear_thrown" from="Player" to="." method="_on_player_spear_thrown"]
 [connection signal="stamina_changed" from="Player" to="CanvasLayer/HUD" method="update_stamina"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="slot_changed" from="CanvasLayer/HUD/Inventory" to="Player" method="_on_weapon_changed"]
 [connection signal="timeout" from="CanvasLayer/HUD/Inventory/Timer" to="CanvasLayer/HUD/Inventory" method="_on_timer_timeout"]

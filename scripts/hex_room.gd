@@ -39,6 +39,7 @@ func initialize(data : CellData):
 		add_ceiling_light()
 	elif room_data.subtype == CellData.SubType.HIGH:
 		var extension : MeshInstance3D = MeshInstance3D.new()
+		extension.layers = 2
 		extension.mesh = load("res://meshes/hexes/extension.res")
 		extension.scale = Vector3(0.5, 1.0, 0.5)
 		extension.material_override = materials[material_index]
@@ -67,10 +68,10 @@ func _ready() -> void:
 func add_ceiling_light():
 	$Ceiling.mesh = load("res://meshes/ceiling_hole.res")
 	var light : OmniLight3D = OmniLight3D.new()
-
+	$Floor.layers = 1
 	light.position = Vector3.UP * 3
-	light.light_energy = 0.5
-	light.omni_range = 5
+	light.light_energy = 0.6
+	light.omni_range = 7
 	light.omni_attenuation = 1.5
 
 	add_child(light)

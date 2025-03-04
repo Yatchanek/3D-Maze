@@ -13,6 +13,8 @@ var current_slot_float : float = 0
 
 var moving_bar : bool = false
 
+signal slot_changed(slot : int)
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.pressed and event.button_index == MOUSE_BUTTON_WHEEL_UP:
@@ -70,4 +72,5 @@ func _on_bar_move_ended():
 	moving_bar = false
 
 func _on_timer_timeout() -> void:
+	slot_changed.emit(current_slot)
 	hide_bar()

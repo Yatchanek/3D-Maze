@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://delb0vr0vc0cc"]
+[gd_scene load_steps=11 format=3 uid="uid://delb0vr0vc0cc"]
 
 [ext_resource type="Script" uid="uid://gyhymu550raf" path="res://scripts/corridor_slope.gd" id="1_w4wwj"]
 [ext_resource type="PackedScene" uid="uid://bxccq776gy1wp" path="res://scenes/coin.tscn" id="2_e4gh7"]
@@ -28,6 +28,9 @@ flip_faces = true
 resource_local_to_scene = true
 size = Vector3(1.5, 0.2, 1)
 
+[sub_resource type="BoxOccluder3D" id="BoxOccluder3D_d5tva"]
+size = Vector3(2, 1, 4)
+
 [node name="Corridor" type="StaticBody3D"]
 collision_layer = 9
 collision_mask = 6
@@ -44,17 +47,21 @@ shape = SubResource("BoxShape3D_d6r7e")
 
 [node name="LeftWall" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+layers = 2
 mesh = SubResource("BoxMesh_fdslq")
 
 [node name="RightWall" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+layers = 2
 mesh = SubResource("BoxMesh_fdslq")
 
 [node name="Floor" type="MeshInstance3D" parent="."]
+layers = 2
 mesh = SubResource("PlaneMesh_j2ho1")
 
 [node name="Ceiling" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.51, 0)
+layers = 2
 mesh = SubResource("PlaneMesh_e502a")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
@@ -64,3 +71,7 @@ collision_mask = 6
 [node name="FloorCollision" type="CollisionShape3D" parent="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_lef5f")
+
+[node name="OccluderInstance3D" type="OccluderInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+occluder = SubResource("BoxOccluder3D_d5tva")

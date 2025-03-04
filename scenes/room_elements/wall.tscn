@@ -4,5 +4,6 @@
 [ext_resource type="Script" uid="uid://cuwmu8naa4ct6" path="res://scripts/wall.gd" id="1_e1eiq"]
 
 [node name="Wall" type="MeshInstance3D"]
+layers = 2
 mesh = ExtResource("1_d6t3q")
 script = ExtResource("1_e1eiq")

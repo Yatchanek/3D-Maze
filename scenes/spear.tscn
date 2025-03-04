@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://bqenhlxtrl1ma"]
+
+[ext_resource type="Script" uid="uid://ch2o5og2j0m6n" path="res://scripts/spear.gd" id="1_43rot"]
+[ext_resource type="ArrayMesh" uid="uid://8e2flesnj2ux" path="res://meshes/spear_Cube.res" id="2_uf2bl"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yp847"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[node name="Spear" type="Area3D"]
+collision_mask = 25
+script = ExtResource("1_43rot")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.402791)
+shape = SubResource("BoxShape3D_yp847")
+
+[node name="SpearInHand" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0, 0, 0)
+mesh = ExtResource("2_uf2bl")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

@@ -66,3 +66,7 @@ run={
 3d_physics/layer_5="Obstacles"
 3d_physics/layer_7="Weapon Hurtbox"
 3d_physics/layer_8="Enemy Hurtbox"
+
+[physics]
+
+common/physics_interpolation=true

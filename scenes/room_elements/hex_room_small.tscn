@@ -35,14 +35,17 @@ materials = Array[Material]([ExtResource("6_833ja"), ExtResource("7_x2opm"), Ext
 
 [node name="Body" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0)
+layers = 2
 mesh = ExtResource("8_2aiot")
 
 [node name="Floor" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+layers = 2
 mesh = ExtResource("14_e2c0n")
 
 [node name="Ceiling" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 2.01, 0)
+layers = 2
 mesh = ExtResource("16_isr0f")
 
 [node name="EntranceDetector" type="Area3D" parent="."]

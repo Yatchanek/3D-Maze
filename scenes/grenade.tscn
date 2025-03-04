@@ -1,8 +1,8 @@
 [gd_scene load_steps=22 format=4 uid="uid://bkb4wd464le6g"]
 
 [ext_resource type="Script" uid="uid://c7gjfdn100miu" path="res://scripts/grenade.gd" id="1_bchq8"]
+[ext_resource type="ArrayMesh" uid="uid://b3brdx6qn5yql" path="res://meshes/grenade_Icosphere.res" id="2_vhiwl"]
 [ext_resource type="PackedScene" uid="uid://cabmscpkdhse4" path="res://scenes/hurtbox.tscn" id="3_3iu5a"]
-[ext_resource type="ArrayMesh" uid="uid://b4mcsnfqtimku" path="res://meshes/grenade.res" id="3_y07fr"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_uci0x"]
 rough = true
@@ -149,9 +149,11 @@ shape = SubResource("SphereShape3D_e2l2h")
 
 [node name="Body" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, 0, 0, 0)
-mesh = ExtResource("3_y07fr")
+layers = 2
+mesh = ExtResource("2_vhiwl")
 
 [node name="ExplosionFragments" type="GPUParticles3D" parent="."]
+layers = 2
 emitting = false
 amount = 32
 lifetime = 0.8
@@ -169,6 +171,7 @@ damage = 10.0
 shape = SubResource("SphereShape3D_dykns")
 
 [node name="Explosion" type="GPUParticles3D" parent="."]
+layers = 2
 emitting = false
 sub_emitter = NodePath("../ExplosionFragments")
 lifetime = 0.4

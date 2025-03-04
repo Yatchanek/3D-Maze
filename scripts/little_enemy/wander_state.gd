@@ -20,9 +20,9 @@ func physics_update(delta : float) -> void:
     var direction : Vector3 = actor.global_position.direction_to(actor.waypoint)
     
     if move_tick % 5 == 0:
-        print("Direction: ", direction)
+       # print("Direction: ", direction)
         direction = actor.context_steering_component.get_context_steering(direction, actor.global_rotation.y)
-        print("Steered Direction: ", direction)
+       # print("Steered Direction: ", direction)
     direction.y = 0.0
 
 
