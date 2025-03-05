@@ -31,6 +31,8 @@ func initialize(data : CellData):
 	material_index = randi_range(0, 4)
 
 	if !room_data.has_been_instantiated:
+		room_data.has_been_instantiated = true
+		
 		define_guillotines()
 		define_coins()
 		define_subtype()
@@ -82,7 +84,7 @@ func place_walls() -> void:
 			var wall : Wall = wall_scene.instantiate()
 			wall.rotation_degrees = Vector3(0, i * -60, 0)
 			var direction = Vector3.FORWARD.rotated(Vector3.UP, wall.rotation.y)
-			wall.position = direction * (sqrt(3) * room_size * 0.5 - Globals.WALL_WIDTH * 0.5)
+			wall.position = direction * (Globals.SQRT3 * room_size * 0.5 - Globals.WALL_WIDTH * 0.5)
 			wall.material = materials[material_index]
 			add_child(wall)
 
@@ -98,7 +100,7 @@ func place_collisions() -> void:
 
 		static_body.rotation_degrees = Vector3(0, i * -60, 0)
 		var direction = Vector3.FORWARD.rotated(Vector3.UP, static_body.rotation.y)
-		static_body.position = direction * (sqrt(3) * room_size * 0.5 - Globals.WALL_WIDTH * 0.5) + Vector3.UP * (Globals.HEX_HEIGHT - 0.5) * 0.5
+		static_body.position = direction * (Globals.SQRT3 * room_size * 0.5 - Globals.WALL_WIDTH * 0.5) + Vector3.UP * (Globals.HEX_HEIGHT - 0.5) * 0.5
 
 		add_child(static_body)
 
@@ -111,28 +113,15 @@ func define_subtype():
 	elif roll < 0.3:
 		room_data.subtype = CellData.SubType.HIGH
 
-func define_corridors():
-	for i in 6:
-		if 1 << i & room_data.layout:
-			var neighbour : Vector3i = room_data.coords + Globals.directions[i]
-			if !Globals.maze[neighbour].corridors[wrapi(i + 3, 0, 6)]:
-				
-				if Globals.maze[room_data.coords].type == room_data.Type.NORMAL and Globals.maze[neighbour].type == room_data.Type.NORMAL:
-					room_data.corridors[i] = 1.0
-				elif Globals.maze[room_data.coords].type == room_data.Type.SMALL and Globals.maze[neighbour].type == room_data.Type.SMALL:
-					room_data.corridors[i] = 2.0
-				elif Globals.maze[room_data.coords].type == room_data.Type.NORMAL and Globals.maze[neighbour].type == room_data.Type.SMALL:
-					room_data.corridors[i] = 1.5
-				else:
-					room_data.corridors[i] = -1.5
+
 
 func place_corridors() -> void:
 	var corridor_index : int = 0
 	for i in room_data.corridors.size():
-		if room_data.corridors[i]:
+		if room_data.corridors[i] != 0:
 			var neighbour : Vector3i = room_data.coords + Globals.directions[i]
 			var corridor_type : CorridorSlope.Type
-			var offset : int
+			var offset : int = 0
 			
 			if Globals.maze[room_data.coords].corridors[i] == 1:
 				corridor_type = CorridorSlope.Type.NORMAL
@@ -151,10 +140,7 @@ func place_corridors() -> void:
 	
 			corridor.rotation_degrees = Vector3(0, i * -60, 0)
 			var direction = Vector3.FORWARD.rotated(Vector3.UP, deg_to_rad(corridor.rotation_degrees.y))
-			corridor.position = direction * (sqrt(3) * Globals.HEX_SIZE * 0.5 + Globals.CORRIDOR_LENGTH * 0.5) - Vector3.UP * position.y
-
-			if corridor_type == CorridorSlope.Type.SEMI_LONG:
-				corridor.position += offset * direction * sqrt(3) * (Globals.HEX_SIZE - Globals.SMALL_HEX_SIZE) * 0.25
+			corridor.position = offset * direction * Globals.SQRT3 * (Globals.HEX_SIZE - Globals.SMALL_HEX_SIZE) * 0.25 + direction * (Globals.SQRT3 * Globals.HEX_SIZE * 0.5 + Globals.CORRIDOR_LENGTH * 0.5) - Vector3.UP * position.y
 
 			corridor.coin_picked.connect(_on_corridor_coin_picked)
 
@@ -162,21 +148,29 @@ func place_corridors() -> void:
 			corridor_index += 1
 
 func define_guillotines():
-	for i in room_data.corridors.size():
-		if room_data.corridors[i] and randf() < 0.25:
-			room_data.guillotines[i] = (randf_range(0.0, 1.0))
-
+	var corridor_index : int = 0
+	for i in 6:
+		if room_data.corridors[i] != 0:
+			if randf() < 0.25:
+				room_data.guillotines[i] = Vector2i(corridor_index, randi_range(0, 10))
+			else:
+				room_data.guillotines[i] = Vector2i(-1, -1)
+			corridor_index += 1
+		else:
+			room_data.guillotines[i] = Vector2i(-1, -1)
 
 func place_guillotines():
-	var corridor_index : int = 0
-	for i in room_data.guillotines.size():
-		if room_data.guillotines[i] > 0:
-			var guillotine = guillotine_scene.instantiate()
-			guillotine.rotation_degrees = Vector3(0, i * -60, 0)
+	for i in room_data.guillotines.keys():
+		var guillotine_data : Vector2i = room_data.guillotines[i]
+		if guillotine_data != Vector2i(-1, -1):
+			var guillotine : Node3D = guillotine_scene.instantiate()
+			guillotine.rotation = Vector3(0, i * -PI / 3, 0)
 			var direction = Vector3.FORWARD.rotated(Vector3.UP, guillotine.rotation.y)
-			var corridor : CorridorSlope = $Corridors.get_child(corridor_index)
-			guillotine.position = direction * (sqrt(3) * room_size * 0.5 - Globals.WALL_WIDTH * 0.5 + corridor.length * room_data.guillotines[i]) + Vector3.UP * corridor.length * room_data.guillotines[i] * tan(corridor.slope_angle) 
-			corridor_index += 1
+			var corridor : CorridorSlope = $Corridors.get_child(guillotine_data.x)
+			#prints("Corridor length: ", corridor.length)
+			#prints("Guillotine position:", corridor.length * room_data.guillotines[i])
+			#prints("Vertical offset: ", corridor.length * room_data.guillotines[i] * tan(corridor.slope_angle))
+			guillotine.position = direction * (Globals.SQRT3 * room_size * 0.5 + corridor.length * guillotine_data.y * 0.1) + Vector3.UP * corridor.length * guillotine_data.y * 0.1 * tan(corridor.slope_angle) 
 			add_child(guillotine)
 
 

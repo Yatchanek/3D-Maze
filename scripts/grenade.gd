@@ -11,6 +11,8 @@ var exploded : bool = false
 var elapsed_time : float = 0
 
 func _ready() -> void:
+	await get_tree().process_frame
+	$Body.show()
 	hurtbox.disable()
 	await get_tree().create_timer(3.0).timeout
 	if !exploded:

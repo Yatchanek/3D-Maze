@@ -64,7 +64,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.51, 0)
 layers = 2
 mesh = SubResource("PlaneMesh_e502a")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="."]
+[node name="StaticBody3D" type="AnimatableBody3D" parent="."]
 collision_layer = 8
 collision_mask = 6
 

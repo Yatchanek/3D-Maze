@@ -67,7 +67,7 @@ func place_coins(coins : PackedInt32Array):
 	if coins.size() == 0:
 		return
 	var start_position = Vector3(0, bottom - offset, 0)
-	var coin_spacing : float = length / 3.0
+	var coin_spacing : float = length / 4.0
 
 	var coin_offset : int = 0
 	var side : int  = 1

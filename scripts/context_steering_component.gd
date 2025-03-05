@@ -21,12 +21,12 @@ func configure_rays():
 	var angle_increment : float = PI / (num_rays - 1)
 	for i in num_rays:
 		ray_directions.append(-parent.basis.z.rotated(Vector3.UP, angle_increment * i - PI / 2))
-		var m : MeshInstance3D = MeshInstance3D.new()
-		m.mesh = SphereMesh.new()
-		m.mesh.radius = 0.05
-		m.mesh.height = 0.1
-		m.transform.origin = ray_directions[i] * ray_length + Vector3.UP * check_height
-		parent.call_deferred("add_child", m)
+		# var m : MeshInstance3D = MeshInstance3D.new()
+		# m.mesh = SphereMesh.new()
+		# m.mesh.radius = 0.05
+		# m.mesh.height = 0.1
+		# m.transform.origin = ray_directions[i] * ray_length + Vector3.UP * check_height
+		# parent.call_deferred("add_child", m)
 
 func get_context_steering(dir : Vector3, rotation : float):
 	for i in num_rays:

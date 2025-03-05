@@ -16,6 +16,7 @@ shape = SubResource("BoxShape3D_yp847")
 
 [node name="SpearInHand" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0, 0, 0)
+visible = false
 mesh = ExtResource("2_uf2bl")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

@@ -3,7 +3,8 @@ extends Area3D
 var velocity : Vector3 = Vector3.ZERO
 
 func _ready() -> void:
-
+    await get_tree().process_frame
+    $SpearInHand.show()
     velocity = -basis.z * 15.0
 
 func _physics_process(delta: float) -> void:

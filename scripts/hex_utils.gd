@@ -3,6 +3,15 @@ class_name HexUtils
 
 const SQRT3 : float = sqrt(3)
 
+static var walls: Dictionary = {
+	Vector3i(0, -1, 1): Globals.N,
+	Vector3i(1, -1, 0): Globals.NE,
+	Vector3i(1, 0, -1): Globals.SE,
+	Vector3i(0, 1, -1): Globals.S,
+	Vector3i(-1, 1, 0): Globals.SW,
+	Vector3i(-1, 0, 1): Globals.NW
+}
+
 static func get_position(coords : Vector3i) -> Vector3:
 	return Vector3(coords.x * (1.5 * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH * cos (PI / 6)), randf_range(0, -1.5), coords.x * (SQRT3 * 0.5 * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH * 0.5) + coords.y * (SQRT3 * Globals.HEX_SIZE + Globals.CORRIDOR_LENGTH))
 
@@ -24,6 +33,18 @@ static func distance(from: Vector3i, to : Vector3i) -> int:
 	var dir : Vector3i = to - from
 
 	return int((abs(dir.x) + abs(dir.y) + abs(dir.z)) * 0.5)
+
+
+static func get_connected_neighbours(maze: Dictionary, coords: Vector3i) -> Array[Vector3i]:
+	var neighbours : Array[Vector3i] = []
+	for wall : Vector3i in walls.keys():
+		if maze[coords].layout & walls[wall] > 0:
+			var neighbour : Vector3i = coords + wall
+
+			if maze.has(neighbour):
+				neighbours.append(neighbour)
+	
+	return neighbours
 
 static func define_corridors(room_data : CellData):
 	for i in 6:

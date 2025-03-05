@@ -15,7 +15,7 @@ var moving_bar : bool = false
 
 signal slot_changed(slot : int)
 
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.pressed and event.button_index == MOUSE_BUTTON_WHEEL_UP:
 			show_bar()

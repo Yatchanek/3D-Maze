@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://b2kx3pbytijw1"]
+[gd_scene load_steps=25 format=3 uid="uid://b2kx3pbytijw1"]
 
 [ext_resource type="Script" uid="uid://ds1758psbybo5" path="res://scripts/hex_maze.gd" id="1_k0ibe"]
 [ext_resource type="PackedScene" uid="uid://cyrp51sdsmug" path="res://scenes/room_elements/hex_room.tscn" id="2_a6gxg"]
@@ -14,6 +14,7 @@
 [ext_resource type="StyleBox" uid="uid://xn5os3rvqd5j" path="res://slot_stylebox_basic.tres" id="8_0rgb7"]
 [ext_resource type="PackedScene" uid="uid://fe2u7rpk2iq8" path="res://scenes/map_elements/map_hex_small.tscn" id="8_5japd"]
 [ext_resource type="StyleBox" uid="uid://02xefc6jnw6p" path="res://slot_stylebox_with_border.tres" id="9_iqbtt"]
+[ext_resource type="Shader" uid="uid://bxos21iiryske" path="res://pixelate.gdshader" id="12_3vhii"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0twwp"]
 sky_cover_modulate = Color(0.868985, 0.868985, 0.868985, 1)
@@ -40,14 +41,6 @@ volumetric_fog_length = 50.0
 adjustment_enabled = true
 adjustment_saturation = 1.2
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8lijc"]
-draw_center = false
-border_width_left = 8
-border_width_top = 8
-border_width_right = 8
-border_width_bottom = 8
-border_color = Color(7.78515e-06, 0.255032, 0.0431681, 1)
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tmlh1"]
 bg_color = Color(0, 0, 0, 1)
 border_width_left = 8
@@ -69,6 +62,18 @@ bg_color = Color(1, 1, 0, 1)
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_apq1y"]
+shader = ExtResource("12_3vhii")
+shader_parameter/pixel_size = 6.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8lijc"]
+draw_center = false
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(7.78515e-06, 0.255032, 0.0431681, 1)
+
 [node name="HexMaze" type="Node3D"]
 script = ExtResource("1_k0ibe")
 MAZE_SIZE = 2
@@ -89,52 +94,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 100, 0)
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_prdqm")
 
-[node name="MiniMap" type="SubViewportContainer" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="SubViewport" type="SubViewport" parent="MiniMap"]
-handle_input_locally = false
-size = Vector2i(384, 384)
-render_target_update_mode = 4
-
-[node name="CanvasLayer" type="CanvasLayer" parent="MiniMap/SubViewport"]
-layer = -1
-
-[node name="Control" type="Control" parent="MiniMap/SubViewport/CanvasLayer"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Panel" type="Panel" parent="MiniMap/SubViewport/CanvasLayer/Control"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_8lijc")
-
-[node name="OrthCamera" type="Camera3D" parent="MiniMap/SubViewport/CanvasLayer"]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 10, 0)
-keep_aspect = 0
-cull_mask = 1048572
-projection = 1
-current = true
-size = 25.0
-near = 0.001
-far = 100.0
-
 [node name="Timer" type="Timer" parent="."]
 wait_time = 5.0
 one_shot = true
 autostart = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 5
 
 [node name="HUD" type="Control" parent="CanvasLayer"]
 layout_mode = 3
@@ -316,6 +282,60 @@ light_color = Color(0.854902, 1, 1, 1)
 light_energy = 0.1
 light_angular_distance = 0.5
 light_cull_mask = 4294967293
+
+[node name="Pixelation" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="ColorRect" type="ColorRect" parent="Pixelation"]
+visible = false
+material = SubResource("ShaderMaterial_apq1y")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MiniMapLayer" type="CanvasLayer" parent="."]
+layer = 3
+
+[node name="MiniMap" type="SubViewportContainer" parent="MiniMapLayer"]
+offset_right = 384.0
+offset_bottom = 384.0
+
+[node name="SubViewport" type="SubViewport" parent="MiniMapLayer/MiniMap"]
+handle_input_locally = false
+size = Vector2i(384, 384)
+render_target_update_mode = 4
+
+[node name="CanvasLayer" type="CanvasLayer" parent="MiniMapLayer/MiniMap/SubViewport"]
+
+[node name="Control" type="Control" parent="MiniMapLayer/MiniMap/SubViewport/CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="MiniMapLayer/MiniMap/SubViewport/CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8lijc")
+
+[node name="OrthCamera" type="Camera3D" parent="MiniMapLayer/MiniMap/SubViewport/CanvasLayer"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 10, 0)
+keep_aspect = 0
+cull_mask = 1048572
+projection = 1
+current = true
+size = 25.0
+near = 0.001
+far = 100.0
 
 [connection signal="grenade_thrown" from="Player" to="." method="_on_player_grenade_thrown"]
 [connection signal="health_changed" from="Player" to="CanvasLayer/HUD" method="update_health"]

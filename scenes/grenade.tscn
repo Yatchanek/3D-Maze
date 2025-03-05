@@ -149,6 +149,7 @@ shape = SubResource("SphereShape3D_e2l2h")
 
 [node name="Body" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, 0, 0, 0)
+visible = false
 layers = 2
 mesh = ExtResource("2_vhiwl")
 

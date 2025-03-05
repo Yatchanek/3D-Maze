@@ -1,7 +1,7 @@
 shader_type spatial;
 render_mode unshaded, depth_draw_opaque, cull_back, shadows_disabled;
 
-
+uniform sampler2D text : source_color;
 uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_linear_mipmap;
 uniform vec3 outline_color: source_color;
 uniform float outline_width : hint_range(0.0, 200.0, 0.1) = 1.0;
@@ -18,7 +18,10 @@ void fragment() {
 
 			if (tex.a == 0.0 && SCREEN_UV.x + float(x) * pixel_size.x < 1.0 && SCREEN_UV.x + float(x) * pixel_size.x > 0.0 &&
 			SCREEN_UV.y + float(y) * pixel_size.y < 1.0 && SCREEN_UV.y + float(y) * pixel_size.y > 0.0) {
-				ALBEDO = outline_color.rgb;
+				//if (UV.x < 0.05 || UV.x > 0.95) {
+					ALBEDO = outline_color.rgb;
+				//}
+				
 			}
 		}
 	}

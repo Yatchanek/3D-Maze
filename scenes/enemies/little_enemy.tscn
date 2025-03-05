@@ -15,7 +15,7 @@ material = ExtResource("2_d8duo")
 size = Vector3(0.25, 0.25, 0.15)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ouvm7"]
-size = Vector3(1, 0.606506, 0.478394)
+size = Vector3(0.779846, 0.321686, 0.478394)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q2dia"]
 albedo_color = Color(1, 1, 0, 1)
@@ -63,7 +63,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.282002)
 collision_mask = 8
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GroundCheck"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.140595, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.030426, -0.00181518, 0)
 shape = SubResource("BoxShape3D_ouvm7")
 
 [node name="Marker" type="MeshInstance3D" parent="."]

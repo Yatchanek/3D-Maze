@@ -59,7 +59,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, -0.038)
 
 [node name="Camera" type="Camera3D" parent="CameraGimbal"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0954871)
-cull_mask = 1048571
+cull_mask = 524283
+current = true
 fov = 65.0
 near = 0.001
 far = 30.0
@@ -76,30 +77,19 @@ spot_angle = 40.0
 spot_angle_attenuation = 2.0
 
 [node name="WeaponSlot" type="Node3D" parent="CameraGimbal/Camera"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="GrenadeInHand" parent="CameraGimbal/Camera/WeaponSlot" instance=ExtResource("5_qlg0r")]
-transform = Transform3D(0.0342165, 0, 0.0364586, 0, 0.05, 0, -0.0364586, 0, 0.0342165, 0.125, -0.11, -0.2)
+transform = Transform3D(0.10265, 0, 0.109376, 0, 0.15, 0, -0.109376, 0, 0.10265, 0.5, 0, -0.5)
 visible = false
+layers = 524288
 skeleton = NodePath("../../../..")
 
 [node name="SpearInHand" type="MeshInstance3D" parent="CameraGimbal/Camera/WeaponSlot"]
-transform = Transform3D(0.96883, 0, 0.247726, 0.00108955, 0.99999, -0.00426112, -0.247724, 0.00439821, 0.96882, 0.214324, 0.0180335, 0.0971045)
+transform = Transform3D(0.990267, -0.00124254, 0.139172, 0.00174532, 0.999992, -0.00349065, -0.139167, 0.00369958, 0.990261, 0.214, 0.02, 0.1)
 visible = false
+layers = 524288
 cast_shadow = 0
 mesh = ExtResource("5_fjrip")
-
-[node name="Marker" type="MeshInstance3D" parent="CameraGimbal"]
-transform = Transform3D(1.25, 0, 0, 0, -4.37114e-08, 1.25, 0, -1, -5.46392e-08, 0, 3, -0.062)
-layers = 4
-mesh = SubResource("PrismMesh_nn47u")
-skeleton = NodePath("../..")
-
-[node name="Marker2" type="MeshInstance3D" parent="CameraGimbal/Marker"]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, -2.73286e-14, 0, 4.09929e-14, 1, 0, 0.0294262, -0.0274539)
-layers = 4
-mesh = SubResource("PrismMesh_dda7n")
-skeleton = NodePath("../../..")
 
 [node name="HitBox" parent="." node_paths=PackedStringArray("target") instance=ExtResource("4_ge4ua")]
 collision_layer = 0
@@ -109,5 +99,36 @@ target = NodePath("..")
 [node name="CollisionShape3D" parent="HitBox" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 shape = SubResource("CapsuleShape3D_sv5h7")
+
+[node name="Marker" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.25, 0, 0, 0, -4.37114e-08, 1.25, 0, -1, -5.46392e-08, 0, 3.6, -0.1)
+layers = 4
+mesh = SubResource("PrismMesh_nn47u")
+
+[node name="Marker2" type="MeshInstance3D" parent="Marker"]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, -2.73286e-14, 0, 4.09929e-14, 1, 0, 0.0294262, -0.0274539)
+layers = 4
+mesh = SubResource("PrismMesh_dda7n")
+skeleton = NodePath("../..")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewport" type="SubViewport" parent="CanvasLayer/SubViewportContainer"]
+transparent_bg = true
+size = Vector2i(1920, 1080)
+
+[node name="SubCamera" type="Camera3D" parent="CanvasLayer/SubViewportContainer/SubViewport"]
+cull_mask = 524288
+current = true
+fov = 65.0
+near = 0.01
+far = 30.0
 
 [editable path="HitBox"]
