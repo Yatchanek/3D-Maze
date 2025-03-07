@@ -1,6 +1,8 @@
 extends FiniteStateMachine
 
 
+
+
 func _on_detector_body_entered(body:Node3D) -> void:
 	actor.target = actor.check_line_sight(body)
 	if actor.target:

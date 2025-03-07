@@ -32,16 +32,22 @@ func physics_update(delta : float) -> void:
 		actor.is_in_instantiated_room = true
 
 
-	var direction : Vector3 = actor.position.direction_to(actor.waypoint)
+	var direction : Vector3
 	
 	
 	if actor.is_in_instantiated_room:
+		direction = -actor.global_basis.z
+
+		if actor.tick % 5 == 0:
+			direction = actor.global_position.direction_to(actor.waypoint)
+			direction = actor.get_context_steering(direction)
+
 		direction.y = 0
 		direction = direction.normalized()
 
-		if actor.tick % 3 == 0:
-			direction = actor.get_context_steering(direction)
-
+	else:
+		direction = actor.global_position.direction_to(actor.waypoint)
+		
 	actor.handle_movement(direction, delta)
 
 

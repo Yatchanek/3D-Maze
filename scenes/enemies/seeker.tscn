@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://bcir1xrpmpjdm"]
+[gd_scene load_steps=22 format=3 uid="uid://bcir1xrpmpjdm"]
 
 [ext_resource type="Script" uid="uid://rsbeuwa2mb1h" path="res://scripts/seeker_enemy/seeker.gd" id="1_6pkhf"]
 [ext_resource type="ArrayMesh" uid="uid://rwc0ynpr13tk" path="res://meshes/pacman_top.res" id="2_6rkqm"]
@@ -24,6 +24,9 @@ material = SubResource("StandardMaterial3D_igcsn")
 size = Vector3(1, 1, 0.1)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_vgb46"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_n5jg5"]
+size = Vector3(0.641113, 0.576111, 0.351563)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1yy75"]
 size = Vector3(1, 0.606506, 0.478394)
@@ -114,6 +117,8 @@ radius = 4.0
 collision_layer = 2
 collision_mask = 9
 script = ExtResource("1_6pkhf")
+STEER_FORCE = 7.0
+hp = 10
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
@@ -150,6 +155,7 @@ script = ExtResource("7_xaa3g")
 script = ExtResource("5_2058m")
 num_rays = 16
 collision_mask = 19
+check_height = 0.25
 
 [node name="HitBox" parent="." node_paths=PackedStringArray("target") instance=ExtResource("6_837p5")]
 collision_layer = 0
@@ -158,16 +164,15 @@ target = NodePath("..")
 [node name="CollisionShape3D" parent="HitBox" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("SphereShape3D_vgb46")
-disabled = true
 
 [node name="Hurtbox" parent="." instance=ExtResource("8_as77w")]
 collision_layer = 128
 collision_mask = 0
-damage = 5.0
+damage = 10
 
 [node name="CollisionShape3D" parent="Hurtbox" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.375, 0)
-shape = SubResource("SphereShape3D_vgb46")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00561523, 0.490143, -0.322749)
+shape = SubResource("BoxShape3D_n5jg5")
 disabled = true
 
 [node name="GroundCheck" type="Area3D" parent="."]

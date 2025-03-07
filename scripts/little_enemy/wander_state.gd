@@ -11,18 +11,24 @@ func _enter_state(_previous_state : State) -> void:
 func physics_update(delta : float) -> void:
     move_tick += 1
     move_elapsed += delta
-    if move_elapsed > 3.0:
-        transition.emit("IdleState")
+
     
     if actor.global_position.distance_squared_to(actor.waypoint) < 0.05 * 0.05:
-        transition.emit("IdleState")
+         if randf() < 0.1:
+             transition.emit("IdleState")
+         else:
+             get_new_waypoint()
 
-    var direction : Vector3 = actor.global_position.direction_to(actor.waypoint)
+    var direction : Vector3 = -actor.global_basis.z
     
+    if move_elapsed > 10.0:
+        direction = direction.rotated(Vector3.UP, randf_range(-PI/8, PI/8))
+        move_elapsed -= 10.0
+
     if move_tick % 5 == 0:
-       # print("Direction: ", direction)
+        direction = actor.global_position.direction_to(actor.waypoint)
         direction = actor.context_steering_component.get_context_steering(direction, actor.global_rotation.y)
-       # print("Steered Direction: ", direction)
+
     direction.y = 0.0
 
 

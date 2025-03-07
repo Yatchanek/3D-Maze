@@ -1,4 +1,5 @@
 extends PanelContainer
+class_name Inventory
 
 @export var normal_style : StyleBoxFlat
 @export var border_style : StyleBoxFlat

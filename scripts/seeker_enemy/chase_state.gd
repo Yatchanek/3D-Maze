@@ -9,6 +9,7 @@ func _enter_state(_precious_state : State) -> void:
 
 func physics_update(delta : float) -> void:
 	elapsed_time += delta
+	actor.tick += 1
 	if elapsed_time > 0.5:
 		elapsed_time -= 0.5
 		if is_instance_valid(actor.target):
@@ -23,14 +24,13 @@ func physics_update(delta : float) -> void:
 
 	if is_instance_valid(actor.target) and actor.position.distance_squared_to(actor.target.position) > 0.2:
 
-		var direction : Vector3 = Vector3.ZERO
-		if actor.target:
+		var direction : Vector3 = -actor.global_basis.z
+
+		if actor.target and actor.tick % 5 == 0:
 			direction = actor.position.direction_to(actor.target.position)
 			direction = actor.get_context_steering(direction)
-			
-		else:
-			direction = -actor.basis.z
 		
-		direction.y = 0
+			direction.y = 0
+			direction = direction.normalized()
 
 		actor.handle_movement(direction, delta)

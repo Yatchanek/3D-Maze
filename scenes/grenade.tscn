@@ -1,7 +1,7 @@
 [gd_scene load_steps=22 format=4 uid="uid://bkb4wd464le6g"]
 
 [ext_resource type="Script" uid="uid://c7gjfdn100miu" path="res://scripts/grenade.gd" id="1_bchq8"]
-[ext_resource type="ArrayMesh" uid="uid://b3brdx6qn5yql" path="res://meshes/grenade_Icosphere.res" id="2_vhiwl"]
+[ext_resource type="ArrayMesh" uid="uid://b3brdx6qn5yql" path="res://meshes/grenade_icosphere.res" id="2_vhiwl"]
 [ext_resource type="PackedScene" uid="uid://cabmscpkdhse4" path="res://scenes/hurtbox.tscn" id="3_3iu5a"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_uci0x"]
@@ -9,7 +9,7 @@ rough = true
 bounce = 0.25
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_e2l2h"]
-radius = 0.15
+radius = 0.1
 
 [sub_resource type="Gradient" id="Gradient_hb6wa"]
 offsets = PackedFloat32Array(0, 0.345455, 0.690909, 1)
@@ -148,8 +148,7 @@ script = ExtResource("1_bchq8")
 shape = SubResource("SphereShape3D_e2l2h")
 
 [node name="Body" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, 0, 0, 0)
-visible = false
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
 layers = 2
 mesh = ExtResource("2_vhiwl")
 
@@ -166,7 +165,7 @@ draw_pass_1 = SubResource("ArrayMesh_dhybf")
 [node name="Hurtbox" parent="." instance=ExtResource("3_3iu5a")]
 collision_layer = 64
 collision_mask = 0
-damage = 10.0
+damage = 15
 
 [node name="CollisionShape3D" parent="Hurtbox" index="0"]
 shape = SubResource("SphereShape3D_dykns")

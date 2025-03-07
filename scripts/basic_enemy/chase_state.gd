@@ -20,13 +20,13 @@ func physics_update(delta : float) -> void:
 
 	if is_instance_valid(actor.target) and actor.position.distance_squared_to(actor.target.position) > 0.2:
 
-		var direction : Vector3 = Vector3.ZERO
-		if actor.target:
-			direction = actor.position.direction_to(actor.target.position)
-			
-		else:
-			direction = -actor.basis.z
+		var direction : Vector3 = -actor.global_basis.z
 		
-		direction.y = 0
+		if actor.target and actor.tick % 5 == 0:
+			direction = actor.position.direction_to(actor.target.position)
+			direction = actor.get_context_steering(direction)
+		
+			direction.y = 0
+			direction = direction.normalized()
 
 		actor.handle_movement(direction, delta)

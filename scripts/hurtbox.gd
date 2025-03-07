@@ -3,7 +3,7 @@ class_name HurtBox
 
 @onready var collision : CollisionShape3D = $CollisionShape3D
 
-@export var damage : float = 0
+@export var damage : int = 0
 
 enum DamageType {
 	INSTANT,

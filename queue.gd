@@ -23,5 +23,14 @@ func deq() -> Variant:
     
     return value
 
+func contains(value : Variant) -> bool:
+    for i in range(first, last + 1):
+        if storage[i] == value:
+            return true
+    return false
+
+func printout():
+    print(storage)
+
 func size() -> int:
     return last - first + 1

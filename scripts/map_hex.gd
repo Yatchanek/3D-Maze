@@ -8,11 +8,9 @@ func initialize(room_data : CellData):
     for i in 6:
         var corridor : MapCorridor = $Corridors.get_child(i)
         var offset : int = 0
-        prints("Room corridors:", room_data.map_corridors)
         if room_data.map_corridors[i] == 0:
             var neighbour : Vector3i = room_data.coords + Globals.directions[i]
             if Globals.maze.has(neighbour) and !Globals.maze[neighbour].discovered:
-                prints("Neighbour:", neighbour, "Corridor data:", Globals.maze[neighbour].map_corridors)
                 var neighbour_corridor_data : float = Globals.maze[neighbour].map_corridors[wrapi(i + 3, 0, 6)]
                 if neighbour_corridor_data == 0:
                     corridor.hide()
@@ -39,3 +37,7 @@ func initialize(room_data : CellData):
         var direction : Vector3 = Vector3.FORWARD.rotated(Vector3.UP, corridor.rotation.y)
 
         corridor.position = direction * (sqrt(3) * Globals.HEX_SIZE * 0.5 + Globals.CORRIDOR_LENGTH * 0.5) + offset * direction * sqrt(3) * (Globals.HEX_SIZE - Globals.SMALL_HEX_SIZE) * 0.25
+
+func _ready() -> void:
+    await get_tree().create_timer(0.075).timeout
+    show()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://b2kx3pbytijw1"]
+[gd_scene load_steps=26 format=3 uid="uid://b2kx3pbytijw1"]
 
 [ext_resource type="Script" uid="uid://ds1758psbybo5" path="res://scripts/hex_maze.gd" id="1_k0ibe"]
 [ext_resource type="PackedScene" uid="uid://cyrp51sdsmug" path="res://scenes/room_elements/hex_room.tscn" id="2_a6gxg"]
@@ -14,6 +14,7 @@
 [ext_resource type="StyleBox" uid="uid://xn5os3rvqd5j" path="res://slot_stylebox_basic.tres" id="8_0rgb7"]
 [ext_resource type="PackedScene" uid="uid://fe2u7rpk2iq8" path="res://scenes/map_elements/map_hex_small.tscn" id="8_5japd"]
 [ext_resource type="StyleBox" uid="uid://02xefc6jnw6p" path="res://slot_stylebox_with_border.tres" id="9_iqbtt"]
+[ext_resource type="PackedScene" uid="uid://pxcjpbn5egbv" path="res://scenes/map_elements/big_map.tscn" id="10_apq1y"]
 [ext_resource type="Shader" uid="uid://bxos21iiryske" path="res://pixelate.gdshader" id="12_3vhii"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0twwp"]
@@ -87,6 +88,7 @@ little_enemy_scene = ExtResource("6_bikdm")
 chest_scene = ExtResource("6_7spxe")
 map_hex_scene = ExtResource("7_lyi48")
 small_map_hex_scene = ExtResource("8_5japd")
+big_map_scene = ExtResource("10_apq1y")
 
 [node name="Player" parent="." instance=ExtResource("3_3ttit")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 100, 0)
@@ -96,7 +98,6 @@ environment = SubResource("Environment_prdqm")
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 5.0
-one_shot = true
 autostart = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
@@ -230,7 +231,7 @@ wait_time = 1.25
 one_shot = true
 
 [node name="HealthBar" type="ProgressBar" parent="CanvasLayer/HUD"]
-custom_minimum_size = Vector2(256, 64)
+custom_minimum_size = Vector2(256, 32)
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -238,7 +239,7 @@ anchor_right = 1.0
 offset_left = -264.0
 offset_top = 8.0
 offset_right = -8.0
-offset_bottom = 72.0
+offset_bottom = 40.0
 grow_horizontal = 0
 theme_override_styles/fill = SubResource("StyleBoxFlat_ergwk")
 max_value = 50.0
@@ -246,15 +247,15 @@ value = 22.0
 show_percentage = false
 
 [node name="StaminaBar" type="ProgressBar" parent="CanvasLayer/HUD"]
-custom_minimum_size = Vector2(256, 64)
+custom_minimum_size = Vector2(256, 32)
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -264.0
-offset_top = 80.0
+offset_top = 49.0
 offset_right = -8.0
-offset_bottom = 144.0
+offset_bottom = 81.0
 grow_horizontal = 0
 theme_override_styles/fill = SubResource("StyleBoxFlat_8pins")
 max_value = 50.0
@@ -278,6 +279,7 @@ grow_vertical = 2
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+layers = 524289
 light_color = Color(0.854902, 1, 1, 1)
 light_energy = 0.1
 light_angular_distance = 0.5
@@ -285,9 +287,9 @@ light_cull_mask = 4294967293
 
 [node name="Pixelation" type="CanvasLayer" parent="."]
 layer = 2
+visible = false
 
 [node name="ColorRect" type="ColorRect" parent="Pixelation"]
-visible = false
 material = SubResource("ShaderMaterial_apq1y")
 anchors_preset = 15
 anchor_right = 1.0

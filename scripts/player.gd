@@ -10,6 +10,7 @@ class_name Player
 @onready var weapon_slot : Node3D = $CameraGimbal/Camera/WeaponSlot
 @onready var grenade_in_hand : MeshInstance3D = $CameraGimbal/Camera/WeaponSlot/GrenadeInHand
 @onready var spear_in_hand : MeshInstance3D = $CameraGimbal/Camera/WeaponSlot/SpearInHand
+@onready var subcamera : Camera3D = $CanvasLayer/SubViewportContainer/SubViewport/Camera3D
 #@onready var marker : MeshInstance3D = $Marker
 
 const WALK_SPEED :float = 4.0
@@ -105,20 +106,23 @@ func start():
 	$CollisionShape3D.set_deferred("disabled", false)
 
 func _process(delta: float) -> void:
-	for agent : HurtBox in damaging_agents:
-		current_health -= agent.damage * delta
+	if damaging_agents.size() > 0:
+		for agent : HurtBox in damaging_agents:
+			current_health -= agent.damage * delta
 
-	damage_time += delta
-	if damage_time >= 0.5:
-		ouch.emit()
-		damage_time -= 0.5
+		damage_time += delta
+		if damage_time >= 0.5:
+			ouch.emit()
+			damage_time -= 0.5
 
+	update_camera(delta)
+	subcamera.global_transform = camera.global_transform
 
 func _physics_process(delta: float) -> void:
 	if !is_on_floor():
 		velocity.y += -9.8 * delta
 
-	update_camera(delta)
+	
 
 	if Input.is_action_just_pressed("action") and is_on_floor():
 		use_weapon()
@@ -171,6 +175,7 @@ func throw_spear():
 	var spear : Area3D = spear_scene.instantiate()
 	var spear_position : Vector3 = spear_in_hand.global_position
 	spear.basis = spear_in_hand.global_basis
+
 	spear_thrown.emit(spear, spear_position)
 	spear_in_hand.hide()
 	hide_weapon()
@@ -178,9 +183,9 @@ func throw_spear():
 
 func throw_grenade():
 	var tw : Tween = create_tween()
-	tw.tween_property(grenade_in_hand, "position:z", -0.6, 0.2)
+	tw.tween_property(grenade_in_hand, "position:z", -0.3, 0.2)
 	tw.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	tw.tween_property(grenade_in_hand, "position:z", -0.5, 0.1)
+	tw.tween_property(grenade_in_hand, "position:z", -0.35, 0.1)
 	await tw.finished
 	var grenade : RigidBody3D = grenade_scene.instantiate()
 	var grenade_position : Vector3 = grenade_in_hand.global_position
@@ -203,7 +208,7 @@ func flicker():
 	var tw : Tween = create_tween().bind_node(self)
 	tw.finished.connect(flicker)
 	var duration : float = randf_range(0.075, 0.125)
-	tw.tween_property(light, "light_energy", 2.0 - randf_range(0.25, 0.85), duration)
+	tw.tween_property(light, "light_energy", 2.5 - randf_range(0.25, 1.0), duration)
 
 func take_damage(hurtbox : HurtBox):
 	if hurtbox.damage_type == HurtBox.DamageType.INSTANT:
@@ -217,7 +222,6 @@ func take_damage(hurtbox : HurtBox):
 func hurtbox_gone(hurtbox : HurtBox):
 	damaging_agents.erase(hurtbox)
 	if damaging_agents.size() == 0:
-		set_process(false)
 		damage_time = 0.0
 
 func change_weapon():
@@ -225,7 +229,7 @@ func change_weapon():
 
 func hide_weapon():
 	can_use_weapon = false
-	var offset : float = -0.2 if current_weapon == 1 else -0.5
+	var offset : float = -0.5
 	var tw: Tween = create_tween()
 	tw.tween_property(weapon_slot, "position:y", offset, 0.5)
 	await tw.finished

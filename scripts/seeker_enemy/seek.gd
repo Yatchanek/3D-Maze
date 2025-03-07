@@ -14,16 +14,16 @@ func physics_update(delta : float) -> void:
 	if actor.position.distance_squared_to(waypoint) < 0.1 * 0.1:
 		get_new_destination()
 
-	var direction : Vector3 = actor.position.direction_to(waypoint)
-
+	var direction : Vector3
 
 	if actor.is_in_instantiated_room:
+		direction = actor.position.direction_to(waypoint)
+
+		if actor.tick % 5 == 0:
+			direction = actor.get_context_steering(direction)
+			
 		direction.y = 0
 		direction = direction.normalized()
-
-		if actor.tick % 3:
-			direction = actor.get_context_steering(direction)
-
 
 		if actor.target_in_range:
 			elapsed_time += delta
@@ -32,6 +32,8 @@ func physics_update(delta : float) -> void:
 				actor.target = actor.check_line_sight(actor.potential_target)
 				if actor.target:
 					transition.emit("Chase")
+	else:
+		direction = actor.position.direction_to(waypoint)
 
 	actor.handle_movement(direction, delta)
 

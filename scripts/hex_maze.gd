@@ -15,11 +15,14 @@ extends Node3D
 @export var map_hex_scene : PackedScene
 @export var small_map_hex_scene : PackedScene
 
+@export var big_map_scene : PackedScene
+
 @onready var orth_camera : Camera3D = %OrthCamera
 @onready var player = $Player
 @onready var rooms_node : Node3D = $Rooms
 @onready var chests_node : Node3D = $Chests
 @onready var map : Node3D = $Map
+@onready var inventory : Inventory = $CanvasLayer/HUD/Inventory
 
 var walls: Dictionary = {
 	Vector3i(0, -1, 1): Globals.N,
@@ -60,10 +63,18 @@ var enemy_array : Array[Enemy] = []
 
 var max_enemies : int = 10
 
+var big_map : BigMap
+
+var corridors_spawned : int = 0
+
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey:
 		if event.pressed and event.keycode == KEY_ESCAPE:
 			get_tree().quit()
+		elif event.pressed and event.keycode == KEY_M:
+			toggle_big_map()
+		elif event.pressed and event.keycode == KEY_P:
+			$Pixelation.visible = !$Pixelation.visible
 
 func _ready() -> void:
 	thread = Thread.new()
@@ -72,8 +83,9 @@ func _ready() -> void:
 	create_maze()
 	break_walls()
 	Globals.maze = maze
+	Globals.map_dict = map_dict
 	create_corridor_data()
-	var start_pos : Vector3i = Vector3i.ZERO#maze.keys().pick_random()
+	var start_pos : Vector3i = Vector3i.ZERO
 	current_room = start_pos
 	maze[current_room].discovered = true
 	player.current_room = start_pos
@@ -82,6 +94,23 @@ func _ready() -> void:
 	player.position = maze[current_room].position
 	spawn_chests()
 	player.start()
+	spawn_seeker()
+
+func toggle_big_map():
+	if big_map:
+		big_map.queue_free()
+		Globals.player.set_process_input(true)
+		inventory.set_process_input(true)
+		Globals.player.set_physics_process(true)
+		$MiniMapLayer.show()
+	else:
+		big_map = big_map_scene.instantiate()
+		add_child(big_map)
+		Globals.player.set_process_input(false)
+		inventory.set_process_input(false)
+		Globals.player.set_physics_process(false)
+		$MiniMapLayer.hide()
+
 
 func create_cells_and_grid():
 	for q in range(-MAZE_SIZE, MAZE_SIZE + 1):
@@ -256,18 +285,23 @@ func add_astar_point_in_corridor(from : Vector3i, to : Vector3i):
 	a_star.connect_points(new_id, maze[to].id)
 
 func create_corridor_data():
+
 	var queue : Queue = Queue.new()
 	queue.enq(current_room)
 
 	while queue.size() > 0:
 		var current : Vector3i = queue.deq()
 		spawn_corridors(current)
-		var neighbours : Array[Vector3i] = HexUtils.get_connected_neighbours(maze, current)
+
+		var neighbours : Array[Vector3i] = HexUtils.get_cells_in_range(maze, current, 1)
 		for neighbour : Vector3i in neighbours:
-			if !maze[neighbour].corridors_created:
+			if !maze[neighbour].corridors_created and !queue.contains(neighbour):
 				queue.enq(neighbour)
 
+
 func spawn_corridors(coords : Vector3i):
+	if maze[coords].corridors_created:
+		return
 	var room_data : CellData = maze[coords]
 
 	for i in 6:
@@ -286,6 +320,7 @@ func spawn_corridors(coords : Vector3i):
 
 	room_data.map_corridors = room_data.corridors.duplicate()
 	room_data.corridors_created = true
+	corridors_spawned += 1
 
 func spawn_chests(attempts : int = 0):
 	if attempts > 50:
@@ -324,32 +359,46 @@ func spawn_enemy():
 	if enemy_array.size() >= max_enemies:
 		return
 
+	var start_tick : int = randi_range(1, 10)
+
+	var pos : Vector3i = choose_enemy_pos()	
+	var enemy : Enemy
+	enemy = basic_enemy_scene.instantiate()
+
+	enemy.position = maze[pos].position + Vector3.UP * 0.01
+	#enemy.pivot_position = maze[pos].position
+	#enemy.max_radius = maze[pos].room_size * 0.75 * Globals.SQRT3 * 0.5
+	enemy.a_star = a_star
+	enemy.tick = start_tick
+	enemy.current_room = pos
+	enemy.died.connect(_on_enemy_destroyed)
+	enemy_array.append(enemy)
+	if room_dict.has(pos):
+		enemy.is_in_instantiated_room = true
+	call_deferred("add_child", enemy)
+
+func spawn_seeker():
+	var enemy : Enemy
+	enemy = seeker_enemy_scene.instantiate()
+	var pos : Vector3i = choose_enemy_pos()
+	enemy.position = maze[pos].position + Vector3.UP * 0.01
+	enemy.a_star = a_star
+	var start_tick : int = randi_range(1, 10)
+	enemy.tick = start_tick
+	enemy.current_room = pos
+	enemy.died.connect(_on_enemy_destroyed)
+	enemy_array.append(enemy)
+	call_deferred("add_child", enemy)
+
+
+func choose_enemy_pos() -> Vector3i:
 	var neighbours : Array[Vector3i]= HexUtils.get_cells_in_range(maze, player.current_room, 1)
 
-	var start_tick : int = randi_range(0, 5)
 	var pos : Vector3i = maze.keys().pick_random()
 	while neighbours.has(pos):
 		pos = maze.keys().pick_random()
 
-	for i in 6:
-		var enemy : Enemy
-		if randf() > 1.88:
-			enemy = basic_enemy_scene.instantiate()
-		else:
-			enemy = little_enemy_scene.instantiate()
-
-		enemy.position = maze[pos].position + Vector3.UP * 0.01 + Vector3.FORWARD.rotated(Vector3.UP, randf_range(0, TAU)) * randf_range(1, maze[pos].room_size * 0.75)
-		enemy.pivot_position = maze[pos].position
-		enemy.max_radius = maze[pos].room_size * 0.75 * sqrt(3)
-		enemy.a_star = a_star
-		enemy.tick = start_tick
-		enemy.current_room = pos
-		enemy.died.connect(_on_enemy_destroyed)
-		enemy_array.append(enemy)
-		if room_dict.has(pos):
-			enemy.is_in_instantiated_room = true
-		call_deferred("add_child", enemy)
-
+	return pos
 
 func _on_room_entered(coords : Vector3i):
 	if player.current_room == coords:
@@ -377,6 +426,8 @@ func _on_player_spear_thrown(spear : Area3D, spear_position : Vector3) -> void:
 
 func _on_enemy_destroyed(enemy : Enemy):
 	enemy_array.erase(enemy)
+	if enemy is Seeker:
+		spawn_seeker()
 
 func _on_timer_timeout() -> void:
 	spawn_enemy()

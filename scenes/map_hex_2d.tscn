@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://cdw16xall3ww7"]
+
+[ext_resource type="Texture2D" uid="uid://b20xexswbm1sc" path="res://textures/cobblestones_0.png" id="1_jpiab"]
+[ext_resource type="Shader" uid="uid://5tdgmfxc4y7h" path="res://outline_shader_2d.gdshader" id="1_w0b6u"]
+[ext_resource type="Script" uid="uid://udrwmqn84p8j" path="res://scripts/map_hex_2d.gd" id="2_w0b6u"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w0b6u"]
+shader = ExtResource("1_w0b6u")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/width = 5.203
+shader_parameter/pattern = 0
+shader_parameter/inside = false
+shader_parameter/add_margins = false
+
+[node name="MapHex2D" type="Polygon2D"]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_w0b6u")
+position = Vector2(100, 100)
+texture = ExtResource("1_jpiab")
+polygon = PackedVector2Array(-107, -199, 82, -214, 174, -83, 77, 84, -293, -27, -255, -194)
+script = ExtResource("2_w0b6u")
+
+[node name="Line2D" type="Line2D" parent="."]
+closed = true
+width = 4.0

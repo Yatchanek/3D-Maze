@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://dupc2snhor4cq"]
+[gd_scene load_steps=21 format=3 uid="uid://dupc2snhor4cq"]
 
 [ext_resource type="Script" uid="uid://dnwy0hv6act8d" path="res://scripts/basic_enemy/basic_enemy.gd" id="1_1ya0f"]
 [ext_resource type="Script" uid="uid://curjphr8g62cc" path="res://scripts/basic_enemy/basic_enemy_fsm.gd" id="2_u5gao"]
@@ -45,10 +45,14 @@ radius = 4.0
 radius = 0.25
 height = 0.75
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_t20e8"]
+size = Vector3(0.779846, 0.321686, 0.478394)
+
 [node name="Enemy" type="CharacterBody3D"]
 collision_layer = 2
 collision_mask = 9
 script = ExtResource("1_1ya0f")
+STEER_FORCE = 7.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.375, 0)
@@ -102,7 +106,7 @@ script = ExtResource("7_kld31")
 
 [node name="ContextSteeringComponent" type="Node" parent="."]
 script = ExtResource("9_yb1bp")
-num_rays = 10
+num_rays = 12
 ray_length = 1.5
 collision_mask = 19
 
@@ -117,19 +121,25 @@ shape = SubResource("CapsuleShape3D_0qftu")
 [node name="Hurtbox" parent="." instance=ExtResource("11_5s4dp")]
 collision_layer = 128
 collision_mask = 0
-damage = 2.0
+damage = 2
 damage_type = 1
 
 [node name="CollisionShape3D" parent="Hurtbox" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.375, 0)
 shape = SubResource("CapsuleShape3D_0qftu")
 
-[node name="GroundCheck" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.186577, -0.447536)
+[node name="GroundCheck" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.282002)
 collision_mask = 8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GroundCheck"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.030426, -0.00181518, 0)
+shape = SubResource("BoxShape3D_t20e8")
 
 [connection signal="body_entered" from="Detector" to="FSM" method="_on_detector_body_entered"]
 [connection signal="body_exited" from="Detector" to="FSM" method="_on_detector_body_exited"]
+[connection signal="body_entered" from="GroundCheck" to="." method="_on_ground_check_body_entered"]
+[connection signal="body_exited" from="GroundCheck" to="." method="_on_ground_check_body_exited"]
 
 [editable path="HitBox"]
 [editable path="Hurtbox"]

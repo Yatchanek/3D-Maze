@@ -3,8 +3,10 @@ class_name Enemy
 
 @export var TOP_SPEED : float = 3.0
 @export var STEER_FORCE : float = 0.1
+@export var hp : int = 1
 
 var SPEED : float
+
 
 var a_star : AStar3D
 
@@ -42,6 +44,10 @@ func check_line_sight(body : PhysicsBody3D = null) -> PhysicsBody3D:
 	else:
 		return null
 
-func take_damage(_hurtbox : HurtBox):
-	queue_free()
-	died.emit(self)
+func take_damage(hurtbox : HurtBox):
+	hp -= hurtbox.damage
+	prints("Taken damage: " + str(hurtbox.damage))
+	if hp <= 0:
+		await get_tree().create_timer(0.1).timeout
+		queue_free()
+		died.emit(self)

@@ -62,11 +62,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0954871)
 cull_mask = 524283
 current = true
 fov = 65.0
-near = 0.001
 far = 30.0
 
 [node name="Light" type="SpotLight3D" parent="CameraGimbal/Camera"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.215, 0.5)
+layers = 524289
 light_color = Color(1, 1, 0.756863, 1)
 light_energy = 2.5
 shadow_enabled = true
@@ -79,13 +79,13 @@ spot_angle_attenuation = 2.0
 [node name="WeaponSlot" type="Node3D" parent="CameraGimbal/Camera"]
 
 [node name="GrenadeInHand" parent="CameraGimbal/Camera/WeaponSlot" instance=ExtResource("5_qlg0r")]
-transform = Transform3D(0.10265, 0, 0.109376, 0, 0.15, 0, -0.109376, 0, 0.10265, 0.5, 0, -0.5)
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0.3, 0, -0.35)
 visible = false
 layers = 524288
 skeleton = NodePath("../../../..")
 
 [node name="SpearInHand" type="MeshInstance3D" parent="CameraGimbal/Camera/WeaponSlot"]
-transform = Transform3D(0.990267, -0.00124254, 0.139172, 0.00174532, 0.999992, -0.00349065, -0.139167, 0.00369958, 0.990261, 0.214, 0.02, 0.1)
+transform = Transform3D(0.495134, -0.00062127, 0.139172, 0.00087266, 0.499996, -0.00349065, -0.0695835, 0.00184979, 0.990262, 0.214, 0.02, 0.1)
 visible = false
 layers = 524288
 cast_shadow = 0
@@ -122,13 +122,13 @@ grow_vertical = 2
 
 [node name="SubViewport" type="SubViewport" parent="CanvasLayer/SubViewportContainer"]
 transparent_bg = true
+handle_input_locally = false
 size = Vector2i(1920, 1080)
+render_target_update_mode = 4
 
-[node name="SubCamera" type="Camera3D" parent="CanvasLayer/SubViewportContainer/SubViewport"]
+[node name="Camera3D" type="Camera3D" parent="CanvasLayer/SubViewportContainer/SubViewport"]
 cull_mask = 524288
-current = true
 fov = 65.0
-near = 0.01
 far = 30.0
 
 [editable path="HitBox"]

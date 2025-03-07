@@ -26,8 +26,10 @@ static var OUTLINE_WIDTH : float = 0.5
 static var CORRIDOR_LENGTH : float = 3.0
 static var CORRIDOR_SEMI_LONG_LENGTH : float = CORRIDOR_LENGTH + sqrt(3) * (HEX_SIZE - SMALL_HEX_SIZE) * 0.5
 static var CORRIDOR_LONG_LENGTH : float = CORRIDOR_LENGTH + sqrt(3) * (HEX_SIZE - SMALL_HEX_SIZE)
-static var player : CharacterBody3D
+static var player : Player
 
 static var maze : Dictionary = {}
+
+static var map_dict : Dictionary = {}
 
 static var SQRT3 : float = sqrt(3)

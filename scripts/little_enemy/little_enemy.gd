@@ -8,17 +8,17 @@ var pivot_position : Vector3
 var max_radius : float
 
 func _ready() -> void:
-	#$FSM.set_physics_process(false)
-	#$FSM.set_process(false)
+
 	velocity = basis.z * - TOP_SPEED
 	SPEED = TOP_SPEED
 
 func handle_movement(direction : Vector3, delta : float):
 	if direction.is_equal_approx(Vector3.ZERO):
-		return
+		direction = -global_basis.z
 	
 	var desired_velocity : Vector3 = direction * SPEED
 	var steering : Vector3 = desired_velocity - velocity
+	
 	steering = steering.normalized() * STEER_FORCE
 	velocity += steering * delta
 
@@ -35,7 +35,6 @@ func handle_movement(direction : Vector3, delta : float):
 
 
 func _on_ground_check_body_exited(_body:Node3D) -> void:
-	print("Exited!")
 	await get_tree().process_frame
 	if ground_check.get_overlapping_bodies().size() == 0:
 		$CollisionShape3D.set_deferred("disabled", true)
@@ -46,7 +45,6 @@ func _on_ground_check_body_exited(_body:Node3D) -> void:
 		hide()
 
 func _on_ground_check_body_entered(_body:Node3D) -> void:
-	print("Entered!")
 	if !is_in_instantiated_room:
 		$CollisionShape3D.set_deferred("disabled", false)
 		is_in_instantiated_room = true

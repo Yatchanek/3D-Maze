@@ -1,22 +1,35 @@
-[gd_scene load_steps=4 format=3 uid="uid://bqenhlxtrl1ma"]
+[gd_scene load_steps=6 format=3 uid="uid://bqenhlxtrl1ma"]
 
 [ext_resource type="Script" uid="uid://ch2o5og2j0m6n" path="res://scripts/spear.gd" id="1_43rot"]
 [ext_resource type="ArrayMesh" uid="uid://8e2flesnj2ux" path="res://meshes/spear_Cube.res" id="2_uf2bl"]
+[ext_resource type="PackedScene" uid="uid://cabmscpkdhse4" path="res://scenes/hurtbox.tscn" id="3_efxkm"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_yp847"]
-size = Vector3(0.1, 0.1, 0.1)
+size = Vector3(0.1, 0.1, 0.611401)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_un1d1"]
+radius = 0.1
 
 [node name="Spear" type="Area3D"]
-collision_mask = 25
+collision_mask = 27
 script = ExtResource("1_43rot")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.402791)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.14709)
 shape = SubResource("BoxShape3D_yp847")
 
 [node name="SpearInHand" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0, 0, 0)
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 1, 0, 0, 0)
 visible = false
 mesh = ExtResource("2_uf2bl")
 
+[node name="Hurtbox" parent="." instance=ExtResource("3_efxkm")]
+damage = 2
+
+[node name="CollisionShape3D" parent="Hurtbox" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.402243)
+shape = SubResource("SphereShape3D_un1d1")
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+
+[editable path="Hurtbox"]

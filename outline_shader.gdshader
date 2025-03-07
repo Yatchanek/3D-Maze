@@ -21,7 +21,7 @@ void fragment() {
 				//if (UV.x < 0.05 || UV.x > 0.95) {
 					ALBEDO = outline_color.rgb;
 				//}
-				
+
 			}
 		}
 	}

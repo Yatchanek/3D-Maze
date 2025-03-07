@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://b6wsyho2xaurv" path="res://scripts/little_enemy/little_enemy.gd" id="1_ouvm7"]
 [ext_resource type="Material" uid="uid://crbopxk1glyq0" path="res://materials/indicator_material.tres" id="2_d8duo"]
 [ext_resource type="PackedScene" uid="uid://cogstiod36jom" path="res://scenes/context_steering_component.tscn" id="2_s5iao"]
-[ext_resource type="Script" uid="uid://bwbges2hoof8m" path="res://scripts/fsm.gd" id="3_d8duo"]
 [ext_resource type="Script" uid="uid://crnw1mxi5ynta" path="res://scripts/little_enemy/wander_state.gd" id="4_0oq60"]
+[ext_resource type="Script" path="res://scripts/little_enemy/litle_enemy_fsm.gd" id="4_d8duo"]
 [ext_resource type="Script" uid="uid://di4strnxj0qq0" path="res://scripts/little_enemy/idle_state.gd" id="6_d8duo"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_s5iao"]
@@ -43,12 +43,12 @@ mesh = SubResource("PrismMesh_5frf0")
 
 [node name="ContextSteeringComponent" parent="." instance=ExtResource("2_s5iao")]
 num_rays = 16
-ray_length = 2.5
+ray_length = 1.0
 collision_mask = 19
 check_height = 0.1
 
 [node name="FSM" type="Node" parent="." node_paths=PackedStringArray("actor")]
-script = ExtResource("3_d8duo")
+script = ExtResource("4_d8duo")
 actor = NodePath("..")
 default_state = "IdleState"
 
