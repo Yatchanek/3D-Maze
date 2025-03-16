@@ -6,6 +6,7 @@ class_name HitBox
 
 
 func _on_area_entered(area:Area3D) -> void:
+	print("HitBox entered")
 	if area is HurtBox:
 		if target.has_method("take_damage"):
 			target.take_damage(area)

@@ -21,4 +21,4 @@ func _on_body_entered(body : Node3D):
     set_physics_process(false)
     await get_tree().create_timer(10.0).timeout
     if is_inside_tree():
-     queue_free()
+        queue_free()

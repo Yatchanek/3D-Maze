@@ -3,7 +3,7 @@ class_name BasicEnemy
 
 @onready var context_steering_component : ContextSteeringComponent = $ContextSteeringComponent
 @onready var body : MeshInstance3D = $Body
-@onready var ground_check : RayCast3D = $GroundCheck
+@onready var ground_check : Area3D = $GroundCheck
 
 var maze : Dictionary = {}
 

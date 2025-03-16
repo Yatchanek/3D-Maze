@@ -28,8 +28,10 @@ static var CORRIDOR_SEMI_LONG_LENGTH : float = CORRIDOR_LENGTH + sqrt(3) * (HEX_
 static var CORRIDOR_LONG_LENGTH : float = CORRIDOR_LENGTH + sqrt(3) * (HEX_SIZE - SMALL_HEX_SIZE)
 static var player : Player
 
-static var maze : Dictionary = {}
+static var maze : Dictionary[Vector3i, CellData] = {}
 
-static var map_dict : Dictionary = {}
+static var map_dict : Dictionary[Vector3i, MapHex] = {}
+
+static var object_data : Dictionary[Vector3i, ObjectData] = {}
 
 static var SQRT3 : float = sqrt(3)

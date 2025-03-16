@@ -1,3 +1,4 @@
+
 extends Node3D
 class_name HexRoom
 
@@ -32,9 +33,10 @@ func initialize(data : CellData):
 
 	if !room_data.has_been_instantiated:
 		room_data.has_been_instantiated = true
-		
+		var object_data : ObjectData = ObjectData.new()
+		Globals.object_data[room_data.coords] = object_data
 		define_guillotines()
-		define_coins()
+		define_coins(object_data)
 		define_subtype()
 		
 	if room_data.subtype == CellData.SubType.HOLE:
@@ -105,7 +107,7 @@ func place_collisions() -> void:
 		add_child(static_body)
 
 func define_subtype():
-	if room_data.subtype == CellData.SubType.HOLE:
+	if room_data.subtype == CellData.SubType.HOLE or room_data.type == CellData.Type.SMALL:
 		return
 	var roll : float = randf()
 	if roll < 0.1:
@@ -120,26 +122,20 @@ func place_corridors() -> void:
 	for i in room_data.corridors.size():
 		if room_data.corridors[i] != 0:
 			var neighbour : Vector3i = room_data.coords + Globals.directions[i]
-			var corridor_type : CorridorSlope.Type
+			var corridor_type : CorridorSlope.Type = Globals.maze[room_data.coords].corridors[i]
 			var offset : int = 0
 			
-			if Globals.maze[room_data.coords].corridors[i] == 1:
-				corridor_type = CorridorSlope.Type.NORMAL
-			elif Globals.maze[room_data.coords].corridors[i] == 2:
-				corridor_type = CorridorSlope.Type.LONG
-			elif Globals.maze[room_data.coords].corridors[i] == 1.5:
-				corridor_type = CorridorSlope.Type.SEMI_LONG
+			if corridor_type == CorridorSlope.Type.SEMI_LONG_PLUS:
 				offset = 1
-			else:
-				corridor_type = CorridorSlope.Type.SEMI_LONG
+			elif corridor_type == CorridorSlope.Type.SEMI_LONG_MINUS:
 				offset = -1
 
 
 			var corridor : CorridorSlope = corridor_scene.instantiate()
 			corridor.initialize(corridor_index, position.y, Globals.maze[neighbour].position.y, corridor_type)
 	
-			corridor.rotation_degrees = Vector3(0, i * -60, 0)
-			var direction = Vector3.FORWARD.rotated(Vector3.UP, deg_to_rad(corridor.rotation_degrees.y))
+			corridor.rotation.y = i * -PI / 3
+			var direction = Vector3.FORWARD.rotated(Vector3.UP, corridor.rotation.y)
 			corridor.position = offset * direction * Globals.SQRT3 * (Globals.HEX_SIZE - Globals.SMALL_HEX_SIZE) * 0.25 + direction * (Globals.SQRT3 * Globals.HEX_SIZE * 0.5 + Globals.CORRIDOR_LENGTH * 0.5) - Vector3.UP * position.y
 
 			corridor.coin_picked.connect(_on_corridor_coin_picked)
@@ -167,25 +163,27 @@ func place_guillotines():
 			guillotine.rotation = Vector3(0, i * -PI / 3, 0)
 			var direction = Vector3.FORWARD.rotated(Vector3.UP, guillotine.rotation.y)
 			var corridor : CorridorSlope = $Corridors.get_child(guillotine_data.x)
-			#prints("Corridor length: ", corridor.length)
-			#prints("Guillotine position:", corridor.length * room_data.guillotines[i])
-			#prints("Vertical offset: ", corridor.length * room_data.guillotines[i] * tan(corridor.slope_angle))
 			guillotine.position = direction * (Globals.SQRT3 * room_size * 0.5 + corridor.length * guillotine_data.y * 0.1) + Vector3.UP * corridor.length * guillotine_data.y * 0.1 * tan(corridor.slope_angle) 
 			add_child(guillotine)
 
 
 
-func define_coins():
+func define_coins(object_data : ObjectData):
 	var coin_count : int = randi_range(0, 5)
 	var max_offset : int = 10
 	if room_data.type == room_data.Type.SMALL:
 		coin_count = randi_range(0, 3)
 		max_offset = 5
 
-	for i in coin_count:
-		room_data.coins.append(randi_range(0, max_offset))
+	var angle_increment : float = TAU / coin_count
+	var radius : float = room_size - 1.25 - 0.1 * randi_range(0, max_offset)
 
-	define_corridor_coins()
+	for i in coin_count:
+		var pos : Vector3 = Vector3.FORWARD.rotated(Vector3.UP, angle_increment * i) * radius + Vector3.UP * 0.4
+		object_data.objects[ObjectData.ObjectType.COIN].append(pos)
+
+
+	#define_corridor_coins()
 
 
 func define_corridor_coins():
@@ -200,25 +198,27 @@ func define_corridor_coins():
 			corridor_idx += 1
 
 func place_coins():
-	if room_data.coins.size() == 0:
+	var coin_data : Array = Globals.object_data[room_data.coords].objects[ObjectData.ObjectType.COIN]
+	if coin_data.size() == 0:
 		return
-	var angle_increment : float = TAU / room_data.coins.size()
-	for i in room_data.coins.size():
-		if room_data.coins[i] > 0:
-			var radius : float = room_size - 1.25 - 0.1 * room_data.coins[i]
-			var coin : Coin = coin_scene.instantiate()
-			coin.idx = i
-			coin.position = Vector3.FORWARD.rotated(Vector3.UP, angle_increment * i) * radius + Vector3.UP * 0.4
-			
-			coin.picked.connect(_on_coin_picked)
-			$Coins.add_child(coin)
+	for i in coin_data.size():
+		if coin_data[i] == Vector3(999, 999, 999):
+			continue
 
-	var corridor_index : int = 0
-	for i in room_data.corridors.size():
-		if room_data.corridors[i]:
-			var corridor : CorridorSlope = $Corridors.get_child(corridor_index)
-			corridor.place_coins(room_data.corridor_coins[corridor_index])
-			corridor_index += 1
+		var coin : Coin = coin_scene.instantiate()
+		coin.type = ObjectData.ObjectType.COIN
+		coin.idx = i
+		coin.position = coin_data[i]
+			
+		coin.picked.connect(_on_object_picked)
+		$Coins.add_child(coin)
+
+	# var corridor_index : int = 0
+	# for i in room_data.corridors.size():
+	# 	if room_data.corridors[i]:
+	# 		var corridor : CorridorSlope = $Corridors.get_child(corridor_index)
+	# 		corridor.place_coins(room_data.corridor_coins[corridor_index])
+	# 		corridor_index += 1
 
 
 
@@ -232,8 +232,8 @@ func toggle_visibility(visibility : bool):
 		corridor.visible = visibility
 
 
-func _on_coin_picked(idx : int):
-	room_data.coins[idx] = -1
+func _on_object_picked(idx : int, object_type : ObjectData.ObjectType):
+	Globals.object_data[room_data.coords].objects[object_type][idx] = Vector3(999, 999, 999)
 
 func _on_corridor_coin_picked(idx : int, corridor_idx : int):
 	room_data.corridor_coins[corridor_idx][idx] = -1

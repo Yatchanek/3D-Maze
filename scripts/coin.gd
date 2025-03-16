@@ -1,7 +1,5 @@
-extends Area3D
+extends PickableObject
 class_name Coin
-
-var idx : int = 0
 
 var is_corridor_coin : bool = false
 
@@ -11,8 +9,6 @@ var base_pos_y : float
 var rotation_speed : float
 
 
-signal picked(index : int)
-
 func _ready() -> void:
 	rotation_offset = randf_range(0, PI)
 	float_offset = randf_range(0, PI)
@@ -21,7 +17,7 @@ func _ready() -> void:
 
 func _on_body_entered(body:Node3D) -> void:
 	if body is Player:
-		picked.emit(idx)
+		picked.emit(idx, type)
 		queue_free()
 
 func _process(delta: float) -> void:

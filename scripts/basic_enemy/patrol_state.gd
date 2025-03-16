@@ -25,13 +25,6 @@ func physics_update(delta : float) -> void:
 			if actor.target:
 				transition.emit("Chase")
 
-	if !actor.ground_check.is_colliding() and actor.is_in_instantiated_room:
-		actor.is_in_instantiated_room = false
-
-	elif actor.ground_check.is_colliding() and !actor.is_in_instantiated_room:
-		actor.is_in_instantiated_room = true
-
-
 	var direction : Vector3
 	
 	

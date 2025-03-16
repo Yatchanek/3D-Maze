@@ -46,17 +46,17 @@ static func get_connected_neighbours(maze: Dictionary, coords: Vector3i) -> Arra
 	
 	return neighbours
 
-static func define_corridors(room_data : CellData):
-	for i in 6:
-		if 1 << i & room_data.layout > 0:
-			var neighbour : Vector3i = room_data.coords + Globals.directions[i]
+# static func define_corridors(room_data : CellData):
+# 	for i in 6:
+# 		if 1 << i & room_data.layout > 0:
+# 			var neighbour : Vector3i = room_data.coords + Globals.directions[i]
 
-			if Globals.maze[neighbour].corridors[wrapi(i + 3, 0, 6)] == 0:	
-				if Globals.maze[room_data.coords].type == room_data.Type.NORMAL and Globals.maze[neighbour].type == room_data.Type.NORMAL:
-					room_data.corridors[i] = 1.0
-				elif Globals.maze[room_data.coords].type == room_data.Type.SMALL and Globals.maze[neighbour].type == room_data.Type.SMALL:
-					room_data.corridors[i] = 2.0
-				elif Globals.maze[room_data.coords].type == room_data.Type.NORMAL and Globals.maze[neighbour].type == room_data.Type.SMALL:
-					room_data.corridors[i] = 1.5
-				else:
-					room_data.corridors[i] = -1.5
+# 			if Globals.maze[neighbour].corridors[wrapi(i + 3, 0, 6)] == 0:	
+# 				if Globals.maze[room_data.coords].type == room_data.Type.NORMAL and Globals.maze[neighbour].type == room_data.Type.NORMAL:
+# 					room_data.corridors[i] = 1.0
+# 				elif Globals.maze[room_data.coords].type == room_data.Type.SMALL and Globals.maze[neighbour].type == room_data.Type.SMALL:
+# 					room_data.corridors[i] = 2.0
+# 				elif Globals.maze[room_data.coords].type == room_data.Type.NORMAL and Globals.maze[neighbour].type == room_data.Type.SMALL:
+# 					room_data.corridors[i] = 1.5
+# 				else:
+# 					room_data.corridors[i] = -1.5

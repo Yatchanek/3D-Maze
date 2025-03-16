@@ -1,3 +1,4 @@
+
 extends StaticBody3D
 class_name CorridorSlope
 
@@ -6,12 +7,15 @@ class_name CorridorSlope
 @onready var left_wall : MeshInstance3D = $LeftWall
 @onready var left_collision : CollisionShape3D = $LeftCollision
 @onready var floor_collision : CollisionShape3D = $StaticBody3D/FloorCollision
+@onready var ceiling_collision : CollisionShape3D = $StaticBody3D/CeilingCollision
 @onready var ceiling : MeshInstance3D = $Ceiling
 @onready var floor_mesh : MeshInstance3D = $Floor
 
 enum Type {
+	NONE,
 	NORMAL,
-	SEMI_LONG,
+	SEMI_LONG_PLUS,
+	SEMI_LONG_MINUS,
 	LONG
 }
 
@@ -32,7 +36,7 @@ func initialize(_index : int, from: float, to : float, type : Type):
 
 	if type == Type.NORMAL:
 		length = Globals.CORRIDOR_LENGTH
-	elif type == Type.SEMI_LONG:
+	elif type == Type.SEMI_LONG_PLUS or type == Type.SEMI_LONG_MINUS:
 		length = Globals.CORRIDOR_SEMI_LONG_LENGTH
 	else:
 		length = Globals.CORRIDOR_LONG_LENGTH
@@ -60,7 +64,8 @@ func _ready() -> void:
 	floor_collision.shape.size.z = slope_length - 0.1
 	floor_collision.rotation.x = slope_angle
 	floor_collision.position.y = floor_mesh.position.y - 0.1
-
+	ceiling_collision.rotation.x = slope_angle
+	ceiling_collision.position.y = ceiling.position.y + 0.1
 	
 
 func place_coins(coins : PackedInt32Array):

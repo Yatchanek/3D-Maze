@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://b2kx3pbytijw1"]
+[gd_scene load_steps=29 format=3 uid="uid://b2kx3pbytijw1"]
 
 [ext_resource type="Script" uid="uid://ds1758psbybo5" path="res://scripts/hex_maze.gd" id="1_k0ibe"]
 [ext_resource type="PackedScene" uid="uid://cyrp51sdsmug" path="res://scenes/room_elements/hex_room.tscn" id="2_a6gxg"]
@@ -16,6 +16,8 @@
 [ext_resource type="StyleBox" uid="uid://02xefc6jnw6p" path="res://slot_stylebox_with_border.tres" id="9_iqbtt"]
 [ext_resource type="PackedScene" uid="uid://pxcjpbn5egbv" path="res://scenes/map_elements/big_map.tscn" id="10_apq1y"]
 [ext_resource type="Shader" uid="uid://bxos21iiryske" path="res://pixelate.gdshader" id="12_3vhii"]
+[ext_resource type="Texture2D" uid="uid://bsys0rmw0cm0" path="res://textures/weapon_wheel.png" id="16_qvxpa"]
+[ext_resource type="Texture2D" uid="uid://hlfen0vf5lr0" path="res://textures/weapon_wheel_selector.png" id="17_gtlhd"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0twwp"]
 sky_cover_modulate = Color(0.868985, 0.868985, 0.868985, 1)
@@ -63,6 +65,10 @@ bg_color = Color(1, 1, 0, 1)
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 
+[sub_resource type="LabelSettings" id="LabelSettings_qvxpa"]
+font_size = 48
+font_color = Color(0, 0, 0, 1)
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_apq1y"]
 shader = ExtResource("12_3vhii")
 shader_parameter/pixel_size = 6.0
@@ -100,10 +106,10 @@ environment = SubResource("Environment_prdqm")
 wait_time = 5.0
 autostart = true
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="HUD" type="CanvasLayer" parent="."]
 layer = 5
 
-[node name="HUD" type="Control" parent="CanvasLayer"]
+[node name="HUD" type="Control" parent="HUD"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -112,7 +118,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("7_342dg")
 
-[node name="Inventory" type="PanelContainer" parent="CanvasLayer/HUD"]
+[node name="Inventory" type="PanelContainer" parent="HUD/HUD"]
 custom_minimum_size = Vector2(1000, 160)
 layout_mode = 1
 anchors_preset = 7
@@ -131,7 +137,7 @@ script = ExtResource("7_6r1b2")
 normal_style = ExtResource("8_0rgb7")
 border_style = ExtResource("9_iqbtt")
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/HUD/Inventory"]
+[node name="MarginContainer" type="MarginContainer" parent="HUD/HUD/Inventory"]
 custom_minimum_size = Vector2(1000, 160)
 layout_mode = 2
 theme_override_constants/margin_left = 16
@@ -139,22 +145,22 @@ theme_override_constants/margin_top = 32
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 32
 
-[node name="InventoryBar" type="HBoxContainer" parent="CanvasLayer/HUD/Inventory/MarginContainer"]
+[node name="InventoryBar" type="HBoxContainer" parent="HUD/HUD/Inventory/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 32
 alignment = 1
 
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar"]
+[node name="PanelContainer" type="PanelContainer" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar"]
 clip_children = 2
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 theme_override_styles/panel = ExtResource("9_iqbtt")
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer"]
+[node name="TextureRect" type="TextureRect" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer"]
 layout_mode = 2
 expand_mode = 2
 
-[node name="Label" type="Label" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer/TextureRect"]
+[node name="Label" type="Label" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer/TextureRect"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -165,17 +171,17 @@ text = "G	"
 label_settings = SubResource("LabelSettings_bikdm")
 horizontal_alignment = 1
 
-[node name="PanelContainer2" type="PanelContainer" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar"]
+[node name="PanelContainer2" type="PanelContainer" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar"]
 clip_children = 2
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 theme_override_styles/panel = ExtResource("8_0rgb7")
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer2"]
+[node name="TextureRect" type="TextureRect" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer2"]
 layout_mode = 2
 expand_mode = 3
 
-[node name="Label" type="Label" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer2/TextureRect"]
+[node name="Label" type="Label" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer2/TextureRect"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -186,51 +192,51 @@ text = "S"
 label_settings = SubResource("LabelSettings_bikdm")
 horizontal_alignment = 1
 
-[node name="PanelContainer3" type="PanelContainer" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar"]
+[node name="PanelContainer3" type="PanelContainer" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar"]
 clip_children = 2
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 theme_override_styles/panel = ExtResource("8_0rgb7")
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer3"]
+[node name="TextureRect" type="TextureRect" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer3"]
 layout_mode = 2
 expand_mode = 3
 
-[node name="PanelContainer4" type="PanelContainer" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar"]
+[node name="PanelContainer4" type="PanelContainer" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar"]
 clip_children = 2
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 theme_override_styles/panel = ExtResource("8_0rgb7")
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer4"]
+[node name="TextureRect" type="TextureRect" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer4"]
 layout_mode = 2
 expand_mode = 3
 
-[node name="PanelContainer5" type="PanelContainer" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar"]
+[node name="PanelContainer5" type="PanelContainer" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar"]
 clip_children = 2
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 theme_override_styles/panel = ExtResource("8_0rgb7")
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer5"]
+[node name="TextureRect" type="TextureRect" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer5"]
 layout_mode = 2
 expand_mode = 3
 
-[node name="PanelContainer6" type="PanelContainer" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar"]
+[node name="PanelContainer6" type="PanelContainer" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar"]
 clip_children = 2
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 theme_override_styles/panel = ExtResource("8_0rgb7")
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer6"]
+[node name="TextureRect" type="TextureRect" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer6"]
 layout_mode = 2
 expand_mode = 3
 
-[node name="Timer" type="Timer" parent="CanvasLayer/HUD/Inventory"]
+[node name="Timer" type="Timer" parent="HUD/HUD/Inventory"]
 wait_time = 1.25
 one_shot = true
 
-[node name="HealthBar" type="ProgressBar" parent="CanvasLayer/HUD"]
+[node name="HealthBar" type="ProgressBar" parent="HUD/HUD"]
 custom_minimum_size = Vector2(256, 32)
 layout_mode = 1
 anchors_preset = 1
@@ -246,7 +252,7 @@ max_value = 50.0
 value = 22.0
 show_percentage = false
 
-[node name="StaminaBar" type="ProgressBar" parent="CanvasLayer/HUD"]
+[node name="StaminaBar" type="ProgressBar" parent="HUD/HUD"]
 custom_minimum_size = Vector2(256, 32)
 layout_mode = 1
 anchors_preset = 1
@@ -262,7 +268,7 @@ max_value = 50.0
 value = 22.0
 show_percentage = false
 
-[node name="RedVeil" type="ColorRect" parent="CanvasLayer/HUD"]
+[node name="RedVeil" type="ColorRect" parent="HUD/HUD"]
 modulate = Color(1, 0, 0, 0)
 layout_mode = 1
 anchors_preset = 15
@@ -270,6 +276,62 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="WeaponWheel" type="TextureRect" parent="HUD/HUD"]
+self_modulate = Color(0.446777, 0.446777, 0.446777, 0.588235)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -710.0
+offset_top = -362.0
+offset_right = -170.0
+offset_bottom = 178.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("16_qvxpa")
+
+[node name="Selector" type="TextureRect" parent="HUD/HUD/WeaponWheel"]
+self_modulate = Color(1, 1, 1, 0.588235)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+pivot_offset = Vector2(270, 270)
+texture = ExtResource("17_gtlhd")
+
+[node name="Label" type="Label" parent="HUD/HUD/WeaponWheel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 19.0
+offset_right = 20.0
+offset_bottom = 93.0
+grow_horizontal = 2
+text = "Grenade"
+label_settings = SubResource("LabelSettings_qvxpa")
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="HUD/HUD/WeaponWheel"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -88.0
+offset_top = -173.0
+offset_right = -41.0
+offset_bottom = 174.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "Spear"
+label_settings = SubResource("LabelSettings_qvxpa")
+vertical_alignment = 1
+autowrap_mode = 1
 
 [node name="Chests" type="Node3D" parent="."]
 
@@ -340,10 +402,11 @@ near = 0.001
 far = 100.0
 
 [connection signal="grenade_thrown" from="Player" to="." method="_on_player_grenade_thrown"]
-[connection signal="health_changed" from="Player" to="CanvasLayer/HUD" method="update_health"]
-[connection signal="ouch" from="Player" to="CanvasLayer/HUD" method="ouch"]
+[connection signal="health_changed" from="Player" to="HUD/HUD" method="update_health"]
+[connection signal="ouch" from="Player" to="HUD/HUD" method="ouch"]
 [connection signal="spear_thrown" from="Player" to="." method="_on_player_spear_thrown"]
-[connection signal="stamina_changed" from="Player" to="CanvasLayer/HUD" method="update_stamina"]
+[connection signal="stamina_changed" from="Player" to="HUD/HUD" method="update_stamina"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
-[connection signal="slot_changed" from="CanvasLayer/HUD/Inventory" to="Player" method="_on_weapon_changed"]
-[connection signal="timeout" from="CanvasLayer/HUD/Inventory/Timer" to="CanvasLayer/HUD/Inventory" method="_on_timer_timeout"]
+[connection signal="weapon_selected" from="HUD/HUD" to="Player" method="_on_weapon_changed"]
+[connection signal="slot_changed" from="HUD/HUD/Inventory" to="Player" method="_on_weapon_changed"]
+[connection signal="timeout" from="HUD/HUD/Inventory/Timer" to="HUD/HUD/Inventory" method="_on_timer_timeout"]

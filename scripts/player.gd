@@ -252,5 +252,6 @@ func show_weapon():
 	can_use_weapon = true
 
 func _on_weapon_changed(weapon :int):
-	current_weapon = weapon
-	change_weapon()
+	if weapon < 2:
+		current_weapon = weapon
+		change_weapon()

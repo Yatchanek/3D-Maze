@@ -1,3 +1,4 @@
+
 extends Node3D
 
 @export var MAZE_SIZE : int = 3
@@ -22,7 +23,7 @@ extends Node3D
 @onready var rooms_node : Node3D = $Rooms
 @onready var chests_node : Node3D = $Chests
 @onready var map : Node3D = $Map
-@onready var inventory : Inventory = $CanvasLayer/HUD/Inventory
+@onready var inventory : Inventory = $HUD/HUD/Inventory
 
 var walls: Dictionary = {
 	Vector3i(0, -1, 1): Globals.N,
@@ -310,13 +311,13 @@ func spawn_corridors(coords : Vector3i):
 			if maze[neighbour].corridors_created:
 				continue
 			if maze[room_data.coords].type == room_data.Type.NORMAL and maze[neighbour].type == room_data.Type.NORMAL:
-				room_data.corridors[i] = 1.0
+				room_data.corridors[i] = CorridorSlope.Type.NORMAL
 			elif maze[room_data.coords].type == room_data.Type.SMALL and maze[neighbour].type == room_data.Type.SMALL:
-				room_data.corridors[i] = 2.0
+				room_data.corridors[i] = CorridorSlope.Type.LONG
 			elif maze[room_data.coords].type == room_data.Type.NORMAL and maze[neighbour].type == room_data.Type.SMALL:
-				room_data.corridors[i] = 1.5
+				room_data.corridors[i] = CorridorSlope.Type.SEMI_LONG_PLUS
 			else:
-				room_data.corridors[i] = -1.5
+				room_data.corridors[i] = CorridorSlope.Type.SEMI_LONG_MINUS
 
 	room_data.map_corridors = room_data.corridors.duplicate()
 	room_data.corridors_created = true

@@ -16,27 +16,27 @@ var moving_bar : bool = false
 
 signal slot_changed(slot : int)
 
-func _input(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
-		if event.pressed and event.button_index == MOUSE_BUTTON_WHEEL_UP:
-			show_bar()
-			current_slot_float = clampf(current_slot_float - 0.6, 0, 5.0)
-			var previous_slot : int = current_slot
-			current_slot = floori(current_slot_float)
-			if previous_slot != current_slot:
-				update()
+# func _input(event: InputEvent) -> void:
+# 	if event is InputEventMouseButton:
+# 		if event.pressed and event.button_index == MOUSE_BUTTON_WHEEL_UP:
+# 			show_bar()
+# 			current_slot_float = clampf(current_slot_float - 0.6, 0, 5.0)
+# 			var previous_slot : int = current_slot
+# 			current_slot = floori(current_slot_float)
+# 			if previous_slot != current_slot:
+# 				update()
 
-			$Timer.start()
+# 			$Timer.start()
 
-		elif event.pressed and event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-			show_bar()
-			current_slot_float = clampf(current_slot_float + 0.6, 0, 5.0)
-			var previous_slot : int = current_slot
-			current_slot = floori(current_slot_float)
-			if previous_slot != current_slot:
-				update()
+# 		elif event.pressed and event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+# 			show_bar()
+# 			current_slot_float = clampf(current_slot_float + 0.6, 0, 5.0)
+# 			var previous_slot : int = current_slot
+# 			current_slot = floori(current_slot_float)
+# 			if previous_slot != current_slot:
+# 				update()
 
-			$Timer.start()
+# 			$Timer.start()
 
 func _ready() -> void:
 	position.y += get_rect().size.y

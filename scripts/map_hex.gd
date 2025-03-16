@@ -1,3 +1,4 @@
+
 extends Node3D
 class_name MapHex
 
@@ -8,20 +9,22 @@ func initialize(room_data : CellData):
     for i in 6:
         var corridor : MapCorridor = $Corridors.get_child(i)
         var offset : int = 0
-        if room_data.map_corridors[i] == 0:
+        if room_data.map_corridors[i] == CorridorSlope.Type.NONE:
             var neighbour : Vector3i = room_data.coords + Globals.directions[i]
             if Globals.maze.has(neighbour) and !Globals.maze[neighbour].discovered:
-                var neighbour_corridor_data : float = Globals.maze[neighbour].map_corridors[wrapi(i + 3, 0, 6)]
-                if neighbour_corridor_data == 0:
-                    corridor.hide()
-                elif neighbour_corridor_data == 1.5 or neighbour_corridor_data == -1.5:
-                    neighbour_corridor_data *= -1
+                var neighbour_corridor_data : CorridorSlope.Type = Globals.maze[neighbour].map_corridors[wrapi(i + 3, 0, 6)]
+                if neighbour_corridor_data == CorridorSlope.Type.NONE:
+                    corridor.queue_free()
+                elif neighbour_corridor_data == CorridorSlope.Type.SEMI_LONG_MINUS:
+                    neighbour_corridor_data = CorridorSlope.Type.SEMI_LONG_PLUS
+                elif neighbour_corridor_data == CorridorSlope.Type.SEMI_LONG_PLUS:
+                    neighbour_corridor_data = CorridorSlope.Type.SEMI_LONG_MINUS
 
                 room_data.map_corridors[i] = neighbour_corridor_data
     
-                Globals.maze[neighbour].map_corridors[wrapi(i + 3, 0, 6)] = 0
+                Globals.maze[neighbour].map_corridors[wrapi(i + 3, 0, 6)] = CorridorSlope.Type.NONE
             else:
-                corridor.hide()
+                corridor.queue_free()
 
         if room_data.map_corridors[i] == 1:
             corridor.initialize(Globals.CORRIDOR_LENGTH + 0.2)

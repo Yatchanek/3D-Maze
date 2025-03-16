@@ -19,8 +19,14 @@ var id : int = 0
 var layout : int = 0
 var position : Vector3 = Vector3(0, 0, 0)
 var exits : Array[bool] = []
-var corridors : Array[float] = [0, 0, 0, 0, 0, 0]
-var map_corridors : Array[float] = []
+var corridors : Array[CorridorSlope.Type] = [
+    CorridorSlope.Type.NONE, 
+    CorridorSlope.Type.NONE, 
+    CorridorSlope.Type.NONE, 
+    CorridorSlope.Type.NONE, 
+    CorridorSlope.Type.NONE, 
+    CorridorSlope.Type.NONE]
+var map_corridors : Array[CorridorSlope.Type] = []
 var guillotines : Dictionary[int, Vector2i] = {}
 var type : Type = Type.NORMAL
 var subtype : SubType = SubType.NORMAL
