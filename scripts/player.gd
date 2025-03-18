@@ -13,6 +13,11 @@ class_name Player
 @onready var subcamera : Camera3D = $CanvasLayer/SubViewportContainer/SubViewport/Camera3D
 #@onready var marker : MeshInstance3D = $Marker
 
+var items : Dictionary[CellData.ObjectType, int] = {
+	CellData.ObjectType.HEALTH_POTION : 0,
+	CellData.ObjectType.STAMINA_POTION : 0
+}
+
 const WALK_SPEED :float = 4.0
 const RUN_SPEED : float = 6.0
 var current_speed : float
@@ -255,3 +260,7 @@ func _on_weapon_changed(weapon :int):
 	if weapon < 2:
 		current_weapon = weapon
 		change_weapon()
+
+func _on_item_picked(item_type : CellData.ObjectType):
+	if items.has(item_type):
+		items[item_type] += 1

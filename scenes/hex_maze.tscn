@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://b2kx3pbytijw1"]
+[gd_scene load_steps=32 format=3 uid="uid://b2kx3pbytijw1"]
 
 [ext_resource type="Script" uid="uid://ds1758psbybo5" path="res://scripts/hex_maze.gd" id="1_k0ibe"]
 [ext_resource type="PackedScene" uid="uid://cyrp51sdsmug" path="res://scenes/room_elements/hex_room.tscn" id="2_a6gxg"]
@@ -17,7 +17,11 @@
 [ext_resource type="PackedScene" uid="uid://pxcjpbn5egbv" path="res://scenes/map_elements/big_map.tscn" id="10_apq1y"]
 [ext_resource type="Shader" uid="uid://bxos21iiryske" path="res://pixelate.gdshader" id="12_3vhii"]
 [ext_resource type="Texture2D" uid="uid://bsys0rmw0cm0" path="res://textures/weapon_wheel.png" id="16_qvxpa"]
+[ext_resource type="Texture2D" uid="uid://cmbcsvqxspcq" path="res://sprites/health_potion.png" id="16_wp8ya"]
 [ext_resource type="Texture2D" uid="uid://hlfen0vf5lr0" path="res://textures/weapon_wheel_selector.png" id="17_gtlhd"]
+[ext_resource type="Texture2D" uid="uid://5xls6x4dmyy3" path="res://sprites/stamina_potion.png" id="17_r2nl2"]
+[ext_resource type="Texture2D" uid="uid://b43ejqqdh5ndf" path="res://sprites/grenade.png" id="18_qx7xi"]
+[ext_resource type="Texture2D" uid="uid://b5p7lhxxbdpvk" path="res://sprites/spear.png" id="21_hp7ou"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0twwp"]
 sky_cover_modulate = Color(0.868985, 0.868985, 0.868985, 1)
@@ -52,8 +56,8 @@ border_width_right = 8
 corner_radius_top_left = 32
 corner_radius_top_right = 32
 
-[sub_resource type="LabelSettings" id="LabelSettings_bikdm"]
-font_size = 72
+[sub_resource type="LabelSettings" id="LabelSettings_gmeqr"]
+font_size = 32
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ergwk"]
 bg_color = Color(0, 1, 0, 1)
@@ -64,10 +68,6 @@ corner_radius_bottom_right = 8
 bg_color = Color(1, 1, 0, 1)
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
-
-[sub_resource type="LabelSettings" id="LabelSettings_qvxpa"]
-font_size = 48
-font_color = Color(0, 0, 0, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_apq1y"]
 shader = ExtResource("12_3vhii")
@@ -136,6 +136,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_tmlh1")
 script = ExtResource("7_6r1b2")
 normal_style = ExtResource("8_0rgb7")
 border_style = ExtResource("9_iqbtt")
+item_textures = Array[Texture]([ExtResource("16_wp8ya"), ExtResource("17_r2nl2"), ExtResource("18_qx7xi")])
 
 [node name="MarginContainer" type="MarginContainer" parent="HUD/HUD/Inventory"]
 custom_minimum_size = Vector2(1000, 160)
@@ -158,18 +159,13 @@ theme_override_styles/panel = ExtResource("9_iqbtt")
 
 [node name="TextureRect" type="TextureRect" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer"]
 layout_mode = 2
-expand_mode = 2
+expand_mode = 3
 
-[node name="Label" type="Label" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer/TextureRect"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "G	"
-label_settings = SubResource("LabelSettings_bikdm")
-horizontal_alignment = 1
+[node name="Label" type="Label" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+label_settings = SubResource("LabelSettings_gmeqr")
 
 [node name="PanelContainer2" type="PanelContainer" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar"]
 clip_children = 2
@@ -181,16 +177,11 @@ theme_override_styles/panel = ExtResource("8_0rgb7")
 layout_mode = 2
 expand_mode = 3
 
-[node name="Label" type="Label" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer2/TextureRect"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "S"
-label_settings = SubResource("LabelSettings_bikdm")
-horizontal_alignment = 1
+[node name="Label" type="Label" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer2"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+label_settings = SubResource("LabelSettings_gmeqr")
 
 [node name="PanelContainer3" type="PanelContainer" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar"]
 clip_children = 2
@@ -202,6 +193,12 @@ theme_override_styles/panel = ExtResource("8_0rgb7")
 layout_mode = 2
 expand_mode = 3
 
+[node name="Label" type="Label" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer3"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+label_settings = SubResource("LabelSettings_gmeqr")
+
 [node name="PanelContainer4" type="PanelContainer" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar"]
 clip_children = 2
 custom_minimum_size = Vector2(128, 128)
@@ -211,6 +208,12 @@ theme_override_styles/panel = ExtResource("8_0rgb7")
 [node name="TextureRect" type="TextureRect" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer4"]
 layout_mode = 2
 expand_mode = 3
+
+[node name="Label" type="Label" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer4"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+label_settings = SubResource("LabelSettings_gmeqr")
 
 [node name="PanelContainer5" type="PanelContainer" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar"]
 clip_children = 2
@@ -222,6 +225,12 @@ theme_override_styles/panel = ExtResource("8_0rgb7")
 layout_mode = 2
 expand_mode = 3
 
+[node name="Label" type="Label" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer5"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+label_settings = SubResource("LabelSettings_gmeqr")
+
 [node name="PanelContainer6" type="PanelContainer" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar"]
 clip_children = 2
 custom_minimum_size = Vector2(128, 128)
@@ -231,6 +240,12 @@ theme_override_styles/panel = ExtResource("8_0rgb7")
 [node name="TextureRect" type="TextureRect" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer6"]
 layout_mode = 2
 expand_mode = 3
+
+[node name="Label" type="Label" parent="HUD/HUD/Inventory/MarginContainer/InventoryBar/PanelContainer6"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+label_settings = SubResource("LabelSettings_gmeqr")
 
 [node name="Timer" type="Timer" parent="HUD/HUD/Inventory"]
 wait_time = 1.25
@@ -278,6 +293,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="WeaponWheel" type="TextureRect" parent="HUD/HUD"]
+visible = false
 self_modulate = Color(0.446777, 0.446777, 0.446777, 0.588235)
 layout_mode = 1
 anchors_preset = 6
@@ -294,44 +310,46 @@ grow_vertical = 2
 texture = ExtResource("16_qvxpa")
 
 [node name="Selector" type="TextureRect" parent="HUD/HUD/WeaponWheel"]
-self_modulate = Color(1, 1, 1, 0.588235)
+self_modulate = Color(1, 1, 1, 0.486275)
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 pivot_offset = Vector2(270, 270)
 texture = ExtResource("17_gtlhd")
 
-[node name="Label" type="Label" parent="HUD/HUD/WeaponWheel"]
+[node name="Control" type="Control" parent="HUD/HUD/WeaponWheel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WeaponImage" type="TextureRect" parent="HUD/HUD/WeaponWheel/Control"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -20.0
-offset_top = 19.0
-offset_right = 20.0
-offset_bottom = 93.0
+offset_left = -64.0
+offset_top = -13.0
+offset_right = 64.0
+offset_bottom = 115.0
 grow_horizontal = 2
-text = "Grenade"
-label_settings = SubResource("LabelSettings_qvxpa")
-vertical_alignment = 1
+texture = ExtResource("18_qx7xi")
 
-[node name="Label2" type="Label" parent="HUD/HUD/WeaponWheel"]
+[node name="WeaponImage2" type="TextureRect" parent="HUD/HUD/WeaponWheel/Control"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -88.0
-offset_top = -173.0
-offset_right = -41.0
-offset_bottom = 174.0
+offset_left = -128.0
+offset_top = -128.0
+offset_bottom = 128.0
 grow_horizontal = 0
 grow_vertical = 2
-text = "Spear"
-label_settings = SubResource("LabelSettings_qvxpa")
-vertical_alignment = 1
-autowrap_mode = 1
+texture = ExtResource("21_hp7ou")
 
 [node name="Chests" type="Node3D" parent="."]
 

@@ -79,7 +79,7 @@ func place_coins(coins : PackedInt32Array):
 	for j in coins.size():
 
 		if coins[j] > 0:
-			var coin : Coin = coin_scene.instantiate()
+			var coin : PickableObject = coin_scene.instantiate()
 			coin.position = start_position + Vector3.FORWARD * side * coin_spacing * coin_offset
 			coin.position.y += 0.4 + (length * 0.5 - coin.position.z) * tan(slope_angle)
 			coin.picked.connect(_on_coin_picked)

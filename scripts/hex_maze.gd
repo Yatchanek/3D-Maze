@@ -177,6 +177,7 @@ func create_room(coords : Vector3i):
 
 	hex_room.initialize(maze[coords])
 	hex_room.entered.connect(_on_room_entered)
+	hex_room.item_picked.connect(_on_item_picked)
 	rooms_node.call_deferred("add_child", hex_room)
 	room_dict[coords] = hex_room	
 
@@ -429,6 +430,10 @@ func _on_enemy_destroyed(enemy : Enemy):
 	enemy_array.erase(enemy)
 	if enemy is Seeker:
 		spawn_seeker()
+
+
+func _on_item_picked(item_type : CellData.ObjectType):
+	inventory.add_item(item_type)
 
 func _on_timer_timeout() -> void:
 	spawn_enemy()

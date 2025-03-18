@@ -1,5 +1,7 @@
 extends PickableObject
 
+@onready var mesh: MeshInstance3D = $MeshInstance3D
+
 var is_corridor_coin : bool = false
 
 var rotation_offset : float
@@ -9,6 +11,11 @@ var rotation_speed : float
 
 
 func _ready() -> void:
+	if type == CellData.ObjectType.HEALTH_POTION:
+		mesh.set_surface_override_material(0, load("res://materials/health_potion_material.tres"))
+	else:
+		mesh.set_surface_override_material(0, load("res://materials/stamina_potion_material.tres"))
+
 	rotation_offset = randf_range(0, PI)
 	float_offset = randf_range(0, PI)
 	rotation_speed = randf_range(PI / 3, PI * 0.75)

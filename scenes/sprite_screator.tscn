@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://p5gjtxqjn7f2"]
+
+[ext_resource type="Script" uid="uid://5al6xyb4dkew" path="res://scripts/sprite_screator.gd" id="1_oevfs"]
+
+[node name="SpriteScreator" type="SubViewport"]
+transparent_bg = true
+size = Vector2i(128, 128)
+script = ExtResource("1_oevfs")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.24096, 0.720628)
+projection = 1
+size = 0.35

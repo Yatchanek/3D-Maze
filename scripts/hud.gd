@@ -6,6 +6,7 @@ class_name HUD
 @onready var red_veil : ColorRect = $RedVeil
 @onready var weapon_wheel : TextureRect = $WeaponWheel
 @onready var weapon_selector: TextureRect = $WeaponWheel/Selector
+@onready var inventory : Inventory = $Inventory
 
 var weapon_wheel_open : bool = false
 
@@ -19,9 +20,11 @@ func _input(event: InputEvent) -> void:
 			weapon_selector.rotation = PI / 2 * Globals.player.current_weapon
 			weapon_wheel.show()
 			weapon_wheel_open = true
+			inventory.can_open = false
 		elif !event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
 			weapon_wheel.hide()
 			weapon_wheel_open = false
+			inventory.can_open = true
 			if floori(selector_position) != Globals.player.current_weapon:
 				weapon_selected.emit(floori(selector_position))
 
@@ -48,3 +51,9 @@ func ouch():
 	tw.set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
 	tw.tween_property(red_veil, "modulate:a", 0.5, 0.1)
 	tw.tween_property(red_veil, "modulate:a", 0.0, 0.1)
+
+func _on_inventory_opened():
+	pass
+
+func _on_inventory_closed():
+	pass

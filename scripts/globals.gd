@@ -32,6 +32,4 @@ static var maze : Dictionary[Vector3i, CellData] = {}
 
 static var map_dict : Dictionary[Vector3i, MapHex] = {}
 
-static var object_data : Dictionary[Vector3i, ObjectData] = {}
-
 static var SQRT3 : float = sqrt(3)

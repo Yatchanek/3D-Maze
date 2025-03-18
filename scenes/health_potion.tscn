@@ -1,0 +1,26 @@
+[gd_scene load_steps=6 format=3 uid="uid://cqsuy71dpam6w"]
+
+[ext_resource type="Script" uid="uid://coegjihw6xpa7" path="res://scripts/potion.gd" id="1_1nwoc"]
+[ext_resource type="ArrayMesh" uid="uid://cxstlbxnvj46q" path="res://meshes/potion.res" id="2_np0hw"]
+[ext_resource type="Material" uid="uid://bmae6454jc7ug" path="res://materials/stamina_potion_material.tres" id="3_mlk75"]
+[ext_resource type="Material" uid="uid://212l0a781usy" path="res://materials/bottle_material.tres" id="4_lwb0h"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xnw0s"]
+size = Vector3(0.3, 0.3, 0.2)
+
+[node name="Potion" type="Area3D"]
+collision_layer = 0
+collision_mask = 4
+monitorable = false
+script = ExtResource("1_1nwoc")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_xnw0s")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+mesh = ExtResource("2_np0hw")
+surface_material_override/0 = ExtResource("3_mlk75")
+surface_material_override/1 = ExtResource("4_lwb0h")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

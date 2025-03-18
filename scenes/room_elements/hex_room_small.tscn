@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cv7vir4skba8n"]
+[gd_scene load_steps=19 format=3 uid="uid://cv7vir4skba8n"]
 
 [ext_resource type="Script" uid="uid://blc57e1p1nq53" path="res://scripts/hex_room.gd" id="1_l0c6j"]
 [ext_resource type="PackedScene" uid="uid://d23pegtrbefue" path="res://scenes/room_elements/wall.tscn" id="2_q60wa"]
@@ -10,6 +10,7 @@
 [ext_resource type="Material" uid="uid://ncplgtiws8qq" path="res://materials/wall_material_1.tres" id="7_x2opm"]
 [ext_resource type="ArrayMesh" uid="uid://coasks1ywxrty" path="res://meshes/hexes/hex_empty_small.res" id="8_2aiot"]
 [ext_resource type="PackedScene" uid="uid://delb0vr0vc0cc" path="res://scenes/room_elements/corridor_slope.tscn" id="8_buug5"]
+[ext_resource type="PackedScene" uid="uid://cqsuy71dpam6w" path="res://scenes/health_potion.tscn" id="8_lvp00"]
 [ext_resource type="Material" uid="uid://c6n25dcaddypg" path="res://materials/wall_material_2.tres" id="10_ob1q8"]
 [ext_resource type="Material" uid="uid://bdh3gpk7eqkiw" path="res://materials/wall_material_3.tres" id="11_vxmjp"]
 [ext_resource type="Material" uid="uid://cat4ifx6ilgi2" path="res://materials/wall_material_4.tres" id="12_035im"]
@@ -31,7 +32,13 @@ exit_collision_scene = ExtResource("4_hgfq1")
 corridor_scene = ExtResource("8_buug5")
 guillotine_scene = ExtResource("6_1sfen")
 coin_scene = ExtResource("7_vhgo2")
+potion_scene = ExtResource("8_lvp00")
 materials = Array[Material]([ExtResource("6_833ja"), ExtResource("7_x2opm"), ExtResource("10_ob1q8"), ExtResource("11_vxmjp"), ExtResource("12_035im")])
+object_scenes = Dictionary[int, PackedScene]({
+0: ExtResource("8_lvp00"),
+1: ExtResource("8_lvp00"),
+3: ExtResource("7_vhgo2")
+})
 
 [node name="Body" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0)

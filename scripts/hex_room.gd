@@ -8,8 +8,10 @@ class_name HexRoom
 @export var corridor_scene : PackedScene
 @export var guillotine_scene : PackedScene
 @export var coin_scene : PackedScene
+@export var potion_scene : PackedScene
 
 @export var materials : Array[Material]
+@export var object_scenes : Dictionary[CellData.ObjectType, PackedScene]
 
 #@onready var entrance_detector : Area3D = $EntranceDetector
 
@@ -19,6 +21,7 @@ var material_index : int = 0
 var room_size : float
 
 signal entered(coords : Vector3i)
+signal item_picked(item_type : CellData.ObjectType)
 
 func initialize(data : CellData):
 	room_data = data
@@ -33,10 +36,8 @@ func initialize(data : CellData):
 
 	if !room_data.has_been_instantiated:
 		room_data.has_been_instantiated = true
-		var object_data : ObjectData = ObjectData.new()
-		Globals.object_data[room_data.coords] = object_data
 		define_guillotines()
-		define_coins(object_data)
+		define_coins()
 		define_subtype()
 		
 	if room_data.subtype == CellData.SubType.HOLE:
@@ -67,7 +68,7 @@ func initialize(data : CellData):
 
 func _ready() -> void:
 	$Body.set_surface_override_material(0, materials[material_index])
-
+	item_picked.connect(Globals.player._on_item_picked)
 
 func add_ceiling_light():
 	$Ceiling.mesh = load("res://meshes/ceiling_hole.res")
@@ -168,7 +169,7 @@ func place_guillotines():
 
 
 
-func define_coins(object_data : ObjectData):
+func define_coins():
 	var coin_count : int = randi_range(0, 5)
 	var max_offset : int = 10
 	if room_data.type == room_data.Type.SMALL:
@@ -180,7 +181,16 @@ func define_coins(object_data : ObjectData):
 
 	for i in coin_count:
 		var pos : Vector3 = Vector3.FORWARD.rotated(Vector3.UP, angle_increment * i) * radius + Vector3.UP * 0.4
-		object_data.objects[ObjectData.ObjectType.COIN].append(pos)
+		var obj_type : CellData.ObjectType
+		if randf() < 0.5:
+			obj_type = CellData.ObjectType.COIN
+		else:
+			if randf() < 0.5:
+				obj_type = CellData.ObjectType.HEALTH_POTION
+			else:
+				obj_type = CellData.ObjectType.STAMINA_POTION
+
+		room_data.objects[obj_type].append(pos)
 
 
 	#define_corridor_coins()
@@ -198,20 +208,20 @@ func define_corridor_coins():
 			corridor_idx += 1
 
 func place_coins():
-	var coin_data : Array = Globals.object_data[room_data.coords].objects[ObjectData.ObjectType.COIN]
-	if coin_data.size() == 0:
-		return
-	for i in coin_data.size():
-		if coin_data[i] == Vector3(999, 999, 999):
+	for obj_type in room_data.objects.keys():
+		if room_data.objects[obj_type].size() == 0:
 			continue
+		for i in room_data.objects[obj_type].size():
+			if room_data.objects[obj_type][i] == Vector3(999, 999, 999):
+				continue
+			var obj : PickableObject = object_scenes[obj_type].instantiate()
+			obj.type = obj_type
+			obj.position = room_data.objects[obj_type][i]
 
-		var coin : Coin = coin_scene.instantiate()
-		coin.type = ObjectData.ObjectType.COIN
-		coin.idx = i
-		coin.position = coin_data[i]
-			
-		coin.picked.connect(_on_object_picked)
-		$Coins.add_child(coin)
+			obj.picked.connect(_on_object_picked)
+
+			$Coins.add_child(obj)
+
 
 	# var corridor_index : int = 0
 	# for i in room_data.corridors.size():
@@ -232,8 +242,9 @@ func toggle_visibility(visibility : bool):
 		corridor.visible = visibility
 
 
-func _on_object_picked(idx : int, object_type : ObjectData.ObjectType):
-	Globals.object_data[room_data.coords].objects[object_type][idx] = Vector3(999, 999, 999)
+func _on_object_picked(idx : int, object_type : CellData.ObjectType):
+	room_data.objects[object_type][idx] = Vector3(999, 999, 999)
+	item_picked.emit(object_type)
 
 func _on_corridor_coin_picked(idx : int, corridor_idx : int):
 	room_data.corridor_coins[corridor_idx][idx] = -1

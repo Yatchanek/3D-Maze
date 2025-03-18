@@ -13,6 +13,13 @@ enum SubType {
     HIGH
 }
 
+enum ObjectType {
+    HEALTH_POTION,
+    STAMINA_POTION,
+    GRENADE,
+    COIN,
+}
+
 var coords : Vector3i = Vector3i(0, 0, 0)
 var room_size : float = Globals.HEX_SIZE
 var id : int = 0
@@ -36,5 +43,12 @@ var corridors_created : bool = false
 
 var coins : PackedInt32Array = []
 var corridor_coins : Array[PackedInt32Array] = []
+
+var objects : Dictionary[ObjectType, Array] = {
+    ObjectType.COIN: [],
+    ObjectType.GRENADE: [],
+    ObjectType.HEALTH_POTION: [],
+    ObjectType.STAMINA_POTION: []
+}
 
 var has_been_instantiated : bool = false
