@@ -37,7 +37,7 @@ func initialize(data : CellData):
 	if !room_data.has_been_instantiated:
 		room_data.has_been_instantiated = true
 		define_guillotines()
-		define_coins()
+		define_objects()
 		define_subtype()
 		
 	if room_data.subtype == CellData.SubType.HOLE:
@@ -62,7 +62,7 @@ func initialize(data : CellData):
 	place_collisions()
 	place_corridors()
 	place_guillotines()
-	place_coins()
+	place_objects()
 	
 
 
@@ -169,7 +169,7 @@ func place_guillotines():
 
 
 
-func define_coins():
+func define_objects():
 	var coin_count : int = randi_range(0, 5)
 	var max_offset : int = 10
 	if room_data.type == room_data.Type.SMALL:
@@ -207,7 +207,7 @@ func define_corridor_coins():
 				room_data.corridor_coins[corridor_idx].append(1)
 			corridor_idx += 1
 
-func place_coins():
+func place_objects():
 	for obj_type in room_data.objects.keys():
 		if room_data.objects[obj_type].size() == 0:
 			continue
@@ -221,14 +221,6 @@ func place_coins():
 			obj.picked.connect(_on_object_picked)
 
 			$Coins.add_child(obj)
-
-
-	# var corridor_index : int = 0
-	# for i in room_data.corridors.size():
-	# 	if room_data.corridors[i]:
-	# 		var corridor : CorridorSlope = $Corridors.get_child(corridor_index)
-	# 		corridor.place_coins(room_data.corridor_coins[corridor_index])
-	# 		corridor_index += 1
 
 
 
